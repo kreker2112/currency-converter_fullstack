@@ -1,7 +1,6 @@
 <template>
     <div class="app">
         <InputForm />
-        <!-- <CurrencyInput /> -->
     </div>
 </template>
 
