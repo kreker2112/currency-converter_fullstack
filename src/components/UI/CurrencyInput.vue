@@ -1,14 +1,19 @@
 <template>
-    <input :value="modelValue" class="input" type="text" @input="updateInput" />
+    <input
+        :value="modelValue"
+        class="input"
+        type="number"
+        @input="updateInput"
+    />
 </template>
 
 <script>
 export default {
-    name: 'my-input',
+    name: 'CurrencyInput',
     props: {
         modelValue: {
             type: [String, Number],
-            default: '',
+            default: null,
             required: true,
         },
     },
@@ -29,6 +34,16 @@ export default {
     padding: 10px 15px;
     margin: 15px 0 0 0;
     border-radius: 10px;
-    size: 30;
+    font-size: 16px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    appearance: textfield; /* Firefox */
 }
 </style>

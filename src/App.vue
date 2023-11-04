@@ -1,17 +1,17 @@
 <template>
-    <Navbar />
-
     <div class="app">
-        <router-view />
+        <InputForm />
+        <!-- <CurrencyInput /> -->
     </div>
 </template>
 
 <script>
-import Navbar from '@/components/UI/NavBar.vue'
+import InputForm from './components/InputForm.vue'
+
 export default {
     name: 'App',
     components: {
-        Navbar,
+        InputForm,
     },
 }
 </script>
@@ -26,5 +26,6 @@ export default {
     max-width: 1480px;
     margin: 0 auto;
     padding: 15px;
+    padding-top: 20vh;
 }
 </style>

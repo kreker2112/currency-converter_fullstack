@@ -5,7 +5,7 @@
 </template>
 
 <script>
-export default { name: 'big-button' }
+export default { name: 'ButtonForConvert' }
 </script>
 
 <style scoped>
