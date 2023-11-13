@@ -1,16 +1,17 @@
 <template>
+    <Navbar />
     <div class="app">
-        <InputForm />
+        <router-view />
     </div>
 </template>
 
 <script>
-import InputForm from './components/InputForm.vue'
+import Navbar from './components/UI/NavBar.vue'
 
 export default {
     name: 'App',
     components: {
-        InputForm,
+        Navbar,
     },
 }
 </script>

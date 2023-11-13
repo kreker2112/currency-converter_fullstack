@@ -2,14 +2,10 @@
     <div>
         <form class="input-form" @submit.prevent>
             <h4>Конвертер валют</h4>
-
-            <CurrencyInput
-                v-model="amount"
-                v-focus
-                type="number"
-                placeholder="Введите сумму"
-            />
-            <ButtonForConvert>Выберите валюту</ButtonForConvert>
+            <CurrencyInput v-model="amount" />
+            <ButtonForConvert @click="$router.push('/currencies')"
+                >Выберите валюту</ButtonForConvert
+            >
         </form>
     </div>
 </template>
@@ -20,7 +16,7 @@ export default {
     components: {},
     data() {
         return {
-            amount: 0,
+            amount: '',
         }
     },
 }
@@ -37,6 +33,14 @@ export default {
     margin: 0 auto;
     padding: 15px;
     border: 2px solid #18aa66;
+    box-shadow: -2px 2px 2px #a79e84bd;
     border-radius: 10px;
+}
+
+.input-form h4 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 900;
+    color: #070707;
 }
 </style>
