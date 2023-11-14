@@ -3,7 +3,7 @@
         <form class="input-form" @submit.prevent>
             <h4>Конвертер валют</h4>
             <CurrencyInput v-model="amount" />
-            <ButtonForConvert @click="$router.push('/currencies')"
+            <ButtonForConvert @click="convert"
                 >Выберите валюту</ButtonForConvert
             >
         </form>
@@ -11,13 +11,24 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
     name: 'InputForm',
-    components: {},
+
     data() {
         return {
             amount: '',
         }
+    },
+    methods: {
+        ...mapMutations(['setAmount']),
+        convert() {
+            this.setAmount(this.amount)
+            this.$router.push({
+                name: 'currenciesList',
+                // query: { amount: this.amount },
+            })
+        },
     },
 }
 </script>

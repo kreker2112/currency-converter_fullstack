@@ -18,7 +18,7 @@ export default {
     props: {
         modelValue: {
             type: [String, Number],
-            default: null,
+            default: '',
             required: true,
         },
     },

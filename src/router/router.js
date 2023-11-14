@@ -11,10 +11,12 @@ const routes = [
     {
         path: '/converter',
         component: ConverterPage,
+        name: 'converterPage',
     },
     {
         path: '/currencies',
         component: CurrenciesList,
+        name: 'currenciesList',
     },
 ]
 
