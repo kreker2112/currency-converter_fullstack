@@ -1,12 +1,12 @@
-const convertModule = {
-    state: { amount: '' },
+const amountModule = {
+    state: () => ({ amount: '' }),
     getters: {
         getAmount: (state) => state.amount,
     },
     mutations: {
         setAmount: (state, amount) => (state.amount = amount),
     },
-    actions: {},
+    namespaced: true,
 }
 
-export default convertModule
+export default amountModule

@@ -21,11 +21,12 @@ export default {
         }
     },
     methods: {
-        ...mapMutations(['setAmount']),
+        ...mapMutations({ setAmount: 'convert/setAmount' }),
         convert() {
             this.setAmount(this.amount)
             this.$router.push({
                 name: 'currenciesList',
+                // Передача параметра через query
                 // query: { amount: this.amount },
             })
         },

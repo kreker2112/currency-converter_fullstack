@@ -7,6 +7,8 @@
 
             <div class="amount__sum">
                 <strong>Сумма для обмена:</strong> {{ getAmount }}
+                <!-- Получение данных из query: -->
+                <!-- <strong>Сумма для обмена:</strong> {{ $route.query.amount }} -->
             </div>
 
             <div class="currencies__container">
@@ -60,10 +62,7 @@ export default {
         return {}
     },
     computed: {
-        ...mapGetters(['getAmount']),
-    },
-    mounted() {
-        console.log(this.$route.params.amount)
+        ...mapGetters({ getAmount: 'convert/getAmount' }),
     },
 }
 </script>

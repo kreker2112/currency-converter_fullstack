@@ -1,8 +1,8 @@
 import { createStore } from 'vuex'
-import convertModule from './convertModule'
+import amountModule from './convertModule'
 
 export default createStore({
     modules: {
-        converter: convertModule,
+        convert: amountModule,
     },
 })
