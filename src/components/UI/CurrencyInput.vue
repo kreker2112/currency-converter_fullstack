@@ -30,6 +30,7 @@ export default {
         },
         clearInput() {
             this.$emit('update:modelValue', '')
+            localStorage.removeItem('amount')
         },
     },
 }

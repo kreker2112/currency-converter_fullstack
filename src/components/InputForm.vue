@@ -2,7 +2,10 @@
     <div>
         <form class="input-form" @submit.prevent>
             <h4>Конвертер валют</h4>
-            <CurrencyInput v-model="amount" />
+            <CurrencyInput
+                v-model="amount"
+                @input="addAmountToLocalStorageOnInput"
+            />
             <ButtonForConvert @click="convert"
                 >Выберите валюту</ButtonForConvert
             >
@@ -12,14 +15,19 @@
 
 <script>
 import { mapMutations } from 'vuex'
+
 export default {
     name: 'InputForm',
-
     data() {
         return {
             amount: '',
         }
     },
+    mounted() {
+        // Получение данных из localStorage:
+        this.amount = localStorage.amount
+    },
+
     methods: {
         ...mapMutations({ setAmount: 'convert/setAmount' }),
         convert() {
@@ -29,6 +37,9 @@ export default {
                 // Передача параметра через query
                 // query: { amount: this.amount },
             })
+        },
+        addAmountToLocalStorageOnInput() {
+            localStorage.setItem('amount', this.amount)
         },
     },
 }

@@ -6,7 +6,7 @@
             </legend>
 
             <div class="amount__sum">
-                <strong>Сумма для обмена:</strong> {{ getAmount }}
+                <strong>Сумма для обмена:</strong> {{ amount }}
                 <!-- Получение данных из query: -->
                 <!-- <strong>Сумма для обмена:</strong> {{ $route.query.amount }} -->
             </div>
@@ -17,9 +17,10 @@
                         id="convertUSDtoUAH"
                         type="radio"
                         class="option-input radio"
-                        name="contact"
-                        value="email"
+                        name="convert"
+                        value="UAH"
                         checked
+                        @click="addRadioInputValueToLocalStorage"
                     />
                     <label class="currency currency-label" for="convertUSDtoUAH"
                         >USD to UAH</label
@@ -31,8 +32,9 @@
                         id="convertUAHtoUSD"
                         type="radio"
                         class="option-input radio"
-                        name="contact"
-                        value="phone"
+                        name="convert"
+                        value="USD"
+                        @click="addRadioInputValueToLocalStorage"
                     />
                     <label class="currency currency-label" for="convertUAHtoUSD"
                         >UAH to USD</label
@@ -40,7 +42,10 @@
                 </div>
             </div>
             <div class="buttons buttons__contaier">
-                <small-button class="button calculate-button" @click.prevent="">
+                <small-button
+                    class="button calculate-button"
+                    @click.prevent="fetchCurrencies"
+                >
                     Посчитать
                 </small-button>
                 <small-button
@@ -56,13 +61,48 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import axios from 'axios'
+axios.defaults.baseURL =
+    'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
 export default {
     name: 'CurrenciesList',
     data() {
-        return {}
+        return { amount: '' }
     },
     computed: {
         ...mapGetters({ getAmount: 'convert/getAmount' }),
+    },
+    mounted() {
+        this.amount = localStorage.amount
+        this.getInputFromLocalStorage()
+    },
+
+    methods: {
+        addRadioInputValueToLocalStorage() {
+            const input = document.querySelector('input[type="radio"]:checked')
+            console.log(input.value)
+
+            localStorage.setItem('input', input.value)
+        },
+        async fetchCurrencies() {
+            try {
+                const response = await axios.get()
+                console.log(response.data)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        addGetAmountToLocalStorageOnMount() {
+            localStorage.setItem('amount', this.getAmount)
+        },
+        setAmountFromGetAmount() {
+            this.amount = this.getAmount
+        },
+        getInputFromLocalStorage() {
+            localStorage.input === 'UAH'
+                ? (document.getElementById('convertUAHtoUSD').checked = true)
+                : (document.getElementById('convertUSDtoUAH').checked = true)
+        },
     },
 }
 </script>
