@@ -100,8 +100,8 @@ export default {
         },
         getInputFromLocalStorage() {
             localStorage.input === 'UAH'
-                ? (document.getElementById('convertUAHtoUSD').checked = true)
-                : (document.getElementById('convertUSDtoUAH').checked = true)
+                ? (document.getElementById('convertUSDtoUAH').checked = true)
+                : (document.getElementById('convertUAHtoUSD').checked = true)
         },
     },
 }
