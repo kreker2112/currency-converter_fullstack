@@ -50,7 +50,7 @@
                 </small-button>
                 <small-button
                     class="button calculate-button"
-                    @click="$router.push('/converter')"
+                    @click="cancelOperation"
                 >
                     Отменить операцию
                 </small-button>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 import axios from 'axios'
 axios.defaults.baseURL =
     'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
@@ -69,21 +69,24 @@ export default {
     data() {
         return { amount: '' }
     },
-    computed: {
-        ...mapGetters({ getAmount: 'convert/getAmount' }),
-    },
+    // computed: {
+    //     ...mapGetters({ getAmount: 'convert/getAmount' }),
+    // },
     mounted() {
         this.amount = localStorage.amount
-        this.getInputFromLocalStorage()
+        const input = document.querySelector('input[type="radio"]:checked')
+        localStorage.input === undefined
+            ? localStorage.setItem('input', input.value)
+            : this.getInputFromLocalStorage()
     },
 
     methods: {
+        // Добавление значения input в localStorage:
         addRadioInputValueToLocalStorage() {
             const input = document.querySelector('input[type="radio"]:checked')
-            console.log(input.value)
-
             localStorage.setItem('input', input.value)
         },
+        // Получение данных из API банка:
         async fetchCurrencies() {
             try {
                 const response = await axios.get()
@@ -92,16 +95,22 @@ export default {
                 console.log(error)
             }
         },
-        addGetAmountToLocalStorageOnMount() {
-            localStorage.setItem('amount', this.getAmount)
-        },
-        setAmountFromGetAmount() {
-            this.amount = this.getAmount
-        },
+        // Запись значения amount в localStorage из геттера getAmount при монтировании компонента:
+        // addGetAmountToLocalStorageOnMount() {
+        //     localStorage.setItem('amount', this.getAmount)
+        // },
+        // Установка значения amount из геттера getAmount:
+        // setAmountFromGetAmount() {
+        //     this.amount = this.getAmount
+        // },
         getInputFromLocalStorage() {
-            localStorage.input === 'UAH'
-                ? (document.getElementById('convertUSDtoUAH').checked = true)
-                : (document.getElementById('convertUAHtoUSD').checked = true)
+            localStorage.input === 'USD'
+                ? (document.getElementById('convertUAHtoUSD').checked = true)
+                : (document.getElementById('convertUSDtoUAH').checked = true)
+        },
+        cancelOperation() {
+            localStorage.clear()
+            this.$router.push('/converter')
         },
     },
 }
