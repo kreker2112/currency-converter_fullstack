@@ -42,10 +42,7 @@
                 </div>
             </div>
             <div class="buttons buttons__contaier">
-                <small-button
-                    class="button calculate-button"
-                    @click.prevent="findCurrenciesPair"
-                >
+                <small-button class="button calculate-button" @click.prevent="">
                     Посчитать
                 </small-button>
                 <small-button
@@ -80,6 +77,8 @@ export default {
             ? localStorage.setItem('input', input.value)
             : this.getInputFromLocalStorage()
         this.checkLocalStorage()
+        console.log(currenciesMap)
+        this.findCurrencieWithCurrencyMap()
     },
 
     methods: {
@@ -103,7 +102,7 @@ export default {
             const cachedCurrencies = JSON.parse(
                 localStorage.getItem('currencies'),
             )
-            console.log(cachedCurrencies)
+            console.log('cachedCurrencies: ', cachedCurrencies)
         },
         // Функция для повторного запроса каждые 5 минут:
         activateFetchCurrencies() {
@@ -118,13 +117,17 @@ export default {
                 ? this.activateFetchCurrencies()
                 : this.handleCurrencies()
         },
-        // Поиск пар для обмена валют согласно currenciesMap:
-        findCurrenciesPair() {
-            const input = localStorage.input
-            const currencies = JSON.parse(localStorage.currencies)
-            console.log(currencies)
-            console.log(input)
-            console.log(currenciesMap)
+        // Поиск курса для обмена валют согласно currenciesMap:
+        findCurrencieWithCurrencyMap() {
+            const currencies = JSON.parse(localStorage.getItem('currencies'))
+            // let currency = currencies.find((item) => item.currencyCodeA === 840)
+            currencies.forEach((item) => {
+                const { currencyCodeA, rateBuy, rateSell } = item
+                console.log('item: ', item)
+                console.log('currencyCodeA: ', currencyCodeA)
+                console.log('rateBuy: ', rateBuy)
+                console.log('rateSell: ', rateSell)
+            })
         },
         // Запись значения amount в localStorage из геттера getAmount при монтировании компонента:
         // addGetAmountToLocalStorageOnMount() {

@@ -1,1 +1,1 @@
-export const currenciesMap = [{ USD: '840' }, { EUR: '978' }, { UAH: '980' }]
+export const currenciesMap = { 840: 'USD', 978: 'EUR', 980: 'UAH' }
