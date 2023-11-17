@@ -120,7 +120,6 @@ export default {
         // Поиск курса для обмена валют согласно currenciesMap:
         findCurrencieWithCurrencyMap() {
             const currencies = JSON.parse(localStorage.getItem('currencies'))
-            // let currency = currencies.find((item) => item.currencyCodeA === 840)
             currencies.forEach((item) => {
                 const { currencyCodeA, rateBuy, rateSell } = item
                 console.log('item: ', item)
