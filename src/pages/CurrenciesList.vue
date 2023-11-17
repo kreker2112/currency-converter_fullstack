@@ -142,7 +142,8 @@ export default {
                 : (document.getElementById('convertUSDtoUAH').checked = true)
         },
         cancelOperation() {
-            localStorage.clear()
+            localStorage.removeItem('input')
+            localStorage.removeItem('amount')
             this.$router.push('/converter')
         },
     },
