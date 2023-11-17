@@ -1,19 +1,18 @@
 <template>
     <div>
-        <form class="input-form" @submit.prevent>
+        <div class="input-form">
             <h4>Конвертер валют</h4>
             <CurrencyInput
                 v-model="amount"
                 @input="addAmountToLocalStorageOnInput"
             />
-            <ButtonForConvert @click="convert"
-                >Выберите валюту</ButtonForConvert
-            >
-        </form>
+            <ButtonForConvert @click="accept">Выберите валюту</ButtonForConvert>
+        </div>
     </div>
 </template>
 
 <script>
+import Notiflix from 'notiflix'
 import { mapMutations } from 'vuex'
 
 export default {
@@ -30,6 +29,11 @@ export default {
 
     methods: {
         ...mapMutations({ setAmount: 'convert/setAmount' }),
+        accept() {
+            this.amount === undefined || this.amount === ''
+                ? Notiflix.Notify.failure('Введите сумму!')
+                : this.convert()
+        },
         convert() {
             this.setAmount(this.amount)
             this.$router.push({

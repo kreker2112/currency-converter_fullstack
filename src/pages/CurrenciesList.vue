@@ -1,5 +1,5 @@
 <template>
-    <div class="currencies__form">
+    <div class="currencies__form" @submit.prevent>
         <fieldset class="fieldset__container">
             <legend class="currencies-legend__header">
                 Выберите, пожалуйста, валютную пару для конвертации
@@ -44,7 +44,7 @@
             <div class="buttons buttons__contaier">
                 <small-button
                     class="button calculate-button"
-                    @click.prevent="fetchCurrencies"
+                    @click.prevent="findCurrenciesPair"
                 >
                     Посчитать
                 </small-button>
@@ -62,10 +62,11 @@
 <script>
 // import { mapGetters } from 'vuex'
 import axios from 'axios'
-axios.defaults.baseURL =
-    'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
+axios.defaults.baseURL = 'https://api.monobank.ua/bank/currency'
+import { currenciesMap } from '@/hooks/currenciesMap'
 export default {
     name: 'CurrenciesList',
+
     data() {
         return { amount: '' }
     },
@@ -78,6 +79,7 @@ export default {
         localStorage.input === undefined
             ? localStorage.setItem('input', input.value)
             : this.getInputFromLocalStorage()
+        this.checkLocalStorage()
     },
 
     methods: {
@@ -86,14 +88,43 @@ export default {
             const input = document.querySelector('input[type="radio"]:checked')
             localStorage.setItem('input', input.value)
         },
-        // Получение данных из API банка:
+        // Получение данных из API банка и запись их в локальное хранилище:
         async fetchCurrencies() {
             try {
                 const response = await axios.get()
-                console.log(response.data)
+                const currencies = response.data
+                localStorage.setItem('currencies', JSON.stringify(currencies))
             } catch (error) {
                 console.log(error)
             }
+        },
+        // Получение данных currencies из localStorage:
+        handleCurrencies() {
+            const cachedCurrencies = JSON.parse(
+                localStorage.getItem('currencies'),
+            )
+            console.log(cachedCurrencies)
+        },
+        // Функция для повторного запроса каждые 5 минут:
+        activateFetchCurrencies() {
+            this.fetchCurrencies()
+            setInterval(() => {
+                this.fetchCurrencies()
+            }, 300000)
+        },
+        // Проверяем, есть ли закешированные данные в локальном хранилище:
+        checkLocalStorage() {
+            localStorage.getItem('currencies') === null
+                ? this.activateFetchCurrencies()
+                : this.handleCurrencies()
+        },
+        // Поиск пар для обмена валют согласно currenciesMap:
+        findCurrenciesPair() {
+            const input = localStorage.input
+            const currencies = JSON.parse(localStorage.currencies)
+            console.log(currencies)
+            console.log(input)
+            console.log(currenciesMap)
         },
         // Запись значения amount в localStorage из геттера getAmount при монтировании компонента:
         // addGetAmountToLocalStorageOnMount() {
