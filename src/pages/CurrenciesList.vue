@@ -72,13 +72,14 @@ export default {
     // },
     mounted() {
         this.amount = localStorage.amount
+        this.fetchCurrencies()
         const input = document.querySelector('input[type="radio"]:checked')
         localStorage.input === undefined
             ? localStorage.setItem('input', input.value)
             : this.getInputFromLocalStorage()
-        this.checkLocalStorage()
-        console.log(currenciesMap)
-        this.findCurrencieWithCurrencyMap()
+
+        this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage()
+        this.findCurrencieWithCurrencyCode()
     },
 
     methods: {
@@ -86,15 +87,19 @@ export default {
         addRadioInputValueToLocalStorage() {
             const input = document.querySelector('input[type="radio"]:checked')
             localStorage.setItem('input', input.value)
+            this.findCurrencieWithCurrencyCode()
         },
-        // Получение данных из API банка и запись их в локальное хранилище:
+        // Получение данных из API банка Монобанк и запись их в localStorage:
         async fetchCurrencies() {
             try {
                 const response = await axios.get()
                 const currencies = response.data
                 localStorage.setItem('currencies', JSON.stringify(currencies))
+                console.log('updatedCurrencies')
             } catch (error) {
-                console.log(error)
+                error.response.status === 429
+                    ? this.handleCurrencies()
+                    : console.error(error)
             }
         },
         // Получение данных currencies из localStorage:
@@ -102,48 +107,41 @@ export default {
             const cachedCurrencies = JSON.parse(
                 localStorage.getItem('currencies'),
             )
-            console.log('cachedCurrencies: ', cachedCurrencies)
+            console.log('cachedCurrencies')
+            return cachedCurrencies
         },
-        // Функция для повторного запроса каждые 5 минут:
-        activateFetchCurrencies() {
-            this.fetchCurrencies()
-            setInterval(() => {
-                this.fetchCurrencies()
-            }, 300000)
-        },
-        // Проверяем, есть ли закешированные данные в локальном хранилище:
-        checkLocalStorage() {
-            localStorage.getItem('currencies') === null
-                ? this.activateFetchCurrencies()
-                : this.handleCurrencies()
-        },
-        // Поиск курса для обмена валют согласно currenciesMap:
-        findCurrencieWithCurrencyMap() {
-            const currencies = JSON.parse(localStorage.getItem('currencies'))
-            currencies.forEach((item) => {
-                const { currencyCodeA, rateBuy, rateSell } = item
-                console.log('item: ', item)
-                console.log('currencyCodeA: ', currencyCodeA)
-                console.log('rateBuy: ', rateBuy)
-                console.log('rateSell: ', rateSell)
+        // Поиск объекта валюты в респонсе API банка Монобанк по коду и запись в localStorage:
+        findCurrencieWithCurrencyCode() {
+            const currencies = this.handleCurrencies()
+            const currencyCode = Number(localStorage.currencyCode)
+            currencies.find((item) => {
+                if (item.currencyCodeA === currencyCode) {
+                    localStorage.setItem('currency', JSON.stringify(item))
+                    console.log('currency: ', item)
+                }
             })
         },
-        // Запись значения amount в localStorage из геттера getAmount при монтировании компонента:
-        // addGetAmountToLocalStorageOnMount() {
-        //     localStorage.setItem('amount', this.getAmount)
-        // },
-        // Установка значения amount из геттера getAmount:
-        // setAmountFromGetAmount() {
-        //     this.amount = this.getAmount
-        // },
+        // Поиск валюты в currenciesMap по инпуту и запись кода валюты в localStorage:
+        findCurrencieCodeWithCurrencyMapAndAddToLocalStorage() {
+            const input = localStorage.input
+            const currencyCode = Object.keys(currenciesMap).find(
+                (key) => currenciesMap[key] === input,
+            )
+            console.log('currencyCode: ', currencyCode)
+            localStorage.setItem('currencyCode', currencyCode)
+        },
+        // Получение данных инпута из localStorage:
         getInputFromLocalStorage() {
             localStorage.input === 'USD'
                 ? (document.getElementById('convertUAHtoUSD').checked = true)
                 : (document.getElementById('convertUSDtoUAH').checked = true)
         },
+        // Отмена операции с очисткой input и amount в localStorage и переход на страницу конвертера:
         cancelOperation() {
             localStorage.removeItem('input')
             localStorage.removeItem('amount')
+            localStorage.removeItem('currencyCode')
+            localStorage.removeItem('currency')
             this.$router.push('/converter')
         },
     },
