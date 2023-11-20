@@ -1,48 +1,61 @@
 <template>
     <div class="currencies__form" @submit.prevent>
         <fieldset class="fieldset__container">
-            <legend class="currencies-legend__header">
-                Выберите, пожалуйста, валютную пару для конвертации
+            <legend for="currency-select" class="currencies-legend__header">
+                Выберите, пожалуйста, валюту для конвертации
             </legend>
 
             <div class="amount__sum">
                 <strong>Сумма для обмена:</strong> {{ amount }}
-                <!-- Получение данных из query: -->
-                <!-- <strong>Сумма для обмена:</strong> {{ $route.query.amount }} -->
+            </div>
+
+            <div class="currency currency-select">
+                <select
+                    id="currency-select"
+                    class="currency currency-select__list"
+                    name="currency"
+                    @change="findSelectedCurrency"
+                >
+                    <option value="USD">USD (Доллар США)</option>
+                    <option value="EUR">EUR (Евро)</option>
+                </select>
             </div>
 
             <div class="currencies__container">
                 <div class=".currency currency__container">
                     <input
-                        id="convertUSDtoUAH"
+                        id="rateBuy"
                         type="radio"
                         class="option-input radio"
                         name="convert"
-                        value="UAH"
+                        value="rateBuy"
                         checked
                         @click="addRadioInputValueToLocalStorage"
                     />
                     <label class="currency currency-label" for="convertUSDtoUAH"
-                        >USD to UAH</label
+                        >Купить</label
                     >
                 </div>
 
                 <div class=".currency currency__container">
                     <input
-                        id="convertUAHtoUSD"
+                        id="rateSell"
                         type="radio"
                         class="option-input radio"
                         name="convert"
-                        value="USD"
+                        value="rateSell"
                         @click="addRadioInputValueToLocalStorage"
                     />
                     <label class="currency currency-label" for="convertUAHtoUSD"
-                        >UAH to USD</label
+                        >Продать</label
                     >
                 </div>
             </div>
             <div class="buttons buttons__contaier">
-                <small-button class="button calculate-button" @click.prevent="">
+                <small-button
+                    class="button calculate-button"
+                    @click.prevent="calculate"
+                >
                     Посчитать
                 </small-button>
                 <small-button
@@ -57,7 +70,6 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
 import axios from 'axios'
 axios.defaults.baseURL = 'https://api.monobank.ua/bank/currency'
 import { currenciesMap } from '@/hooks/currenciesMap'
@@ -67,48 +79,77 @@ export default {
     data() {
         return { amount: '' }
     },
-    // computed: {
-    //     ...mapGetters({ getAmount: 'convert/getAmount' }),
-    // },
+    watch() {
+        this.addOptionValueToLocalStorage()
+    },
     mounted() {
         this.amount = localStorage.amount
         this.fetchCurrencies()
-        const input = document.querySelector('input[type="radio"]:checked')
-        localStorage.input === undefined
-            ? localStorage.setItem('input', input.value)
-            : this.getInputFromLocalStorage()
-
-        this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage()
-        this.findCurrencieWithCurrencyCode()
+        this.addOptionInputOnMounted()
+        this.addRadioInputOnMounted()
     },
 
     methods: {
-        // Добавление значения input в localStorage:
-        addRadioInputValueToLocalStorage() {
-            const input = document.querySelector('input[type="radio"]:checked')
-            localStorage.setItem('input', input.value)
-            this.findCurrencieWithCurrencyCode()
-        },
         // Получение данных из API банка Монобанк и запись их в localStorage:
         async fetchCurrencies() {
             try {
                 const response = await axios.get()
                 const currencies = response.data
                 localStorage.setItem('currencies', JSON.stringify(currencies))
-                console.log('updatedCurrencies')
             } catch (error) {
                 error.response.status === 429
                     ? this.handleCurrencies()
                     : console.error(error)
             }
         },
+        // Добавление значения option в localStorage при его изменении:
+        addOptionValueToLocalStorage() {
+            const select = document.getElementById('currency-select')
+            const selectedOption = select.options[select.selectedIndex].value
+            localStorage.setItem('optionInput', selectedOption)
+        },
+        // Добавление значения optionInput в localStorage при монтировании компонента:
+        addOptionInputOnMounted() {
+            const select = document.getElementById('currency-select')
+            const selectedOption = select.options[select.selectedIndex].value
+            localStorage.optionInput === undefined
+                ? localStorage.setItem('optionInput', selectedOption)
+                : this.addOptionValueToLocalStorage()
+            this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage()
+            this.findCurrencieWithCurrencyCode()
+        },
+        // Добавление значения radioInput в localStorage:
+        addRadioInputValueToLocalStorage() {
+            const input = document.querySelector('input[type="radio"]:checked')
+            localStorage.setItem('radioInput', input.value)
+        },
+        // Получение данных инпута из localStorage:
+        getInputFromLocalStorage() {
+            localStorage.radioInput === 'rateBuy'
+                ? (document.getElementById('rateBuy').checked = true)
+                : (document.getElementById('rateSell').checked = true)
+        },
+        // Добавление значения radioInput в localStorage при монтировании компонента:
+        addRadioInputOnMounted() {
+            const input = document.querySelector('input[type="radio"]:checked')
+            localStorage.input === undefined
+                ? localStorage.setItem('radioInput', input.value)
+                : this.getInputFromLocalStorage()
+        },
         // Получение данных currencies из localStorage:
         handleCurrencies() {
             const cachedCurrencies = JSON.parse(
                 localStorage.getItem('currencies'),
             )
-            console.log('cachedCurrencies')
             return cachedCurrencies
+        },
+        // Поиск валюты в currenciesMap по инпуту и запись кода валюты в localStorage:
+        findCurrencieCodeWithCurrencyMapAndAddToLocalStorage() {
+            const input = localStorage.optionInput
+            const currencyCode = Object.keys(currenciesMap).find(
+                (key) => currenciesMap[key] === input,
+            )
+            localStorage.setItem('currencyCode', currencyCode)
         },
         // Поиск объекта валюты в респонсе API банка Монобанк по коду и запись в localStorage:
         findCurrencieWithCurrencyCode() {
@@ -116,32 +157,39 @@ export default {
             const currencyCode = Number(localStorage.currencyCode)
             currencies.find((item) => {
                 if (item.currencyCodeA === currencyCode) {
-                    localStorage.setItem('currency', JSON.stringify(item))
-                    console.log('currency: ', item)
+                    localStorage.setItem('currencyObject', JSON.stringify(item))
                 }
             })
         },
-        // Поиск валюты в currenciesMap по инпуту и запись кода валюты в localStorage:
-        findCurrencieCodeWithCurrencyMapAndAddToLocalStorage() {
-            const input = localStorage.input
-            const currencyCode = Object.keys(currenciesMap).find(
-                (key) => currenciesMap[key] === input,
+        findSelectedCurrency() {
+            this.addOptionValueToLocalStorage()
+            this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage()
+            this.findCurrencieWithCurrencyCode()
+        },
+        // Посчитать конвертацию согласно выбранным параметрам валюты и типа операции:
+        calculate() {
+            const currencyObject = JSON.parse(
+                localStorage.getItem('currencyObject'),
             )
-            console.log('currencyCode: ', currencyCode)
-            localStorage.setItem('currencyCode', currencyCode)
+            const amount = localStorage.amount
+            const radioInput = localStorage.radioInput
+            const rateBuy = currencyObject.rateBuy
+            const rateSell = currencyObject.rateSell
+            const rate = radioInput === 'rateBuy' ? rateBuy : rateSell
+            const result =
+                radioInput === 'rateBuy' ? amount * rate : amount / rate
+            localStorage.setItem('result', result)
+            this.$router.push('/result')
         },
-        // Получение данных инпута из localStorage:
-        getInputFromLocalStorage() {
-            localStorage.input === 'USD'
-                ? (document.getElementById('convertUAHtoUSD').checked = true)
-                : (document.getElementById('convertUSDtoUAH').checked = true)
-        },
+
         // Отмена операции с очисткой input и amount в localStorage и переход на страницу конвертера:
         cancelOperation() {
-            localStorage.removeItem('input')
+            localStorage.removeItem('result')
+            localStorage.removeItem('optionInput')
+            localStorage.removeItem('radioInput')
             localStorage.removeItem('amount')
             localStorage.removeItem('currencyCode')
-            localStorage.removeItem('currency')
+            localStorage.removeItem('currencyObject')
             this.$router.push('/converter')
         },
     },
@@ -167,19 +215,10 @@ export default {
 }
 .currencies__container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    flex-direction: row;
+    justify-content: center;
     margin-bottom: 10px;
     gap: 10px;
-}
-
-.currency.currency__container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 10px;
 }
 
 .currency.currency-label {
@@ -196,6 +235,19 @@ export default {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
+}
+
+.currency.currency-select {
+    margin: 10px;
+}
+
+.currency.currency-select__list {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid #12c0b2;
+    outline: none;
 }
 
 .buttons.buttons__contaier {
