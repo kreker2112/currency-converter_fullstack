@@ -24,7 +24,11 @@ export default {
     methods: {
         getResult() {
             const result = Number(localStorage.getItem('result'))
-            const roundedResult = result.toFixed(2)
+            const currency =
+                localStorage.getItem('radioInput') === 'rateBuy'
+                    ? localStorage.getItem('optionInput')
+                    : 'UAH'
+            const roundedResult = result.toFixed(2) + ` ${currency}`
             return (this.result = roundedResult)
         },
 

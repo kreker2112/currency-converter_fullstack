@@ -156,7 +156,10 @@ export default {
             const currencies = this.handleCurrencies()
             const currencyCode = Number(localStorage.currencyCode)
             currencies.find((item) => {
-                if (item.currencyCodeA === currencyCode) {
+                if (
+                    item.currencyCodeA === currencyCode &&
+                    item.currencyCodeB === 980
+                ) {
                     localStorage.setItem('currencyObject', JSON.stringify(item))
                 }
             })
@@ -177,7 +180,7 @@ export default {
             const rateSell = currencyObject.rateSell
             const rate = radioInput === 'rateBuy' ? rateBuy : rateSell
             const result =
-                radioInput === 'rateBuy' ? amount * rate : amount / rate
+                radioInput === 'rateBuy' ? amount / rate : amount * rate
             localStorage.setItem('result', result)
             this.$router.push('/result')
         },
