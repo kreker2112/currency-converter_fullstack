@@ -5,7 +5,7 @@
     </div>
     <div class="buttons buttons__contaier">
         <small-button class="button calculate-button" @click="cancelOperation">
-            Отменить операцию
+            Вернуться в начало
         </small-button>
     </div>
 </template>

@@ -33,7 +33,7 @@
                         @click="addRadioInputValueToLocalStorage"
                     />
                     <label class="currency currency-label" for="convertUSDtoUAH"
-                        >Купить</label
+                        >UAH to {{ optionInput }}</label
                     >
                 </div>
 
@@ -47,7 +47,7 @@
                         @click="addRadioInputValueToLocalStorage"
                     />
                     <label class="currency currency-label" for="convertUAHtoUSD"
-                        >Продать</label
+                        >{{ optionInput }} to UAH</label
                     >
                 </div>
             </div>
@@ -72,21 +72,20 @@
 <script>
 import axios from 'axios'
 axios.defaults.baseURL = 'https://api.monobank.ua/bank/currency'
-import { currenciesMap } from '@/hooks/currenciesMap'
+import { currenciesMap } from '@/assets/constants/currenciesMap'
 export default {
     name: 'CurrenciesList',
 
     data() {
-        return { amount: '' }
+        return { amount: '', optionInput: '' }
     },
-    watch() {
-        this.addOptionValueToLocalStorage()
-    },
+
     mounted() {
         this.amount = localStorage.amount
         this.fetchCurrencies()
         this.addOptionInputOnMounted()
         this.addRadioInputOnMounted()
+        this.optionInput = localStorage.getItem('optionInput')
     },
 
     methods: {
@@ -168,6 +167,7 @@ export default {
             this.addOptionValueToLocalStorage()
             this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage()
             this.findCurrencieWithCurrencyCode()
+            this.optionInput = localStorage.getItem('optionInput')
         },
         // Посчитать конвертацию согласно выбранным параметрам валюты и типа операции:
         calculate() {
@@ -342,3 +342,4 @@ export default {
     }
 }
 </style>
+~/src/assets/constants/currenciesMap
