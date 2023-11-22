@@ -7,7 +7,7 @@
 <script>
 import InputForm from '@/components/InputForm.vue'
 export default {
-    name: 'App',
+    name: 'ConverterPage',
     components: {
         InputForm,
     },
