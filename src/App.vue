@@ -10,12 +10,26 @@
 <script>
 import Navbar from '@/components/UI/NavBar.vue'
 import ConvertationHistory from './components/UI/ConvertationHistory.vue'
-
+import { mapMutations } from 'vuex'
 export default {
     name: 'App',
     components: {
         Navbar,
         ConvertationHistory,
+    },
+    mounted() {
+        this.initExchangeHistory()
+    },
+    methods: {
+        ...mapMutations(['setCurrenciesHistory']),
+        initExchangeHistory() {
+            const exchangeHistory = JSON.parse(
+                localStorage.getItem('convertListItemsArray'),
+            )
+            const exchangeHistoryArray = exchangeHistory
+            console.log('exchangeHistoryArray', exchangeHistoryArray)
+            this.setCurrenciesHistory(exchangeHistoryArray)
+        },
     },
 }
 </script>

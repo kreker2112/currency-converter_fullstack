@@ -74,12 +74,16 @@ import axios from 'axios'
 axios.defaults.baseURL = 'https://api.monobank.ua/bank/currency'
 import { currenciesMap } from '@/assets/constants/currenciesMap'
 import { keysToRemove } from '@/assets/constants/keysToRemove'
-import { COVERTATION_HISTORY } from '@/assets/constants/covertationHistory'
+
+import { mapActions } from 'vuex'
 export default {
     name: 'CurrenciesList',
 
     data() {
-        return { amount: '', optionInput: '' }
+        return {
+            amount: '',
+            optionInput: '',
+        }
     },
 
     mounted() {
@@ -91,6 +95,7 @@ export default {
     },
 
     methods: {
+        ...mapActions(['setCurrenciesHistory']),
         // Получение данных из API банка Монобанк и запись их в localStorage:
         async fetchCurrencies() {
             try {
@@ -206,15 +211,24 @@ export default {
         },
 
         addConvertListItemToHistoryArray(item) {
-            COVERTATION_HISTORY.push(item)
-            const historyArray = COVERTATION_HISTORY
-
-            localStorage.setItem('convertListItemsArray', historyArray)
             const historyInLocalStorage = localStorage.getItem(
                 'convertListItemsArray',
             )
-            const ArrayFromHistory = historyInLocalStorage.split(',')
-            console.log('convertListItemsArray: ', ArrayFromHistory)
+
+            if (historyInLocalStorage) {
+                const ArrayFromHistory = JSON.parse(historyInLocalStorage)
+                console.log('convertListItemsArray: ', ArrayFromHistory)
+                this.setCurrenciesHistory([...ArrayFromHistory, item])
+                localStorage.setItem(
+                    'convertListItemsArray',
+                    JSON.stringify([...ArrayFromHistory, item]),
+                )
+                return
+            }
+            localStorage.setItem(
+                'convertListItemsArray',
+                JSON.stringify([item]),
+            )
         },
 
         // Отмена операции с очисткой input и amount в localStorage и переход на страницу конвертера:

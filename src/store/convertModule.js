@@ -1,12 +1,20 @@
 const amountModule = {
-    state: () => ({ amount: '' }),
+    state: () => ({ amount: '', currenciesHistory: null }),
     getters: {
         getAmount: (state) => state.amount,
+        getCurrenciesHistory: (state) => state.currenciesHistory,
     },
     mutations: {
         setAmount: (state, amount) => (state.amount = amount),
+        setCurrenciesHistory: (state, currenciesHistory) =>
+            (state.currenciesHistory = currenciesHistory),
     },
-    namespaced: true,
+    actions: {
+        setCurrenciesHistory: ({ commit }, currenciesHistory) => {
+            commit('setCurrenciesHistory', currenciesHistory)
+        },
+    },
+    // namespaced: true,
 }
 
 export default amountModule

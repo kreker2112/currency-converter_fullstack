@@ -3,20 +3,24 @@
         <h1 class="convertation-history__header">История конвертаций:</h1>
         <transition-group name="convertation-history__list"
             ><div class="container list-item">
-                <div class="list-item">{{ listItemArray }}</div>
+                <div
+                    v-for="item in getCurrenciesHistory"
+                    :key="item + index"
+                    class="list-item"
+                >
+                    {{ item }}
+                </div>
             </div>
         </transition-group>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     name: 'ConvertationHistory',
-    data() {
-        return {
-            listItemArray: [],
-        }
-    },
+
+    computed: { ...mapGetters(['getCurrenciesHistory']) },
     mounted() {},
     methods: {},
 }
@@ -48,12 +52,15 @@ export default {
     margin-bottom: 15px;
     padding: 15px;
     width: 100%;
-    border: 2px solid #12c0b2;
-    border-radius: 5px;
 }
 .list-item {
     text-align: center;
     padding: 5px;
     width: 100%;
+    border: 2px solid #12c0b2;
+    border-radius: 5px;
+}
+.list-item:not(:last-of-type) {
+    margin-bottom: 10px;
 }
 </style>
