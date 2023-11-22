@@ -73,6 +73,8 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'https://api.monobank.ua/bank/currency'
 import { currenciesMap } from '@/assets/constants/currenciesMap'
+import { keysToRemove } from '@/assets/constants/keysToRemove'
+import { COVERTATION_HISTORY } from '@/assets/constants/covertationHistory'
 export default {
     name: 'CurrenciesList',
 
@@ -181,18 +183,43 @@ export default {
             const rate = radioInput === 'rateBuy' ? rateBuy : rateSell
             const result =
                 radioInput === 'rateBuy' ? amount / rate : amount * rate
-            localStorage.setItem('result', result)
+            localStorage.setItem('result', result.toFixed(2))
+            this.makeConvertListItem()
             this.$router.push('/result')
+        },
+        // Создание строки для списка конвертаций и запись ее в localStorage:
+        makeConvertListItem() {
+            const amount = localStorage.amount
+            const currency = localStorage.optionInput
+            const currencyFrom =
+                localStorage.radioInput === 'rateBuy' ? 'UAH' : currency
+            const currencyTo =
+                localStorage.radioInput === 'rateBuy' ? currency : 'UAH'
+            const result = Number(localStorage.result)
+            const item = `${amount} ${currencyFrom} = ${result} ${currencyTo}`
+            localStorage.setItem('convertListItem', item)
+            console.log(
+                'itemFromLocalStorage: ',
+                localStorage.getItem('convertListItem'),
+            )
+            this.addConvertListItemToHistoryArray(item)
+        },
+
+        addConvertListItemToHistoryArray(item) {
+            COVERTATION_HISTORY.push(item)
+            const historyArray = COVERTATION_HISTORY
+
+            localStorage.setItem('convertListItemsArray', historyArray)
+            const historyInLocalStorage = localStorage.getItem(
+                'convertListItemsArray',
+            )
+            const ArrayFromHistory = historyInLocalStorage.split(',')
+            console.log('convertListItemsArray: ', ArrayFromHistory)
         },
 
         // Отмена операции с очисткой input и amount в localStorage и переход на страницу конвертера:
         cancelOperation() {
-            localStorage.removeItem('result')
-            localStorage.removeItem('optionInput')
-            localStorage.removeItem('radioInput')
-            localStorage.removeItem('amount')
-            localStorage.removeItem('currencyCode')
-            localStorage.removeItem('currencyObject')
+            keysToRemove.forEach((key) => localStorage.removeItem(key))
             this.$router.push('/converter')
         },
     },
@@ -212,8 +239,6 @@ export default {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
     padding: 20px;
 }
 .currencies__container {

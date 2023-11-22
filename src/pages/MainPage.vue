@@ -32,7 +32,7 @@ export default {
 }
 
 .header__title {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
         'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;

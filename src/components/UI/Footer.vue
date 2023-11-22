@@ -1,18 +1,14 @@
 <template>
-    <div class="footer__container">
-        <footer class="footer">
-            <div className="copyright">
-                <p>
-                    © 2023 All rights reserved <br />
-                    <a
-                        href="https://kreker2112.github.io/goit_js_basic_course/"
-                    >
-                        kreker2112.github.io
-                    </a>
-                </p>
-            </div>
-        </footer>
-    </div>
+    <footer class="footer">
+        <div className="copyright">
+            <p>
+                © 2023 All rights reserved <br />
+                <a href="https://kreker2112.github.io/goit_js_basic_course/">
+                    kreker2112.github.io
+                </a>
+            </p>
+        </div>
+    </footer>
 </template>
 
 <script>
@@ -22,13 +18,11 @@ export default {
 </script>
 
 <style scoped>
-.footer__container {
-    position: relative;
-}
 .footer {
     position: absolute;
+    bottom: 0;
     width: 100%;
-    padding: 60px 0 50px;
+    padding: 20px 0 20px;
     background-color: #12c0b2;
     color: #fff;
 }

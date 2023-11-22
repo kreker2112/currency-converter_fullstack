@@ -3,6 +3,8 @@ import ButtonForConvert from '@/components/UI/Button.vue'
 import NavButton from '@/components/UI/NavButton'
 import SmallButton from '@/components/UI/SmallButton'
 import FooterComponent from '@/components/UI/Footer'
+import ConvertationHistory from '@/components/UI/ConvertationHistory'
+import HistoryListItem from '@/components/UI/HistoryListItem'
 
 export default [
     CurrencyInput,
@@ -10,4 +12,6 @@ export default [
     NavButton,
     SmallButton,
     FooterComponent,
+    ConvertationHistory,
+    HistoryListItem,
 ]

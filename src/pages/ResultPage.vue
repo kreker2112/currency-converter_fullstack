@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { keysToRemove } from '@/assets/constants/keysToRemove'
 export default {
     name: 'ResultPage',
     data() {
@@ -28,18 +29,12 @@ export default {
                 localStorage.getItem('radioInput') === 'rateBuy'
                     ? localStorage.getItem('optionInput')
                     : 'UAH'
-            const roundedResult = result.toFixed(2) + ` ${currency}`
-            return (this.result = roundedResult)
+            const resultWithCurrency = result + ` ${currency}`
+            return (this.result = resultWithCurrency)
         },
 
         cancelOperation() {
-            localStorage.removeItem('result')
-            localStorage.removeItem('resultWithCurrency')
-            localStorage.removeItem('optionInput')
-            localStorage.removeItem('radioInput')
-            localStorage.removeItem('amount')
-            localStorage.removeItem('currencyCode')
-            localStorage.removeItem('currencyObject')
+            keysToRemove.forEach((key) => localStorage.removeItem(key))
             this.$router.push('/converter')
         },
     },
