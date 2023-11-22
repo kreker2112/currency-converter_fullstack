@@ -42,6 +42,7 @@ export default {}
         'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: #fff;
     padding: 15px;
+    height: 80px;
 }
 
 .navbar__btns {

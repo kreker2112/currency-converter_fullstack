@@ -40,10 +40,13 @@ export default {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Blinker', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
+
 .app {
     max-width: 1480px;
-    height: 92.5vh;
+    height: calc(100vh - 80px);
     margin: 0 auto;
     padding: 25vh;
     /* padding-top: 20vh; */
