@@ -2,14 +2,19 @@
     <div class="container convertation-history__container">
         <h1 class="convertation-history__header">История конвертаций:</h1>
         <transition-group name="convertation-history__list"
-            ><div class="container list-item">
-                <div
+            ><div
+                v-for="item in getCurrenciesHistory"
+                :key="item"
+                class="container list-item"
+            >
+                {{ item }}
+                <!-- <div
                     v-for="item in getCurrenciesHistory"
                     :key="item + index"
                     class="list-item"
                 >
                     {{ item }}
-                </div>
+                </div> -->
             </div>
         </transition-group>
     </div>
@@ -62,5 +67,14 @@ export default {
 }
 .list-item:not(:last-of-type) {
     margin-bottom: 10px;
+}
+.convertation-history__list-enter-active,
+.convertation-history__list-leave-active {
+    transition: all 0.5s;
+}
+.convertation-history__list-enter-from,
+.convertation-history__list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
 }
 </style>
