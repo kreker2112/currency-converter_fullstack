@@ -1,13 +1,11 @@
 <template>
-    <div>
-        <InputForm />
-    </div>
+    <InputForm />
 </template>
 
 <script>
 import InputForm from '@/components/InputForm.vue'
 export default {
-    name: 'App',
+    name: 'ConverterPage',
     components: {
         InputForm,
     },
