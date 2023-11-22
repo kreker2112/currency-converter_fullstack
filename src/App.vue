@@ -27,7 +27,6 @@ export default {
                 localStorage.getItem('convertListItemsArray'),
             )
             const exchangeHistoryArray = exchangeHistory
-            console.log('exchangeHistoryArray', exchangeHistoryArray)
             this.setCurrenciesHistory(exchangeHistoryArray)
         },
     },

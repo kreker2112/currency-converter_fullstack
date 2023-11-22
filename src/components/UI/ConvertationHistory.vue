@@ -38,7 +38,7 @@ export default {
     right: 0;
     padding: 15px;
     max-width: 480px;
-    height: 85.5vh;
+    height: 85.6vh;
     border: 4px solid #12c0b2;
     overflow-y: scroll;
 }
@@ -70,7 +70,7 @@ export default {
 }
 .convertation-history__list-enter-active,
 .convertation-history__list-leave-active {
-    transition: all 0.5s;
+    transition: all 1s;
 }
 .convertation-history__list-enter-from,
 .convertation-history__list-leave-to {
