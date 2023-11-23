@@ -8,13 +8,6 @@
                 class="container list-item"
             >
                 {{ item }}
-                <!-- <div
-                    v-for="item in getCurrenciesHistory"
-                    :key="item + index"
-                    class="list-item"
-                >
-                    {{ item }}
-                </div> -->
             </div>
         </transition-group>
     </div>
