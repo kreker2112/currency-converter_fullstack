@@ -2,7 +2,7 @@
     <Navbar />
     <div class="app">
         <router-view />
-        <ConvertationHistory v-if="shouldShow" />
+        <ConvertationHistory v-if="isExchangeHistoryVisible" />
     </div>
 
     <FooterComponent />
@@ -19,15 +19,13 @@ export default {
         ConvertationHistory,
     },
     computed: {
-        shouldShow() {
-            if (
-                this.$route.path === '/converter' ||
-                this.$route.path === '/converter/currencies' ||
-                this.$route.path === '/converter/result'
-            ) {
-                return true
-            }
-            return false
+        isExchangeHistoryVisible() {
+            const pathsWithExchangeHistory = [
+                '/converter',
+                '/converter/currencies',
+                '/converter/result',
+            ]
+            return pathsWithExchangeHistory.includes(this.$route.path)
         },
     },
 
