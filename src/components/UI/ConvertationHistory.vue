@@ -33,12 +33,12 @@ export default {
 
 <style scoped>
 .container.convertation-history__container {
-    position: absolute;
+    position: fixed;
     top: 80px;
     right: 0;
     padding: 15px;
-    max-width: 480px;
-    height: 85.6vh;
+    width: calc(100vw - 80%);
+    height: calc(100vh - 156px);
     border: 4px solid #12c0b2;
     overflow-y: scroll;
 }

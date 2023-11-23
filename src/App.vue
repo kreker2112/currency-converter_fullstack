@@ -42,12 +42,11 @@ export default {
     font-family: 'Blinker', sans-serif;
     font-family: 'Roboto', sans-serif;
 }
-
 .app {
     max-width: 1480px;
-    height: calc(100vh - 80px);
-    margin: 0 auto;
+    width: calc(100vw - 20%);
+    height: calc(100vh - 156px);
+    margin: 0;
     padding: 25vh;
-    /* padding-top: 20vh; */
 }
 </style>

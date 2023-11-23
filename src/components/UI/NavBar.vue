@@ -24,8 +24,8 @@ export default {}
 
 <style scoped>
 .navbar {
-    /* position: fixed;
-    width: 100%; */
+    position: fixed;
+    width: 100%;
     height: 80px;
     background-color: #12c0b2;
     box-shadow: 2px 2px 4px #a79e84bd;
