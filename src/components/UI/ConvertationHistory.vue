@@ -3,7 +3,7 @@
         <h1 class="convertation-history__header">История конвертаций:</h1>
         <ButtonForConvert
             class="button button__cleanup-history"
-            @click.prevent=""
+            @click="clearHistory"
             >Очистить историю</ButtonForConvert
         >
         <transition-group name="convertation-history__list"
@@ -25,7 +25,11 @@ export default {
 
     computed: { ...mapGetters(['getCurrenciesHistory']) },
     mounted() {},
-    methods: {},
+    methods: {
+        clearHistory() {
+            localStorage.setItem('convertListItemsArray', '[]')
+        },
+    },
 }
 </script>
 
