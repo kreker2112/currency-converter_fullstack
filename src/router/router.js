@@ -15,14 +15,14 @@ const routes = [
         name: 'converterPage',
     },
     {
-        path: '/currencies',
+        path: '/converter/currencies',
         component: CurrenciesList,
         name: 'currenciesList',
     },
     {
-        path: '/result',
+        path: '/converter/result',
         component: ResultPage,
-        name: 'ResultPage',
+        name: 'resultPage',
     },
 ]
 

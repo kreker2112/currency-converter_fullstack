@@ -35,7 +35,6 @@ export default {
 
 <style scoped>
 .container.convertation-history__container {
-    position: absolute;
     top: 80px;
     right: 0;
     padding: 15px;
@@ -51,8 +50,6 @@ export default {
 }
 
 .button.button__cleanup-history {
-    position: relative;
-    margin-left: calc(50% - 75px);
     margin-bottom: 15px;
     width: 150px;
     height: 30px;

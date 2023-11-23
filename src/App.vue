@@ -2,8 +2,9 @@
     <Navbar />
     <div class="app">
         <router-view />
+        <ConvertationHistory v-if="shouldShow" />
     </div>
-    <ConvertationHistory />
+
     <FooterComponent />
 </template>
 
@@ -17,8 +18,22 @@ export default {
         Navbar,
         ConvertationHistory,
     },
+    computed: {
+        shouldShow() {
+            if (
+                this.$route.path === '/converter' ||
+                this.$route.path === '/converter/currencies' ||
+                this.$route.path === '/converter/result'
+            ) {
+                return true
+            }
+            return false
+        },
+    },
+
     mounted() {
         this.initExchangeHistory()
+        console.log(this.$route.path)
     },
     methods: {
         ...mapMutations(['setCurrenciesHistory']),
@@ -41,12 +56,15 @@ export default {
     font-family: 'Blinker', sans-serif;
     font-family: 'Roboto', sans-serif;
 }
+
 .app {
-    position: relative;
+    position: absolute;
     top: 80px;
-    max-width: 1480px;
-    height: calc(100vh - 156px);
-    margin: 0 auto;
-    padding: 25vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    width: 100%;
 }
 </style>

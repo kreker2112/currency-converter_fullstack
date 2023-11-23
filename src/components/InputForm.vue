@@ -38,8 +38,6 @@ export default {
             this.setAmount(this.amount)
             this.$router.push({
                 name: 'currenciesList',
-                // Передача параметра через query
-                // query: { amount: this.amount },
             })
         },
         addAmountToLocalStorageOnInput() {
@@ -55,9 +53,8 @@ export default {
     flex-direction: column;
     text-align: center;
     gap: 15px;
-    max-width: 500px;
-    margin: 0 auto;
     padding: 15px;
+    width: 30vw;
     border: 2px solid #18aa66;
     box-shadow: -2px 2px 2px #a79e84bd;
     border-radius: 10px;

@@ -14,4 +14,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.input-form__container {
+    margin: 0 auto;
+}
+</style>

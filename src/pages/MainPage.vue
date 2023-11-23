@@ -17,8 +17,13 @@ export default {
 
 <style scoped>
 .header__container {
-    position: absolute;
-    right: 350px;
+    margin: 0 auto;
+    width: 50vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .header__title {

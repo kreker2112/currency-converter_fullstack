@@ -1,5 +1,5 @@
 <template>
-    <div class="currencies__form" @submit.prevent>
+    <div class="currencies__list" @submit.prevent>
         <fieldset class="fieldset__container">
             <legend for="currency-select" class="currencies-legend__header">
                 Выберите, пожалуйста, валюту для конвертации
@@ -190,7 +190,7 @@ export default {
                 radioInput === 'rateBuy' ? amount / rate : amount * rate
             localStorage.setItem('result', result.toFixed(2))
             this.makeConvertListItem()
-            this.$router.push('/result')
+            this.$router.push({ name: 'resultPage' })
         },
         // Создание строки для списка конвертаций и запись ее в localStorage:
         makeConvertListItem() {
@@ -234,13 +234,16 @@ export default {
         // Отмена операции с очисткой input и amount в localStorage и переход на страницу конвертера:
         cancelOperation() {
             keysToRemove.forEach((key) => localStorage.removeItem(key))
-            this.$router.push('/converter')
+            this.$router.push({ name: 'converterPage' })
         },
     },
 }
 </script>
 
 <style scoped>
+.currencies__list {
+    margin: 0 auto;
+}
 .fieldset__container {
     border: 2px solid #12c0b2;
     border-radius: 5px;
@@ -248,13 +251,7 @@ export default {
     margin: 0 auto;
     width: 50vw;
 }
-.currencies__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-}
+
 .currencies__container {
     display: flex;
     flex-direction: row;

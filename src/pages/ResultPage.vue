@@ -1,12 +1,17 @@
 <template>
-    <div class="container result__container">
-        <h1 class="result__container-header">Результат</h1>
-        <span>{{ result }}</span>
-    </div>
-    <div class="buttons buttons__contaier">
-        <small-button class="button calculate-button" @click="cancelOperation">
-            Вернуться в начало
-        </small-button>
+    <div class="result-page">
+        <div class="container result__container">
+            <h1 class="result__container-header">Результат</h1>
+            <span>{{ result }}</span>
+        </div>
+        <div class="buttons buttons__contaier">
+            <small-button
+                class="button calculate-button"
+                @click="cancelOperation"
+            >
+                Вернуться в начало
+            </small-button>
+        </div>
     </div>
 </template>
 
@@ -42,6 +47,10 @@ export default {
 </script>
 
 <style scoped>
+.result-page {
+    margin: 0 auto;
+    height: 100%;
+}
 .container.result__container {
     margin: 0 auto;
     width: 15vw;
