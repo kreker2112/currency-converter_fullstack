@@ -161,7 +161,7 @@ export default {
         findCurrencieWithCurrencyCode() {
             const currencies = this.handleCurrencies()
             const currencyCode = Number(localStorage.currencyCode)
-            currencies?.find((item) => {
+            currencies.find((item) => {
                 if (
                     item.currencyCodeA === currencyCode &&
                     item.currencyCodeB === 980

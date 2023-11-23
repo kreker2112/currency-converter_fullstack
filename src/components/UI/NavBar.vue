@@ -24,7 +24,7 @@ export default {}
 
 <style scoped>
 .navbar {
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 80px;
     background-color: #12c0b2;
@@ -46,6 +46,8 @@ export default {}
 }
 
 .navbar__btns {
+    position: absolute;
+    right: 0;
     display: flex;
     align-items: center;
     justify-content: flex-end;

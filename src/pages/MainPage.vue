@@ -1,13 +1,11 @@
 <template>
     <header class="header__container">
-        <div class="pages__container">
-            <h1 class="header__title">
-                Добро пожаловать в личный кабинет предпринимателя! Тут можно
-                конвертировать валюту, хранить данные о поступлениях денежных
-                средств, расчет дохода за период, расчет суммы налогов и
-                формирование бюджетных платежей
-            </h1>
-        </div>
+        <h1 class="header__title">
+            Добро пожаловать в личный кабинет предпринимателя! Тут можно
+            конвертировать валюту, хранить данные о поступлениях денежных
+            средств, расчет дохода за период, расчет суммы налогов и
+            формирование бюджетных платежей
+        </h1>
     </header>
 </template>
 
@@ -19,16 +17,8 @@ export default {
 
 <style scoped>
 .header__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.pages__container {
-    display: flex;
-    justify-content: space-between;
-    margin: 15px 0;
+    position: absolute;
+    right: 350px;
 }
 
 .header__title {

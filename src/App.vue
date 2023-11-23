@@ -35,7 +35,6 @@ export default {
 
 <style>
 * {
-    position: relative;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -43,10 +42,11 @@ export default {
     font-family: 'Roboto', sans-serif;
 }
 .app {
+    position: relative;
+    top: 80px;
     max-width: 1480px;
-    width: calc(100vw - 20%);
     height: calc(100vh - 156px);
-    margin: 0;
+    margin: 0 auto;
     padding: 25vh;
 }
 </style>

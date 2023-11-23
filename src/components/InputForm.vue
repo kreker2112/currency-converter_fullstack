@@ -55,7 +55,6 @@ export default {
     flex-direction: column;
     text-align: center;
     gap: 15px;
-    width: 100%;
     max-width: 500px;
     margin: 0 auto;
     padding: 15px;

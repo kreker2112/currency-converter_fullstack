@@ -1,5 +1,7 @@
 <template>
-    <InputForm />
+    <div class="input-form__container">
+        <InputForm />
+    </div>
 </template>
 
 <script>
@@ -12,4 +14,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
