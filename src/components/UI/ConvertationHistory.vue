@@ -1,11 +1,11 @@
 <template>
     <div class="container convertation-history__container">
         <h1 class="convertation-history__header">История конвертаций:</h1>
-        <!-- <ButtonForConvert
+        <ButtonForConvert
             class="button button__cleanup-history"
             @click.prevent=""
             >Очистить историю</ButtonForConvert
-        > -->
+        >
         <transition-group name="convertation-history__list"
             ><div
                 v-for="item in getCurrenciesHistory"
@@ -47,9 +47,13 @@ export default {
 }
 
 .button.button__cleanup-history {
+    position: relative;
+    margin-left: calc(50% - 75px);
     margin-bottom: 15px;
-
-    font-size: 16px;
+    width: 150px;
+    height: 30px;
+    font-size: 12px;
+    padding: 5px;
 }
 .convertation-history__list {
     display: flex;
