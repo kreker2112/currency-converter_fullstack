@@ -12,19 +12,19 @@
 </template>
 
 <script>
-import Notiflix from 'notiflix'
-import { mapMutations } from 'vuex'
+import Notiflix from 'notiflix';
+import { mapMutations } from 'vuex';
 
 export default {
     name: 'InputForm',
     data() {
         return {
             amount: '',
-        }
+        };
     },
     mounted() {
         // Получение данных из localStorage:
-        this.amount = localStorage.amount
+        this.amount = localStorage.amount;
     },
 
     methods: {
@@ -32,19 +32,19 @@ export default {
         accept() {
             this.amount === undefined || this.amount === ''
                 ? Notiflix.Notify.failure('Введите сумму!')
-                : this.convert()
+                : this.convert();
         },
         convert() {
-            this.setAmount(this.amount)
+            this.setAmount(this.amount);
             this.$router.push({
                 name: 'currenciesList',
-            })
+            });
         },
         addAmountToLocalStorageOnInput() {
-            localStorage.setItem('amount', this.amount)
+            localStorage.setItem('amount', this.amount);
         },
     },
-}
+};
 </script>
 
 <style scoped>

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-export default { name: 'nav-button' }
+export default { name: 'nav-button' };
 </script>
 
 <style scoped>

@@ -8,9 +8,9 @@
 </template>
 
 <script setup>
-import ConvertationHistory from '@/components/ConvertationHistory.vue'
-import Navbar from '@/components/NavBar.vue'
-import FooterComponent from '@/components/FooterComponent.vue'
+import ConvertationHistory from '@/components/ConvertationHistory.vue';
+import Navbar from '@/components/NavBar.vue';
+import FooterComponent from '@/components/FooterComponent.vue';
 </script>
 
 <style scoped>

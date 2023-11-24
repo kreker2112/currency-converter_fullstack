@@ -1,3 +1,5 @@
-module.exports = {
-    services: [require('volar-service-vetur').create()],
-}
+import { create } from 'volar-service-vetur';
+
+export default {
+    services: [create()],
+};

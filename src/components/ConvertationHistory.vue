@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 export default {
     name: 'ConvertationHistory',
 
@@ -27,10 +27,10 @@ export default {
     mounted() {},
     methods: {
         clearHistory() {
-            localStorage.setItem('convertListItemsArray', '[]')
+            localStorage.setItem('convertListItemsArray', '[]');
         },
     },
-}
+};
 </script>
 
 <style scoped>

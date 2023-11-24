@@ -11,10 +11,10 @@ const amountModule = {
     },
     actions: {
         setCurrenciesHistory: ({ commit }, currenciesHistory) => {
-            commit('setCurrenciesHistory', currenciesHistory)
+            commit('setCurrenciesHistory', currenciesHistory);
         },
     },
     // namespaced: true,
-}
+};
 
-export default amountModule
+export default amountModule;

@@ -1,8 +1,8 @@
-import IntroPage from '@/pages/IntroPage.vue'
-import ConverterPage from '@/pages/ConverterPage.vue'
-import CurrenciesList from '@/pages/CurrenciesList.vue'
-import ResultPage from '@/pages/ResultPage.vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import IntroPage from '@/pages/IntroPage.vue';
+import ConverterPage from '@/pages/ConverterPage.vue';
+import CurrenciesList from '@/pages/CurrenciesList.vue';
+import ResultPage from '@/pages/ResultPage.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
@@ -37,11 +37,11 @@ const routes = [
             layout: 'currencyLayout',
         },
     },
-]
+];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
-})
+});
 
-export default router
+export default router;

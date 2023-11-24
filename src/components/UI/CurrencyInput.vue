@@ -6,18 +6,20 @@
             class="input"
             type="number"
             placeholder="Введите сумму"
-            @input="updateInput"
+            @payload="updateInput"
         />
         <small-button @click="clearInput"> Очистить </small-button>
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+
+export default defineComponent({
     name: 'CurrencyInput',
     props: {
         modelValue: {
-            type: [String, Number],
+            type: [String, Number] as PropType<string | number>,
             default: '',
             required: true,
         },
@@ -25,15 +27,18 @@ export default {
     emits: ['update:modelValue', 'clearInput'],
 
     methods: {
-        updateInput(event) {
-            this.$emit('update:modelValue', event.target.value)
+        updateInput(payload: InputEvent): void {
+            this.$emit(
+                'update:modelValue',
+                (payload.target as HTMLInputElement).value,
+            );
         },
-        clearInput() {
-            this.$emit('update:modelValue', '')
-            localStorage.removeItem('amount')
+        clearInput(): void {
+            this.$emit('update:modelValue', '');
+            localStorage.removeItem('amount');
         },
     },
-}
+});
 </script>
 
 <style scoped>

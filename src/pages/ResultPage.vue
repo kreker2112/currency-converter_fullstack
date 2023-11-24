@@ -16,34 +16,34 @@
 </template>
 
 <script>
-import { keysToRemove } from '@/assets/constants/keysToRemove'
+import { keysToRemove } from '@/assets/constants/keysToRemove';
 export default {
     name: 'ResultPage',
     data() {
         return {
             result: null,
-        }
+        };
     },
     mounted() {
-        this.getResult()
+        this.getResult();
     },
     methods: {
         getResult() {
-            const result = Number(localStorage.getItem('result'))
+            const result = Number(localStorage.getItem('result'));
             const currency =
                 localStorage.getItem('radioInput') === 'rateBuy'
                     ? localStorage.getItem('optionInput')
-                    : 'UAH'
-            const resultWithCurrency = result + ` ${currency}`
-            return (this.result = resultWithCurrency)
+                    : 'UAH';
+            const resultWithCurrency = result + ` ${currency}`;
+            return (this.result = resultWithCurrency);
         },
 
         cancelOperation() {
-            keysToRemove.forEach((key) => localStorage.removeItem(key))
-            this.$router.push('/converter')
+            keysToRemove.forEach((key) => localStorage.removeItem(key));
+            this.$router.push('/converter');
         },
     },
-}
+};
 </script>
 
 <style scoped>

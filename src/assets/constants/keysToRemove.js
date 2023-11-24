@@ -6,4 +6,4 @@ export const keysToRemove = [
     'amount',
     'currencyCode',
     'currencyObject',
-]
+];

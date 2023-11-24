@@ -5,7 +5,7 @@
 </template>
 
 <script>
-export default { name: 'small-button' }
+export default { name: 'small-button' };
 </script>
 
 <style scoped>
