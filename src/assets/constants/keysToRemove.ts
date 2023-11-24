@@ -1,4 +1,4 @@
-export const keysToRemove = [
+export const keysToRemove: Array<string> = [
     'result',
     'resultWithCurrency',
     'optionInput',

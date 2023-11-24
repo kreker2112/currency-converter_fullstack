@@ -24,10 +24,9 @@ module.exports = {
     globals: {
         $nuxt: true,
     },
-    parser: '@typescript-eslint/parser',
+    parser: 'vue-eslint-parser',
     parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
+        parser: '@typescript-eslint/parser',
     },
     plugins: ['@typescript-eslint', 'prettier'],
 };

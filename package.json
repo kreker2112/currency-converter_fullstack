@@ -1,66 +1,69 @@
 {
-    "name": "vue3-course",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+  "name": "vue3-course",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@jridgewell/sourcemap-codec": "^1.4.15",
+    "axios": "^1.5.1",
+    "core-js": "^3.8.3",
+    "global": "^4.4.0",
+    "notiflix": "^3.2.6",
+    "uuid": "^9.0.1",
+    "volar-service-vetur": "^0.0.14",
+    "vue": "^3.2.36",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/eslint-parser": "^7.12.16",
+    "@babel/preset-env": "^7.23.2",
+    "@types/uuid": "^9.0.6",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.3.7",
+    "@vue/eslint-config-typescript": "^9.1.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-vue": "^9.17.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
     },
-    "dependencies": {
-        "@jridgewell/sourcemap-codec": "^1.4.15",
-        "axios": "^1.5.1",
-        "core-js": "^3.8.3",
-        "global": "^4.4.0",
-        "notiflix": "^3.2.6",
-        "uuid": "^9.0.1",
-        "volar-service-vetur": "^0.0.14",
-        "vue": "^3.2.36",
-        "vue-router": "^4.0.3",
-        "vuex": "^4.0.2"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.23.2",
-        "@babel/eslint-parser": "^7.12.16",
-        "@babel/preset-env": "^7.23.2",
-        "@types/uuid": "^9.0.6",
-        "@typescript-eslint/eslint-plugin": "^6.12.0",
-        "@typescript-eslint/parser": "^6.12.0",
-        "@vue/cli-plugin-babel": "~5.0.0",
-        "@vue/cli-plugin-eslint": "~5.0.0",
-        "@vue/cli-plugin-router": "~5.0.0",
-        "@vue/cli-plugin-vuex": "~5.0.0",
-        "@vue/cli-service": "^5.0.8",
-        "@vue/compiler-sfc": "^3.3.7",
-        "eslint": "^8.54.0",
-        "eslint-config-prettier": "^8.3.0",
-        "eslint-plugin-prettier": "^5.0.1",
-        "eslint-plugin-vue": "^9.17.0",
-        "prettier": "^3.0.3",
-        "typescript": "^5.3.2",
-        "vite": "^5.0.2"
-    },
-    "eslintConfig": {
-        "root": true,
-        "env": {
-            "node": true
-        },
-        "extends": [
-            "plugin:vue/vue3-essential",
-            "eslint:recommended",
-            "plugin:prettier/recommended"
-        ],
-        "parserOptions": {
-            "parser": "@babel/eslint-parser"
-        },
-        "rules": {}
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not dead",
-        "not ie 11"
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended",
+      "plugin:prettier/recommended",
+      "@vue/typescript"
     ],
-    "_id": "vue3-course@0.1.0",
-    "readme": "ERROR: No README data found!"
+    "parserOptions": {
+      "parser": "@typescript-eslint/parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "_id": "vue3-course@0.1.0",
+  "readme": "ERROR: No README data found!"
 }

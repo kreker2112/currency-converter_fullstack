@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <component :is="currentLayout">
-            <router-view> </router-view>
+            <router-view />
         </component>
     </div>
 </template>

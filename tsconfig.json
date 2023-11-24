@@ -1,36 +1,40 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "target": "ESNext",
-        "allowJs": true,
-        "useDefineForClassFields": true,
-        "allowSyntheticDefaultImports": true,
-        "module": "ESNext",
-        "moduleResolution": "Node",
-        "strict": true,
-        "jsx": "preserve",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "esModuleInterop": true,
-        "jsxFactory": "h",
-        "jsxFragmentFactory": "Fragment",
-        "lib": ["ESNext", "DOM"],
-        "skipLibCheck": true,
-        "noEmit": true,
-        "paths": {
-            "~/*": ["./*"],
-            "@/*": ["src/*"],
-            "~~/*": ["./*"],
-            "@@/*": ["./*"]
-        },
-        "types": ["vite/client", "vue"]
-    },
-    "include": [
-        "src/**/*.ts",
-        "src/**/*.d.ts",
-        "src/**/*.tsx",
-        "src/**/*.vue",
-        "src/main.js"
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "types": [
+      "webpack-env"
     ],
-    "exclude": ["node_modules", ".nuxt", "dist"]
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
