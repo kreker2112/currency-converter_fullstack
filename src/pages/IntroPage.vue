@@ -11,15 +11,15 @@
 
 <script>
 export default {
-    name: 'MainPage',
+    name: 'IntroPage',
 }
 </script>
 
 <style scoped>
 .header__container {
     margin: 0 auto;
-    width: 50vw;
-    height: 80vh;
+    width: 1480px;
+    height: calc(100vh - 156px);
     display: flex;
     flex-direction: column;
     justify-content: center;
