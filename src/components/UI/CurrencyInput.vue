@@ -6,7 +6,7 @@
             class="input"
             type="number"
             placeholder="Введите сумму"
-            @payload="updateInput"
+            @input="updateInput"
         />
         <small-button @click="clearInput"> Очистить </small-button>
     </div>
@@ -27,11 +27,9 @@ export default defineComponent({
     emits: ['update:modelValue', 'clearInput'],
 
     methods: {
-        updateInput(payload: InputEvent): void {
-            this.$emit(
-                'update:modelValue',
-                (payload.target as HTMLInputElement).value,
-            );
+        updateInput(input: Event): void {
+            const inputValue = (input.target as HTMLInputElement).value;
+            this.$emit('update:modelValue', inputValue);
         },
         clearInput(): void {
             this.$emit('update:modelValue', '');
