@@ -69,9 +69,8 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
-axios.defaults.baseURL = 'https://api.monobank.ua/bank/currency';
 import { currenciesMap } from '@/assets/constants/currenciesMap';
 import { keysToRemove } from '@/assets/constants/keysToRemove';
 
@@ -79,44 +78,53 @@ import { mapActions } from 'vuex';
 export default {
     name: 'CurrenciesList',
 
-    data() {
+    data(): {
+        amount: string;
+        optionInput: string;
+    } {
         return {
             amount: '',
             optionInput: '',
         };
     },
 
-    mounted() {
+    mounted(): void {
         this.amount = localStorage.amount;
         this.fetchCurrencies();
         this.addOptionInputOnMounted();
         this.addRadioInputOnMounted();
-        this.optionInput = localStorage.getItem('optionInput');
+        this.optionInput = localStorage.getItem('optionInput') || '';
     },
 
     methods: {
         ...mapActions(['setCurrenciesHistory']),
         // Получение данных из API банка Монобанк и запись их в localStorage:
-        async fetchCurrencies() {
+        async fetchCurrencies(): Promise<void> {
             try {
-                const response = await axios.get();
+                const response = await axios.get(
+                    'https://api.monobank.ua/bank/currency',
+                );
                 const currencies = response.data;
                 localStorage.setItem('currencies', JSON.stringify(currencies));
-            } catch (error) {
+            } catch (error: any) {
                 error.response.status === 429
                     ? this.handleCurrencies()
                     : console.error(error);
             }
         },
         // Добавление значения option в localStorage при его изменении:
-        addOptionValueToLocalStorage() {
-            const select = document.getElementById('currency-select');
+        addOptionValueToLocalStorage(): void {
+            const select = document.getElementById(
+                'currency-select',
+            ) as HTMLSelectElement;
             const selectedOption = select.options[select.selectedIndex].value;
             localStorage.setItem('optionInput', selectedOption);
         },
         // Добавление значения optionInput в localStorage при монтировании компонента:
-        addOptionInputOnMounted() {
-            const select = document.getElementById('currency-select');
+        addOptionInputOnMounted(): void {
+            const select = document.getElementById(
+                'currency-select',
+            ) as HTMLSelectElement;
             const selectedOption = select.options[select.selectedIndex].value;
             localStorage.optionInput === undefined
                 ? localStorage.setItem('optionInput', selectedOption)
@@ -125,19 +133,28 @@ export default {
             this.findCurrencieWithCurrencyCode();
         },
         // Добавление значения radioInput в localStorage:
-        addRadioInputValueToLocalStorage() {
-            const input = document.querySelector('input[type="radio"]:checked');
+        addRadioInputValueToLocalStorage(): void {
+            const input = document.querySelector(
+                'input[type="radio"]:checked',
+            ) as HTMLInputElement;
             localStorage.setItem('radioInput', input.value);
         },
         // Получение данных инпута из localStorage:
-        getInputFromLocalStorage() {
-            localStorage.radioInput === 'rateBuy'
-                ? (document.getElementById('rateBuy').checked = true)
-                : (document.getElementById('rateSell').checked = true);
+        getInputFromLocalStorage(): void {
+            const radioInput = localStorage.radioInput;
+            radioInput === 'rateBuy'
+                ? ((
+                      document.getElementById('rateBuy') as HTMLInputElement
+                  ).checked = true)
+                : ((
+                      document.getElementById('rateSell') as HTMLInputElement
+                  ).checked = true);
         },
         // Добавление значения radioInput в localStorage при монтировании компонента:
-        addRadioInputOnMounted() {
-            const input = document.querySelector('input[type="radio"]:checked');
+        addRadioInputOnMounted(): void {
+            const input = document.querySelector(
+                'input[type="radio"]:checked',
+            ) as HTMLInputElement;
             localStorage.input === undefined
                 ? localStorage.setItem('radioInput', input.value)
                 : this.getInputFromLocalStorage();

@@ -4,8 +4,9 @@
     </button>
 </template>
 
-<script>
-export default { name: 'nav-button' };
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({ name: 'nav-button' });
 </script>
 
 <style scoped>

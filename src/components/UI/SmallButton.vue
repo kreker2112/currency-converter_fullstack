@@ -4,8 +4,9 @@
     </button>
 </template>
 
-<script>
-export default { name: 'small-button' };
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({ name: 'small-button' });
 </script>
 
 <style scoped>

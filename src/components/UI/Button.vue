@@ -4,8 +4,9 @@
     </button>
 </template>
 
-<script>
-export default { name: 'ButtonForConvert' };
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({ name: 'ButtonForConvert' });
 </script>
 
 <style scoped>

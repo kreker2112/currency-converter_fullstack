@@ -3,7 +3,7 @@
         <div className="copyright">
             <p>
                 © 2023 All rights reserved <br />
-                <a href="https://kreker2112.github.io/goit_js_basic_course/">
+                <a href="https://github.com/kreker2112/-urrency-converter.git">
                     kreker2112.github.io
                 </a>
             </p>
@@ -11,10 +11,11 @@
     </footer>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({
     name: 'FooterComponent',
-};
+});
 </script>
 
 <style scoped>

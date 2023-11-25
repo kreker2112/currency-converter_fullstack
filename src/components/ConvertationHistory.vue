@@ -18,19 +18,20 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
-export default {
+export default defineComponent({
     name: 'ConvertationHistory',
 
     computed: { ...mapGetters(['getCurrenciesHistory']) },
     mounted() {},
     methods: {
-        clearHistory() {
+        clearHistory(): void {
             localStorage.setItem('convertListItemsArray', '[]');
         },
     },
-};
+});
 </script>
 
 <style scoped>

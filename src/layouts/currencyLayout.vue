@@ -7,7 +7,7 @@
     <FooterComponent />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import ConvertationHistory from '@/components/ConvertationHistory.vue';
 import Navbar from '@/components/NavBar.vue';
 import FooterComponent from '@/components/FooterComponent.vue';

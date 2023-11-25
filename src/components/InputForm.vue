@@ -11,40 +11,40 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import Notiflix from 'notiflix';
 import { mapMutations } from 'vuex';
 
-export default {
+export default defineComponent({
     name: 'InputForm',
     data() {
         return {
-            amount: '',
+            amount: '' as string,
         };
     },
     mounted() {
-        // Получение данных из localStorage:
-        this.amount = localStorage.amount;
+        this.amount = localStorage.amount || '';
     },
 
     methods: {
-        ...mapMutations({ setAmount: 'convert/setAmount' }),
-        accept() {
+        ...mapMutations({ setAmount: 'setAmount' }),
+        accept(): void {
             this.amount === undefined || this.amount === ''
                 ? Notiflix.Notify.failure('Введите сумму!')
                 : this.convert();
         },
-        convert() {
+        convert(): void {
             this.setAmount(this.amount);
             this.$router.push({
                 name: 'currenciesList',
             });
         },
-        addAmountToLocalStorageOnInput() {
+        addAmountToLocalStorageOnInput(): void {
             localStorage.setItem('amount', this.amount);
         },
     },
-};
+});
 </script>
 
 <style scoped>
