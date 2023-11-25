@@ -18,7 +18,6 @@ export default {
     },
     computed: {
         currentLayout() {
-            console.log(this.$route.meta.layout);
             return this.$route.meta.layout;
         },
     },

@@ -70,26 +70,35 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
+
 import axios from 'axios';
+
 import { currenciesMap } from '@/assets/constants/currenciesMap';
+
 import { keysToRemove } from '@/assets/constants/keysToRemove';
 
 import { mapActions } from 'vuex';
-export default {
+
+import { CurrencyObject, Amount, OptionInput } from '@/interfaces/currency';
+
+export default defineComponent({
     name: 'CurrenciesList',
 
     data(): {
-        amount: string;
-        optionInput: string;
+        amount: Amount;
+        optionInput: OptionInput;
+        currencyObject: CurrencyObject;
     } {
         return {
-            amount: '',
-            optionInput: '',
+            amount: '' as Amount,
+            optionInput: '' as OptionInput,
+            currencyObject: {} as CurrencyObject,
         };
     },
 
     mounted(): void {
-        this.amount = localStorage.amount;
+        this.amount = localStorage.amount as string;
         this.fetchCurrencies();
         this.addOptionInputOnMounted();
         this.addRadioInputOnMounted();
@@ -104,7 +113,7 @@ export default {
                 const response = await axios.get(
                     'https://api.monobank.ua/bank/currency',
                 );
-                const currencies = response.data;
+                const currencies: CurrencyObject = response.data;
                 localStorage.setItem('currencies', JSON.stringify(currencies));
             } catch (error: any) {
                 error.response.status === 429
@@ -117,7 +126,8 @@ export default {
             const select = document.getElementById(
                 'currency-select',
             ) as HTMLSelectElement;
-            const selectedOption = select.options[select.selectedIndex].value;
+            const selectedOption: string =
+                select.options[select.selectedIndex].value;
             localStorage.setItem('optionInput', selectedOption);
         },
         // Добавление значения optionInput в localStorage при монтировании компонента:
@@ -125,7 +135,8 @@ export default {
             const select = document.getElementById(
                 'currency-select',
             ) as HTMLSelectElement;
-            const selectedOption = select.options[select.selectedIndex].value;
+            const selectedOption: string =
+                select.options[select.selectedIndex].value;
             localStorage.optionInput === undefined
                 ? localStorage.setItem('optionInput', selectedOption)
                 : this.addOptionValueToLocalStorage();
@@ -160,25 +171,26 @@ export default {
                 : this.getInputFromLocalStorage();
         },
         // Получение данных currencies из localStorage:
-        handleCurrencies() {
-            const cachedCurrencies = JSON.parse(
-                localStorage.getItem('currencies'),
+
+        handleCurrencies(): CurrencyObject[] {
+            const cachedCurrencies: CurrencyObject[] = JSON.parse(
+                localStorage.getItem('currencies') || '[]',
             );
             return cachedCurrencies;
         },
         // Поиск валюты в currenciesMap по инпуту и запись кода валюты в localStorage:
-        findCurrencieCodeWithCurrencyMapAndAddToLocalStorage() {
-            const input = localStorage.optionInput;
+        findCurrencieCodeWithCurrencyMapAndAddToLocalStorage(): void {
+            const input: string = localStorage.optionInput;
             const currencyCode = Object.keys(currenciesMap).find(
-                (key) => currenciesMap[key] === input,
+                (key: string) => currenciesMap[parseInt(key)] === input,
             );
-            localStorage.setItem('currencyCode', currencyCode);
+            localStorage.setItem('currencyCode', currencyCode || '');
         },
         // Поиск объекта валюты в респонсе API банка Монобанк по коду и запись в localStorage:
-        findCurrencieWithCurrencyCode() {
-            const currencies = this.handleCurrencies();
+        findCurrencieWithCurrencyCode(): void {
+            const currencies: CurrencyObject[] = this.handleCurrencies();
             const currencyCode = Number(localStorage.currencyCode);
-            currencies.find((item) => {
+            currencies.find((item: any) => {
                 if (
                     item.currencyCodeA === currencyCode &&
                     item.currencyCodeB === 980
@@ -194,12 +206,12 @@ export default {
             this.addOptionValueToLocalStorage();
             this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage();
             this.findCurrencieWithCurrencyCode();
-            this.optionInput = localStorage.getItem('optionInput');
+            this.optionInput = localStorage.getItem('optionInput') || '';
         },
         // Посчитать конвертацию согласно выбранным параметрам валюты и типа операции:
-        calculate() {
+        calculate(): void {
             const currencyObject = JSON.parse(
-                localStorage.getItem('currencyObject'),
+                localStorage.getItem('currencyObject') || '{}',
             );
             const amount = localStorage.amount;
             const radioInput = localStorage.radioInput;
@@ -230,7 +242,7 @@ export default {
             this.addConvertListItemToHistoryArray(item);
         },
 
-        addConvertListItemToHistoryArray(item) {
+        addConvertListItemToHistoryArray(item: string) {
             const historyInLocalStorage = localStorage.getItem(
                 'convertListItemsArray',
             );
@@ -257,7 +269,7 @@ export default {
             this.$router.push({ name: 'converterPage' });
         },
     },
-};
+});
 </script>
 
 <style scoped>
