@@ -20,15 +20,35 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+
 export default defineComponent({
     name: 'ConvertationHistory',
 
-    computed: { ...mapGetters(['getCurrenciesHistory']) },
-    mounted() {},
+    computed: {
+        ...mapGetters(['getCurrenciesHistory']),
+    },
+
+    mounted() {
+        // При создании компонента инициализируем данные из localStorage
+        const historyInLocalStorage: string | null = localStorage.getItem(
+            'convertListItemsArray' || '[]',
+        );
+
+        if (historyInLocalStorage) {
+            const convertListItemsArray: string[] = JSON.parse(
+                historyInLocalStorage,
+            );
+            this.setCurrenciesHistory(convertListItemsArray);
+        }
+    },
+
     methods: {
+        ...mapActions(['cleanCurrenciesHistory', 'setCurrenciesHistory']),
+
         clearHistory(): void {
-            localStorage.setItem('convertListItemsArray', '[]');
+            localStorage.removeItem('convertListItemsArray');
+            this.cleanCurrenciesHistory();
         },
     },
 });

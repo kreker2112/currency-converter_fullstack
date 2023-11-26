@@ -24,15 +24,24 @@ export default {
 
     mounted() {
         this.initExchangeHistory();
+        this.initCleanHistory();
     },
     methods: {
-        ...mapMutations(['setCurrenciesHistory']),
+        ...mapMutations(['setCurrenciesHistory', 'cleanCurrenciesHistory']),
         initExchangeHistory() {
             const exchangeHistory = JSON.parse(
-                localStorage.getItem('convertListItemsArray'),
+                localStorage.getItem('convertListItemsArray') || '[]',
             );
             const exchangeHistoryArray = exchangeHistory;
             this.setCurrenciesHistory(exchangeHistoryArray);
+        },
+        initCleanHistory() {
+            const exchangeHistory = JSON.parse(
+                localStorage.getItem('convertListItemsArray') || '[]',
+            );
+            if (exchangeHistory) {
+                this.cleanCurrenciesHistory();
+            }
         },
     },
 };

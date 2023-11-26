@@ -225,41 +225,30 @@ export default defineComponent({
             this.$router.push({ name: 'resultPage' });
         },
         // Создание строки для списка конвертаций и запись ее в localStorage:
-        makeConvertListItem() {
-            const amount = localStorage.amount;
-            const currency = localStorage.optionInput;
-            const currencyFrom =
+        makeConvertListItem(): void {
+            const amount: string = localStorage.amount;
+            const currency: string = localStorage.optionInput;
+            const currencyFrom: string =
                 localStorage.radioInput === 'rateBuy' ? 'UAH' : currency;
-            const currencyTo =
+            const currencyTo: string =
                 localStorage.radioInput === 'rateBuy' ? currency : 'UAH';
-            const result = Number(localStorage.result);
-            const item = `${amount} ${currencyFrom} = ${result} ${currencyTo}`;
+            const result: number = Number(localStorage.result);
+            const item: string = `${amount} ${currencyFrom} = ${result} ${currencyTo}`;
             localStorage.setItem('convertListItem', item);
-            console.log(
-                'itemFromLocalStorage: ',
-                localStorage.getItem('convertListItem'),
-            );
             this.addConvertListItemToHistoryArray(item);
         },
 
-        addConvertListItemToHistoryArray(item: string) {
-            const historyInLocalStorage = localStorage.getItem(
-                'convertListItemsArray',
-            );
+        addConvertListItemToHistoryArray(item: string): void {
+            const convertListItemsArray: string[] =
+                JSON.parse(
+                    localStorage.getItem('convertListItemsArray') || '[]',
+                ) || [];
 
-            if (historyInLocalStorage) {
-                const ArrayFromHistory = JSON.parse(historyInLocalStorage);
-                console.log('convertListItemsArray: ', ArrayFromHistory);
-                this.setCurrenciesHistory([...ArrayFromHistory, item]);
-                localStorage.setItem(
-                    'convertListItemsArray',
-                    JSON.stringify([...ArrayFromHistory, item]),
-                );
-                return;
-            }
+            convertListItemsArray.push(item);
+            this.setCurrenciesHistory(convertListItemsArray);
             localStorage.setItem(
                 'convertListItemsArray',
-                JSON.stringify([item]),
+                JSON.stringify(convertListItemsArray),
             );
         },
 
