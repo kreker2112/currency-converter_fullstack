@@ -10,9 +10,11 @@ import directives from '@/directives';
 
 import store from '@/store';
 
+import { ComponentWithname } from '@/interfaces/currency';
+
 const app = createApp(App);
 
-components.forEach((component) => {
+(components as ComponentWithname[]).forEach((component) => {
     app.component(component.name, component);
 });
 
