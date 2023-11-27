@@ -114,6 +114,7 @@ export default defineComponent({
                     'https://api.monobank.ua/bank/currency',
                 );
                 const currencies: CurrencyObject = response.data;
+                console.log(typeof currencies);
                 localStorage.setItem('currencies', JSON.stringify(currencies));
             } catch (error: any) {
                 error.response.status === 429
@@ -176,6 +177,7 @@ export default defineComponent({
             const cachedCurrencies: CurrencyObject[] = JSON.parse(
                 localStorage.getItem('currencies') || '[]',
             );
+            console.log(typeof cachedCurrencies);
             return cachedCurrencies;
         },
         // Поиск валюты в currenciesMap по инпуту и запись кода валюты в localStorage:
@@ -202,7 +204,7 @@ export default defineComponent({
                 }
             });
         },
-        findSelectedCurrency() {
+        findSelectedCurrency(): void {
             this.addOptionValueToLocalStorage();
             this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage();
             this.findCurrencieWithCurrencyCode();
@@ -253,7 +255,7 @@ export default defineComponent({
         },
 
         // Отмена операции с очисткой input и amount в localStorage и переход на страницу конвертера:
-        cancelOperation() {
+        cancelOperation(): void {
             keysToRemove.forEach((key) => localStorage.removeItem(key));
             this.$router.push({ name: 'converterPage' });
         },

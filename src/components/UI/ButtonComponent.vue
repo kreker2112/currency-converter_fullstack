@@ -4,7 +4,9 @@
     </button>
 </template>
 
-<script setup lang="ts"></script>
+<script lang="ts">
+export default { name: 'ButtonForConvert' };
+</script>
 
 <style scoped>
 .button {

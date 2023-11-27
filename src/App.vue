@@ -6,37 +6,38 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import currencyLayout from '@/layouts/currencyLayout.vue';
 import defaultLayout from '@/layouts/defaultLayout.vue';
 import { mapMutations } from 'vuex';
-export default {
+export default defineComponent({
     name: 'App',
     components: {
         currencyLayout,
         defaultLayout,
     },
     computed: {
-        currentLayout() {
-            return this.$route.meta.layout;
+        currentLayout(): string {
+            return (this.$route.meta as any).layout;
         },
     },
 
-    mounted() {
+    mounted(): void {
         this.initExchangeHistory();
         this.initCleanHistory();
     },
     methods: {
         ...mapMutations(['setCurrenciesHistory', 'cleanCurrenciesHistory']),
-        initExchangeHistory() {
-            const exchangeHistory = JSON.parse(
+        initExchangeHistory(): void {
+            const exchangeHistory: string = JSON.parse(
                 localStorage.getItem('convertListItemsArray') || '[]',
             );
-            const exchangeHistoryArray = exchangeHistory;
+            const exchangeHistoryArray: string = exchangeHistory;
             this.setCurrenciesHistory(exchangeHistoryArray);
         },
-        initCleanHistory() {
-            const exchangeHistory = JSON.parse(
+        initCleanHistory(): void {
+            const exchangeHistory: string = JSON.parse(
                 localStorage.getItem('convertListItemsArray') || '[]',
             );
             if (exchangeHistory) {
@@ -44,7 +45,7 @@ export default {
             }
         },
     },
-};
+});
 </script>
 
 <style>
