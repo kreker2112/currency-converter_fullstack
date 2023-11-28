@@ -1,7 +1,3 @@
-export interface CurrencyObject {
-    key: number;
-}
-
 export interface ComponentWithname {
     name: string;
 }

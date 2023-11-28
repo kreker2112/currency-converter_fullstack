@@ -6,7 +6,7 @@
             </legend>
 
             <div class="amount__sum">
-                <strong>Сумма для обмена:</strong> {{ amount }}
+                <strong>Сумма для обмена:</strong> {{ getAmount }}
             </div>
 
             <div class="currency currency-select">
@@ -30,7 +30,9 @@
                         name="convert"
                         value="rateBuy"
                         checked
-                        @click="addRadioInputValueToLocalStorage"
+                        @click="
+                            addRadioInputValueToComponentPropertyWithItsChanges
+                        "
                     />
                     <label class="currency currency-label" for="convertUSDtoUAH"
                         >UAH to {{ optionInput }}</label
@@ -44,7 +46,9 @@
                         class="option-input radio"
                         name="convert"
                         value="rateSell"
-                        @click="addRadioInputValueToLocalStorage"
+                        @click="
+                            addRadioInputValueToComponentPropertyWithItsChanges
+                        "
                     />
                     <label class="currency currency-label" for="convertUAHtoUSD"
                         >{{ optionInput }} to UAH</label
@@ -72,15 +76,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import axios from 'axios';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
-import { currenciesMap } from '@/assets/constants/currenciesMap';
-
-import { keysToRemove } from '@/assets/constants/keysToRemove';
-
-import { mapActions } from 'vuex';
-
-import { CurrencyObject, Amount, OptionInput } from '@/interfaces/currency';
+import { Amount, OptionInput } from '@/interfaces/currency';
 
 export default defineComponent({
     name: 'CurrenciesList',
@@ -88,175 +86,64 @@ export default defineComponent({
     data(): {
         amount: Amount;
         optionInput: OptionInput;
-        currencyObject: CurrencyObject;
     } {
         return {
             amount: '' as Amount,
             optionInput: '' as OptionInput,
-            currencyObject: {} as CurrencyObject,
         };
+    },
+
+    computed: {
+        ...mapGetters(['getCachedCurrencies', 'getOptionInput', 'getAmount']),
     },
 
     mounted(): void {
         this.amount = localStorage.amount as string;
         this.fetchCurrencies();
-        this.addOptionInputOnMounted();
-        this.addRadioInputOnMounted();
+        this.updateOptionInputOnMounted();
+        this.addRadioInputValueToComponentPropertyOnMounted();
+
         this.optionInput = localStorage.getItem('optionInput') || '';
     },
 
     methods: {
-        ...mapActions(['setCurrenciesHistory']),
-        // Получение данных из API банка Монобанк и запись их в localStorage:
-        async fetchCurrencies(): Promise<void> {
-            try {
-                const response = await axios.get(
-                    'https://api.monobank.ua/bank/currency',
-                );
-                const currencies: CurrencyObject = response.data;
-                console.log(typeof currencies);
-                localStorage.setItem('currencies', JSON.stringify(currencies));
-            } catch (error: any) {
-                error.response.status === 429
-                    ? this.handleCurrencies()
-                    : console.error(error);
-            }
-        },
-        // Добавление значения option в localStorage при его изменении:
-        addOptionValueToLocalStorage(): void {
-            const select = document.getElementById(
-                'currency-select',
-            ) as HTMLSelectElement;
-            const selectedOption: string =
-                select.options[select.selectedIndex].value;
-            localStorage.setItem('optionInput', selectedOption);
-        },
-        // Добавление значения optionInput в localStorage при монтировании компонента:
-        addOptionInputOnMounted(): void {
-            const select = document.getElementById(
-                'currency-select',
-            ) as HTMLSelectElement;
-            const selectedOption: string =
-                select.options[select.selectedIndex].value;
-            localStorage.optionInput === undefined
-                ? localStorage.setItem('optionInput', selectedOption)
-                : this.addOptionValueToLocalStorage();
-            this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage();
+        ...mapMutations([
+            'addRadioInputValueToComponentPropertyWithItsChanges',
+            'addOptionValueToOptionInputAndLocalStorageWithItsChanges',
+            'findCurrencieCodeWithCurrencyMapAndAddToState',
+            'findCurrencieWithCurrencyCode',
+            'calculateCurrency',
+            'makeConvertListItem',
+            'addConvertListItemToHistoryArray',
+        ]),
+        ...mapActions([
+            'addConvertListItemToHistoryArrayAction',
+            'fetchCurrencies',
+            'addOptionValueToOptionInputAndLocalStorageOnMounted',
+            'addRadioInputValueToComponentPropertyOnMounted',
+        ]),
+
+        updateOptionInputOnMounted(): void {
+            this.fetchCurrencies();
+            this.addOptionValueToOptionInputAndLocalStorageOnMounted();
+            this.findCurrencieCodeWithCurrencyMapAndAddToState();
             this.findCurrencieWithCurrencyCode();
         },
-        // Добавление значения radioInput в localStorage:
-        addRadioInputValueToLocalStorage(): void {
-            const input = document.querySelector(
-                'input[type="radio"]:checked',
-            ) as HTMLInputElement;
-            localStorage.setItem('radioInput', input.value);
-        },
-        // Получение данных инпута из localStorage:
-        getInputFromLocalStorage(): void {
-            const radioInput = localStorage.radioInput;
-            radioInput === 'rateBuy'
-                ? ((
-                      document.getElementById('rateBuy') as HTMLInputElement
-                  ).checked = true)
-                : ((
-                      document.getElementById('rateSell') as HTMLInputElement
-                  ).checked = true);
-        },
-        // Добавление значения radioInput в localStorage при монтировании компонента:
-        addRadioInputOnMounted(): void {
-            const input = document.querySelector(
-                'input[type="radio"]:checked',
-            ) as HTMLInputElement;
-            localStorage.input === undefined
-                ? localStorage.setItem('radioInput', input.value)
-                : this.getInputFromLocalStorage();
-        },
-        // Получение данных currencies из localStorage:
-
-        handleCurrencies(): CurrencyObject[] {
-            const cachedCurrencies: CurrencyObject[] = JSON.parse(
-                localStorage.getItem('currencies') || '[]',
-            );
-            console.log(typeof cachedCurrencies);
-            return cachedCurrencies;
-        },
-        // Поиск валюты в currenciesMap по инпуту и запись кода валюты в localStorage:
-        findCurrencieCodeWithCurrencyMapAndAddToLocalStorage(): void {
-            const input: string = localStorage.optionInput;
-            const currencyCode = Object.keys(currenciesMap).find(
-                (key: string) => currenciesMap[parseInt(key)] === input,
-            );
-            localStorage.setItem('currencyCode', currencyCode || '');
-        },
-        // Поиск объекта валюты в респонсе API банка Монобанк по коду и запись в localStorage:
-        findCurrencieWithCurrencyCode(): void {
-            const currencies: CurrencyObject[] = this.handleCurrencies();
-            const currencyCode = Number(localStorage.currencyCode);
-            currencies.find((item: any) => {
-                if (
-                    item.currencyCodeA === currencyCode &&
-                    item.currencyCodeB === 980
-                ) {
-                    localStorage.setItem(
-                        'currencyObject',
-                        JSON.stringify(item),
-                    );
-                }
-            });
-        },
         findSelectedCurrency(): void {
-            this.addOptionValueToLocalStorage();
-            this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage();
+            this.addOptionValueToOptionInputAndLocalStorageWithItsChanges();
+            this.findCurrencieCodeWithCurrencyMapAndAddToState();
             this.findCurrencieWithCurrencyCode();
             this.optionInput = localStorage.getItem('optionInput') || '';
         },
-        // Посчитать конвертацию согласно выбранным параметрам валюты и типа операции:
+
         calculate(): void {
-            const currencyObject = JSON.parse(
-                localStorage.getItem('currencyObject') || '{}',
-            );
-            const amount = localStorage.amount;
-            const radioInput = localStorage.radioInput;
-            const rateBuy = currencyObject.rateBuy;
-            const rateSell = currencyObject.rateSell;
-            const rate = radioInput === 'rateBuy' ? rateBuy : rateSell;
-            const result =
-                radioInput === 'rateBuy' ? amount / rate : amount * rate;
-            localStorage.setItem('result', result.toFixed(2));
+            this.calculateCurrency();
             this.makeConvertListItem();
+            this.addConvertListItemToHistoryArray();
             this.$router.push({ name: 'resultPage' });
         },
-        // Создание строки для списка конвертаций и запись ее в localStorage:
-        makeConvertListItem(): void {
-            const amount: string = localStorage.amount;
-            const currency: string = localStorage.optionInput;
-            const currencyFrom: string =
-                localStorage.radioInput === 'rateBuy' ? 'UAH' : currency;
-            const currencyTo: string =
-                localStorage.radioInput === 'rateBuy' ? currency : 'UAH';
-            const result: number = Number(localStorage.result);
-            const item: string = `${amount} ${currencyFrom} = ${result} ${currencyTo}`;
-            localStorage.setItem('convertListItem', item);
-            this.addConvertListItemToHistoryArray(item);
-        },
 
-        addConvertListItemToHistoryArray(item: string): void {
-            const convertListItemsArray: string[] =
-                JSON.parse(
-                    localStorage.getItem('convertListItemsArray') || '[]',
-                ) || [];
-
-            convertListItemsArray.push(item);
-            this.setCurrenciesHistory(convertListItemsArray);
-            localStorage.setItem(
-                'convertListItemsArray',
-                JSON.stringify(convertListItemsArray),
-            );
-        },
-
-        // Отмена операции с очисткой input и amount в localStorage и переход на страницу конвертера:
         cancelOperation(): void {
-            keysToRemove.forEach((key) => localStorage.removeItem(key));
             this.$router.push({ name: 'converterPage' });
         },
     },

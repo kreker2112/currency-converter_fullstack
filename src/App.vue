@@ -28,13 +28,16 @@ export default defineComponent({
         this.initCleanHistory();
     },
     methods: {
-        ...mapMutations(['setCurrenciesHistory', 'cleanCurrenciesHistory']),
+        ...mapMutations([
+            'addConvertListItemToHistoryArray',
+            'cleanCurrenciesHistory',
+        ]),
         initExchangeHistory(): void {
             const exchangeHistory: string = JSON.parse(
                 localStorage.getItem('convertListItemsArray') || '[]',
             );
             const exchangeHistoryArray: string = exchangeHistory;
-            this.setCurrenciesHistory(exchangeHistoryArray);
+            this.addConvertListItemToHistoryArray(exchangeHistoryArray);
         },
         initCleanHistory(): void {
             const exchangeHistory: string = JSON.parse(

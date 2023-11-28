@@ -39,12 +39,15 @@ export default defineComponent({
             const convertListItemsArray: string[] = JSON.parse(
                 historyInLocalStorage,
             );
-            this.setCurrenciesHistory(convertListItemsArray);
+            this.addConvertListItemToHistoryArrayAction(convertListItemsArray);
         }
     },
 
     methods: {
-        ...mapActions(['cleanCurrenciesHistory', 'setCurrenciesHistory']),
+        ...mapActions([
+            'cleanCurrenciesHistory',
+            'addConvertListItemToHistoryArrayAction',
+        ]),
 
         clearHistory(): void {
             localStorage.removeItem('convertListItemsArray');

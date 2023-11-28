@@ -6,7 +6,9 @@
                 v-model="amount"
                 @input="addAmountToLocalStorageOnInput"
             />
-            <ButtonForConvert @click="accept">Выберите валюту</ButtonForConvert>
+            <ButtonForConvert @click.prevent="accept"
+                >Выберите валюту</ButtonForConvert
+            >
         </div>
     </div>
 </template>
@@ -23,12 +25,10 @@ export default defineComponent({
             amount: '' as string,
         };
     },
-    mounted() {
-        this.amount = localStorage.amount || '';
-    },
 
     methods: {
         ...mapMutations({ setAmount: 'setAmount' }),
+
         accept(): void {
             this.amount === undefined || this.amount === ''
                 ? Notiflix.Notify.failure('Введите сумму!')

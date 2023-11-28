@@ -2,7 +2,7 @@
     <div class="result-page">
         <div class="container result__container">
             <h1 class="result__container-header">Результат</h1>
-            <span>{{ result }}</span>
+            <span>{{ getResult }} {{ getOptionInput }}</span>
         </div>
         <div class="buttons buttons__contaier">
             <small-button
@@ -16,30 +16,15 @@
 </template>
 
 <script>
-import { keysToRemove } from '@/assets/constants/keysToRemove';
+import { mapGetters } from 'vuex';
 export default {
     name: 'ResultPage',
-    data() {
-        return {
-            result: null,
-        };
+    computed: {
+        ...mapGetters(['getResult', 'getOptionInput']),
     },
-    mounted() {
-        this.getResult();
-    },
-    methods: {
-        getResult() {
-            const result = Number(localStorage.getItem('result'));
-            const currency =
-                localStorage.getItem('radioInput') === 'rateBuy'
-                    ? localStorage.getItem('optionInput')
-                    : 'UAH';
-            const resultWithCurrency = result + ` ${currency}`;
-            return (this.result = resultWithCurrency);
-        },
 
+    methods: {
         cancelOperation() {
-            keysToRemove.forEach((key) => localStorage.removeItem(key));
             this.$router.push('/converter');
         },
     },
