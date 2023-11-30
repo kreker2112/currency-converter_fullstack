@@ -1,6 +1,4 @@
-interface CurrenciesMap {
-    [key: number]: string;
-}
+import { CurrenciesMap } from '@/interfaces/currency';
 
 export const currenciesMap: CurrenciesMap = {
     840: 'USD',

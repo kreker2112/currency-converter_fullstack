@@ -25,7 +25,6 @@ export default defineComponent({
 
     mounted(): void {
         this.initExchangeHistory();
-        this.initCleanHistory();
     },
     methods: {
         ...mapMutations([
@@ -34,14 +33,14 @@ export default defineComponent({
         ]),
         initExchangeHistory(): void {
             const exchangeHistory: string = JSON.parse(
-                localStorage.getItem('convertListItemsArray') || '[]',
+                localStorage.getItem('convertListItemsArray') as string,
             );
             const exchangeHistoryArray: string = exchangeHistory;
             this.addConvertListItemToHistoryArray(exchangeHistoryArray);
         },
         initCleanHistory(): void {
             const exchangeHistory: string = JSON.parse(
-                localStorage.getItem('convertListItemsArray') || '[]',
+                localStorage.getItem('convertListItemsArray') as string,
             );
             if (exchangeHistory) {
                 this.cleanCurrenciesHistory();

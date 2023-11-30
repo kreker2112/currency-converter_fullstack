@@ -1,5 +1,5 @@
 <template>
-    <div class="input__container">
+    <div class="currency-input__container">
         <input
             v-focus
             :value="modelValue"
@@ -8,7 +8,12 @@
             placeholder="Введите сумму"
             @input="updateInput"
         />
-        <small-button @click="clearInput"> Очистить </small-button>
+        <ButtonComponent
+            button-style="currency-input_cleanup"
+            @click="clearInput"
+        >
+            Очистить
+        </ButtonComponent>
     </div>
 </template>
 
@@ -33,14 +38,22 @@ export default defineComponent({
         },
         clearInput(): void {
             this.$emit('update:modelValue', '');
-            localStorage.removeItem('amount');
         },
     },
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.currency-input__container {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+}
 .input {
+    @extend .currency-input__input;
+}
+
+.currency-input__input {
     position: relative;
     width: 100%;
     border: 2px solid #18aa66;
@@ -48,21 +61,15 @@ export default defineComponent({
     border-radius: 10px 0 0 10px;
     font-size: 16px;
     outline: none;
-}
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 
-input[type='number'] {
-    appearance: textfield; /* Firefox */
-}
-
-.input__container {
-    display: flex;
-    flex-direction: row;
-    gap: 0;
+    &[type='number'] {
+        appearance: textfield; /* Firefox */
+    }
 }
 </style>

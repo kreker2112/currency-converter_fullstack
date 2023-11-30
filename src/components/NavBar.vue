@@ -4,23 +4,33 @@
             Личный кабинет предпринимателя
         </div>
         <div class="navbar__btns">
-            <nav-button @click="$router.push('/converter')"
-                >Конвертер валют</nav-button
+            <ButtonComponent
+                button-style="nav-button"
+                v-for="button in navButtons"
+                :key="button.id"
+                @click="$router.push(button.link)"
+                >{{ button.name }}</ButtonComponent
             >
-
-            <nav-button @click="$router.push('/#')">Поступления</nav-button>
-            <nav-button @click="$router.push('/#')"
-                >Налоговые обязанности</nav-button
-            >
-            <nav-button @click="$router.push('/#')">Уплата налогов</nav-button>
-            <nav-button @click="$router.push('/#')">О сайте</nav-button>
         </div>
     </div>
 </template>
 
 <script lang="ts">
+import { v4 as uuidv4 } from 'uuid';
 import { defineComponent } from 'vue';
-export default defineComponent({});
+export default defineComponent({
+    data() {
+        return {
+            navButtons: [
+                { id: uuidv4(), name: 'Конвертер валют', link: '/converter' },
+                { id: uuidv4(), name: 'Поступления', link: '/#' },
+                { id: uuidv4(), name: 'Налоговые обязанности', link: '/#' },
+                { id: uuidv4(), name: 'Уплата налогов', link: '/#' },
+                { id: uuidv4(), name: 'О сайте', link: '/#' },
+            ],
+        };
+    },
+});
 </script>
 
 <style scoped>

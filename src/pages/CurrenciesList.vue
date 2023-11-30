@@ -1,23 +1,34 @@
 <template>
-    <div class="currencies__list" @submit.prevent>
+    <div class="currencies__list" ref="currenciesList">
         <fieldset class="fieldset__container">
             <legend for="currency-select" class="currencies-legend__header">
                 Выберите, пожалуйста, валюту для конвертации
             </legend>
 
             <div class="amount__sum">
-                <strong>Сумма для обмена:</strong> {{ getAmount }}
+                <strong>Сумма для обмена:</strong> {{ amount }}
             </div>
 
             <div class="currency currency-select">
                 <select
+                    ref="currencySelect"
                     id="currency-select"
                     class="currency currency-select__list"
                     name="currency"
                     @change="findSelectedCurrency"
                 >
-                    <option value="USD">USD (Доллар США)</option>
-                    <option value="EUR">EUR (Евро)</option>
+                    <option
+                        class="currency currency-select__option_USD"
+                        value="USD"
+                    >
+                        USD (Доллар США)
+                    </option>
+                    <option
+                        class="currency currency-select__option_EUR"
+                        value="EUR"
+                    >
+                        EUR (Евро)
+                    </option>
                 </select>
             </div>
 
@@ -30,9 +41,7 @@
                         name="convert"
                         value="rateBuy"
                         checked
-                        @click="
-                            addRadioInputValueToComponentPropertyWithItsChanges
-                        "
+                        @click="saveRadioInputValue"
                     />
                     <label class="currency currency-label" for="convertUSDtoUAH"
                         >UAH to {{ optionInput }}</label
@@ -46,9 +55,7 @@
                         class="option-input radio"
                         name="convert"
                         value="rateSell"
-                        @click="
-                            addRadioInputValueToComponentPropertyWithItsChanges
-                        "
+                        @click="saveRadioInputValue"
                     />
                     <label class="currency currency-label" for="convertUAHtoUSD"
                         >{{ optionInput }} to UAH</label
@@ -56,18 +63,18 @@
                 </div>
             </div>
             <div class="buttons buttons__contaier">
-                <small-button
-                    class="button calculate-button"
+                <ButtonComponent
+                    button-style="currencies-list"
                     @click.prevent="calculate"
                 >
                     Посчитать
-                </small-button>
-                <small-button
-                    class="button calculate-button"
-                    @click="cancelOperation"
+                </ButtonComponent>
+                <ButtonComponent
+                    button-style="currencies-list"
+                    @click.prevent="cancelOperation"
                 >
                     Отменить операцию
-                </small-button>
+                </ButtonComponent>
             </div>
         </fieldset>
     </div>
@@ -88,50 +95,66 @@ export default defineComponent({
         optionInput: OptionInput;
     } {
         return {
-            amount: '' as Amount,
-            optionInput: '' as OptionInput,
+            amount: '',
+            optionInput: '',
         };
     },
 
     computed: {
-        ...mapGetters(['getCachedCurrencies', 'getOptionInput', 'getAmount']),
+        ...mapGetters({
+            getCachedCurrencies: 'convert/getCachedCurrencies',
+            getOptionInput: 'convert/getOptionInput',
+            getAmount: 'convert/getAmount',
+        }),
     },
 
     mounted(): void {
-        this.amount = localStorage.amount as string;
+        this.amount = this.getAmount;
         this.fetchCurrencies();
         this.updateOptionInputOnMounted();
-        this.addRadioInputValueToComponentPropertyOnMounted();
-
+        this.saveRadioInputValue();
+        console.log(this.$refs.currenciesList);
         this.optionInput = localStorage.getItem('optionInput') || '';
     },
 
     methods: {
-        ...mapMutations([
-            'addRadioInputValueToComponentPropertyWithItsChanges',
-            'addOptionValueToOptionInputAndLocalStorageWithItsChanges',
-            'findCurrencieCodeWithCurrencyMapAndAddToState',
-            'findCurrencieWithCurrencyCode',
-            'calculateCurrency',
-            'makeConvertListItem',
-            'addConvertListItemToHistoryArray',
-        ]),
-        ...mapActions([
-            'addConvertListItemToHistoryArrayAction',
-            'fetchCurrencies',
-            'addOptionValueToOptionInputAndLocalStorageOnMounted',
-            'addRadioInputValueToComponentPropertyOnMounted',
-        ]),
+        ...mapMutations({
+            setValueInput: 'convert/setValueInput',
+            setOptionInput: 'convert/setOptionInput',
+            findCurrencieCode: 'convert/findCurrencieCode',
+            findCurrencieWithCurrencyCode:
+                'convert/findCurrencieWithCurrencyCode',
+            calculateCurrency: 'convert/calculateCurrency',
+            makeConvertListItem: 'convert/makeConvertListItem',
+            addConvertListItemToHistoryArray:
+                'convert/addConvertListItemToHistoryArray',
+        }),
+        ...mapActions({ fetchCurrencies: 'convert/fetchCurrencies' }),
+
+        saveOptionValue() {
+            const select = this.$refs.currencySelect as HTMLSelectElement;
+            const selectedOption: string =
+                select.options[select.selectedIndex].value;
+            localStorage.setItem('optionInput', selectedOption);
+            this.setOptionInput(selectedOption);
+        },
+
+        saveRadioInputValue() {
+            const input = document.querySelector(
+                'input[type="radio"]:checked',
+            ) as HTMLInputElement;
+            this.setValueInput(input.value);
+        },
 
         updateOptionInputOnMounted(): void {
             this.fetchCurrencies();
-            this.addOptionValueToOptionInputAndLocalStorageOnMounted();
-            this.findCurrencieCodeWithCurrencyMapAndAddToState();
+            this.saveOptionValue();
+            this.findCurrencieCode();
             this.findCurrencieWithCurrencyCode();
         },
         findSelectedCurrency(): void {
-            this.addOptionValueToOptionInputAndLocalStorageWithItsChanges();
-            this.findCurrencieCodeWithCurrencyMapAndAddToState();
+            this.saveOptionValue();
+            this.findCurrencieCode();
             this.findCurrencieWithCurrencyCode();
             this.optionInput = localStorage.getItem('optionInput') || '';
         },
@@ -191,12 +214,14 @@ export default defineComponent({
 }
 
 .currency.currency-select__list {
+    width: fit-content;
     font-size: 20px;
     font-weight: bold;
     padding: 5px;
     border-radius: 5px;
     border: 2px solid #12c0b2;
     outline: none;
+    text-align: center;
 }
 
 .buttons.buttons__contaier {
@@ -206,10 +231,9 @@ export default defineComponent({
     align-items: center;
     margin-bottom: 10px;
 }
-.button.calculate-button {
-    margin-top: 20px;
-    border-radius: 10px;
-    width: 20em;
+
+.button:hover {
+    background-color: #6ac054 !important;
 }
 
 .option-input {

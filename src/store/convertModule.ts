@@ -39,28 +39,17 @@ const amountModule: Module<AmountState, any> = {
     },
     mutations: {
         setAmount: (state, amount: string) => (state.amount = amount),
-        // setCurrenciesHistory: (state, currenciesHistory: []) =>
-        //     (state.currenciesHistory = currenciesHistory),
         cleanCurrenciesHistory: (state) => (state.currenciesHistory = []),
         setCachedCurrencies: (state, currencies) => {
             state.cachedCurrencies = currencies;
         },
-        addOptionValueToOptionInputAndLocalStorageWithItsChanges: (state) => {
-            const select = document.getElementById(
-                'currency-select',
-            ) as HTMLSelectElement;
-            const selectedOption: string =
-                select.options[select.selectedIndex].value;
-            localStorage.setItem('optionInput', selectedOption);
-            state.optionInput = selectedOption;
+        setOptionInput: (state, optionInput: string) => {
+            state.optionInput = optionInput;
         },
-        addRadioInputValueToComponentPropertyWithItsChanges: (state) => {
-            const input = document.querySelector(
-                'input[type="radio"]:checked',
-            ) as HTMLInputElement;
-            state.radioInput = input.value;
+        setValueInput: (state, valueInput: string) => {
+            state.radioInput = valueInput;
         },
-        findCurrencieCodeWithCurrencyMapAndAddToState: (state) => {
+        findCurrencieCode: (state) => {
             const input: string = state.optionInput;
             const searchedCurrencyCode: any = Object.keys(currenciesMap).find(
                 (key: string) => currenciesMap[parseInt(key)] === input,
@@ -85,18 +74,18 @@ const amountModule: Module<AmountState, any> = {
             const currencyObjectForCalculate = {
                 ...state.currencyObject,
             };
-            const amount = Number(localStorage.amount);
-            const radioInput = state.radioInput;
+            const amount = Number(state.amount);
             const rateBuy = currencyObjectForCalculate.rateBuy;
             const rateSell = currencyObjectForCalculate.rateSell;
-            const rate = radioInput === 'rateBuy' ? rateBuy : rateSell;
             const result =
-                radioInput === 'rateBuy' ? amount / rate : amount * rate;
+                state.radioInput === 'rateBuy'
+                    ? amount / rateBuy
+                    : amount * rateSell;
             const fixedResult = result.toFixed(2);
             state.result = Number(fixedResult);
         },
         makeConvertListItem: (state) => {
-            const amount = localStorage.amount;
+            const amount = state.amount;
             const currency = state.optionInput;
             const currencyFrom: string =
                 state.radioInput === 'rateBuy' ? 'UAH' : currency;
@@ -110,20 +99,20 @@ const amountModule: Module<AmountState, any> = {
         addConvertListItemToHistoryArray(state): void {
             const convertListItemsArray: string[] =
                 JSON.parse(
-                    localStorage.getItem('convertListItemsArray') || '[]',
+                    localStorage.getItem('convertListItemsArray') as string,
                 ) || [];
-            convertListItemsArray.push(state.convertListItem);
             state.currenciesHistory = convertListItemsArray;
-            localStorage.setItem(
-                'convertListItemsArray',
-                JSON.stringify(convertListItemsArray),
-            );
+            if (state.convertListItem) {
+                convertListItemsArray.push(state.convertListItem);
+
+                localStorage.setItem(
+                    'convertListItemsArray',
+                    JSON.stringify(convertListItemsArray),
+                );
+            }
         },
     },
     actions: {
-        setAmount: ({ commit }, amount: string) => {
-            commit('setAmount', amount);
-        },
         fetchCurrencies: async ({ commit }) => {
             try {
                 const response = await axios.get(
@@ -137,35 +126,8 @@ const amountModule: Module<AmountState, any> = {
                     : console.error(error);
             }
         },
-        addOptionValueToOptionInputAndLocalStorageOnMounted: (
-            { commit },
-            optionInput,
-        ) => {
-            commit(
-                'addOptionValueToOptionInputAndLocalStorageWithItsChanges',
-                optionInput,
-            );
-        },
-        addRadioInputValueToComponentPropertyOnMounted: (
-            { commit },
-            radioInput,
-        ) => {
-            commit(
-                'addRadioInputValueToComponentPropertyWithItsChanges',
-                radioInput,
-            );
-        },
-        addConvertListItemToHistoryArrayAction: (
-            { commit },
-            currenciesHistory: [],
-        ) => {
-            commit('addConvertListItemToHistoryArray', currenciesHistory);
-        },
-        cleanCurrenciesHistory: ({ commit }) => {
-            commit('cleanCurrenciesHistory');
-        },
     },
-    // namespaced: true,
+    namespaced: true,
 };
 
 export default amountModule;

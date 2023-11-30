@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer">
+    <footer class="footer-component">
         <div className="copyright">
             <p>
                 © 2023 All rights reserved <br />
@@ -19,7 +19,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.footer {
+.footer-component {
     position: absolute;
     bottom: 0;
     width: 100%;

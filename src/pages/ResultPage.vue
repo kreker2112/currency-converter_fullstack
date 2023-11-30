@@ -5,22 +5,27 @@
             <span>{{ getResult }} {{ getOptionInput }}</span>
         </div>
         <div class="buttons buttons__contaier">
-            <small-button
-                class="button calculate-button"
+            <ButtonComponent
+                button-style="cancel-result"
                 @click="cancelOperation"
             >
                 Вернуться в начало
-            </small-button>
+            </ButtonComponent>
         </div>
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
-export default {
+export default defineComponent({
     name: 'ResultPage',
+
     computed: {
-        ...mapGetters(['getResult', 'getOptionInput']),
+        ...mapGetters({
+            getResult: 'convert/getResult',
+            getOptionInput: 'convert/getOptionInput',
+        }),
     },
 
     methods: {
@@ -28,7 +33,7 @@ export default {
             this.$router.push('/converter');
         },
     },
-};
+});
 </script>
 
 <style scoped>
@@ -62,10 +67,5 @@ span {
     flex-direction: column;
     align-items: center;
     margin-bottom: 10px;
-}
-.button.calculate-button {
-    margin-top: 20px;
-    border-radius: 10px;
-    width: 20em;
 }
 </style>

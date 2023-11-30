@@ -2,12 +2,9 @@
     <div>
         <div class="input-form">
             <h4>Конвертер валют</h4>
-            <CurrencyInput
-                v-model="amount"
-                @input="addAmountToLocalStorageOnInput"
-            />
-            <ButtonForConvert @click.prevent="accept"
-                >Выберите валюту</ButtonForConvert
+            <CurrencyInput v-model="amount" @input="addAmountToState" />
+            <ButtonComponent button-style="button" @click.prevent="accept"
+                >Выберите валюту</ButtonComponent
             >
         </div>
     </div>
@@ -17,20 +14,23 @@
 import { defineComponent } from 'vue';
 import Notiflix from 'notiflix';
 import { mapMutations } from 'vuex';
+import { Amount } from '@/interfaces/currency';
 
 export default defineComponent({
     name: 'InputForm',
-    data() {
+    data(): {
+        amount: Amount;
+    } {
         return {
-            amount: '' as string,
+            amount: '',
         };
     },
 
     methods: {
-        ...mapMutations({ setAmount: 'setAmount' }),
+        ...mapMutations({ setAmount: 'convert/setAmount' }),
 
         accept(): void {
-            this.amount === undefined || this.amount === ''
+            !this.amount
                 ? Notiflix.Notify.failure('Введите сумму!')
                 : this.convert();
         },
@@ -40,8 +40,8 @@ export default defineComponent({
                 name: 'currenciesList',
             });
         },
-        addAmountToLocalStorageOnInput(): void {
-            localStorage.setItem('amount', this.amount);
+        addAmountToState(): void {
+            this.setAmount(this.amount);
         },
     },
 });
