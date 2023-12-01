@@ -4,7 +4,7 @@
             <p>
                 © 2023 All rights reserved <br />
                 <a href="https://github.com/kreker2112/-urrency-converter.git">
-                    kreker2112.github.io
+                    kreker2112.github
                 </a>
             </p>
         </div>
@@ -18,7 +18,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .footer-component {
     position: absolute;
     bottom: 0;
@@ -27,13 +27,20 @@ export default defineComponent({
     padding: 20px 0 20px;
     background-color: #12c0b2;
     color: #fff;
-}
-.copyright {
-    font-size: 16px;
-    text-align: center;
-}
 
-.copyright p + p {
-    margin-top: 0.5em;
+    .copyright {
+        gap: 5px;
+        font-size: 16px;
+        text-align: center;
+        p {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        a {
+            color: #273baa;
+            text-decoration: underline;
+        }
+    }
 }
 </style>

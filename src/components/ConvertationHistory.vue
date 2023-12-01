@@ -4,11 +4,11 @@
         <ButtonComponent button-style="cleanup-history" @click="clearHistory"
             >Очистить историю</ButtonComponent
         >
-        <transition-group name="convertation-history__list"
+        <transition-group name="convertation-history list"
             ><div
                 v-for="item in getCurrenciesHistory"
                 :key="item"
-                class="convertation-history__list-item"
+                class="convertation-history list-item"
             >
                 {{ item }}
             </div>
@@ -63,35 +63,37 @@ export default defineComponent({
     height: calc(100vh - 156px);
     border-left: 4px solid #12c0b2;
     overflow-y: scroll;
-}
-.convertation-history.header {
-    margin-bottom: 15px;
-    font-size: 24px;
-}
 
-.convertation-history__list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    list-style: none;
-}
-.convertation-history__list-item {
-    text-align: center;
-    padding: 15px;
-    width: 100%;
-    border: 2px solid #12c0b2;
-    border-radius: 5px;
-    &:not(:last-of-type) {
-        margin-bottom: 10px;
+    .header {
+        margin-bottom: 15px;
+        font-size: 24px;
     }
-}
-.convertation-history__list-enter-active,
-.convertation-history__list-leave-active {
-    transition: all 1s;
-}
-.convertation-history__list-enter-from,
-.convertation-history__list-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        list-style: none;
+    }
+    .list-item {
+        text-align: center;
+        padding: 15px;
+        width: 100%;
+        border: 2px solid #12c0b2;
+        border-radius: 5px;
+
+        &:not(:last-of-type) {
+            margin-bottom: 10px;
+        }
+    }
+    .list-enter-active,
+    .list-leave-active {
+        transition: all 1s;
+    }
+    .list-enter-from,
+    .list-leave-to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
 }
 </style>

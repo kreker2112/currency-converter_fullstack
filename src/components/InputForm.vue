@@ -47,7 +47,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .input-form {
     display: flex;
     flex-direction: column;
@@ -58,12 +58,12 @@ export default defineComponent({
     border: 2px solid #18aa66;
     box-shadow: -2px 2px 2px #a79e84bd;
     border-radius: 10px;
-}
 
-.input-form h4 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 900;
-    color: #070707;
+    h4 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 900;
+        color: #070707;
+    }
 }
 </style>

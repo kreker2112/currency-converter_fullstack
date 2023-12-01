@@ -33,7 +33,7 @@
             </div>
 
             <div class="currencies__container">
-                <div class=".currency currency__container">
+                <div class="currency__item">
                     <input
                         id="rateBuy"
                         type="radio"
@@ -43,12 +43,12 @@
                         checked
                         @click="saveRadioInputValue"
                     />
-                    <label class="currency currency-label" for="convertUSDtoUAH"
+                    <label class="currency-label" for="convertUSDtoUAH"
                         >UAH to {{ optionInput }}</label
                     >
                 </div>
 
-                <div class=".currency currency__container">
+                <div class="currency__item">
                     <input
                         id="rateSell"
                         type="radio"
@@ -57,12 +57,12 @@
                         value="rateSell"
                         @click="saveRadioInputValue"
                     />
-                    <label class="currency currency-label" for="convertUAHtoUSD"
+                    <label class="currency-label" for="convertUAHtoUSD"
                         >{{ optionInput }} to UAH</label
                     >
                 </div>
             </div>
-            <div class="buttons buttons__contaier">
+            <div class="buttons__contaier">
                 <ButtonComponent
                     button-style="currencies-list"
                     @click.prevent="calculate"
@@ -173,129 +173,119 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .currencies__list {
     margin: 0 auto;
-}
-.fieldset__container {
-    border: 2px solid #12c0b2;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 0 auto;
-    width: 50vw;
-}
+    .fieldset__container {
+        border: 2px solid #12c0b2;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 0 auto;
+        width: 50vw;
+        .currencies-legend__header {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .amount__sum {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .currency.currency-select {
+            margin: 10px;
+            .currency-select__list {
+                width: fit-content;
+                font-size: 20px;
+                font-weight: bold;
+                padding: 5px;
+                border-radius: 5px;
+                border: 2px solid #12c0b2;
+                outline: none;
+                text-align: center;
+            }
+        }
+        .currencies__container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 10px;
+            gap: 10px;
+            .radio {
+                border-radius: 50%;
+                &::after {
+                    border-radius: 50%;
+                }
+            }
+            .option-input {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                -ms-appearance: none;
+                -o-appearance: none;
+                appearance: none;
+                position: relative;
+                top: 13.33333px;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                height: 40px;
+                width: 40px;
+                transition: all 0.15s ease-out 0s;
+                background: #cbd1d8;
+                border: none;
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                margin-right: 0.5rem;
+                outline: none;
+                position: relative;
+                z-index: 1000;
 
-.currencies__container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 10px;
-    gap: 10px;
+                &:hover {
+                    background: #6ac054;
+                }
+                &:checked {
+                    background: #6ac054;
+                }
+                &:checked::before {
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    font-family: 'Font Awesome 5 Free';
+                    content: '\f00c';
+                    font-size: 25px;
+                    font-weight: 900;
+                    position: absolute;
+                    align-items: center;
+                    justify-content: center;
+                    color: #fff;
+                }
+                &:checked::after {
+                    -webkit-animation: click-wave 0.65s;
+                    -moz-animation: click-wave 0.65s;
+                    animation: click-wave 0.65s;
+                    background: #40e0d0;
+                    content: '';
+                    display: block;
+                    position: relative;
+                    z-index: 100;
+                }
+            }
+            .currency-label {
+                font-size: 20px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+        }
+        .buttons__contaier {
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    }
 }
-
-.currency.currency-label {
-    font-size: 20px;
-    font-weight: bold;
-    margin-left: 10px;
-}
-.currencies-legend__header {
-    font-size: 30px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.amount__sum {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.currency.currency-select {
-    margin: 10px;
-}
-
-.currency.currency-select__list {
-    width: fit-content;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 5px;
-    border: 2px solid #12c0b2;
-    outline: none;
-    text-align: center;
-}
-
-.buttons.buttons__contaier {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.button:hover {
-    background-color: #6ac054 !important;
-}
-
-.option-input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    -o-appearance: none;
-    appearance: none;
-    position: relative;
-    top: 13.33333px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 40px;
-    width: 40px;
-    transition: all 0.15s ease-out 0s;
-    background: #cbd1d8;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    display: inline-block;
-    margin-right: 0.5rem;
-    outline: none;
-    position: relative;
-    z-index: 1000;
-}
-.option-input:hover {
-    background: #6ac054;
-}
-.option-input:checked {
-    background: #12c0b2;
-}
-.option-input:checked::before {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    font-family: 'Font Awesome 5 Free';
-    content: '\f00c';
-    font-size: 25px;
-    font-weight: 900;
-    position: absolute;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-}
-.option-input:checked::after {
-    -webkit-animation: click-wave 0.65s;
-    -moz-animation: click-wave 0.65s;
-    animation: click-wave 0.65s;
-    background: #40e0d0;
-    content: '';
-    display: block;
-    position: relative;
-    z-index: 100;
-}
-.option-input.radio {
-    border-radius: 50%;
-}
-.option-input.radio::after {
-    border-radius: 50%;
-}
-
 @keyframes click-wave {
     0% {
         height: 40px;

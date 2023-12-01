@@ -33,7 +33,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .navbar {
     position: absolute;
     width: 100%;
@@ -46,23 +46,22 @@ export default defineComponent({
     gap: 15px;
     padding: 0 15px;
     cursor: pointer;
-}
-.navbar_title {
-    font-size: 2rem;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-        'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color: #fff;
-    padding: 15px;
-    height: 80px;
-}
-
-.navbar__btns {
-    position: absolute;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 15px;
-    padding-right: 20px;
+    .navbar_title {
+        font-size: 2rem;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+            'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        color: #fff;
+        padding: 15px;
+        height: 80px;
+    }
+    .navbar__btns {
+        position: absolute;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 15px;
+        padding-right: 20px;
+    }
 }
 </style>
