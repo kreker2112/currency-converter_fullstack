@@ -80,95 +80,93 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { useStore } from 'vuex';
+import { ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
 
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+const store = useStore();
+const router = useRouter();
 
-import { Amount, OptionInput } from '@/interfaces/currency';
+let amount: Ref<string> = ref('');
 
-export default defineComponent({
-    name: 'CurrenciesList',
+let optionInput: Ref<string> = ref('');
 
-    data(): {
-        amount: Amount;
-        optionInput: OptionInput;
-    } {
-        return {
-            amount: '',
-            optionInput: '',
-        };
-    },
+const currencySelect = ref(HTMLSelectElement);
 
-    computed: {
-        ...mapGetters({
-            getCachedCurrencies: 'convert/getCachedCurrencies',
-            getOptionInput: 'convert/getOptionInput',
-            getAmount: 'convert/getAmount',
-        }),
-    },
+const getAmount = store.getters['convert/getAmount'];
+const setValueInput = (valueInput: string): void => {
+    store.commit('convert/setValueInput', valueInput);
+};
+const setOptionInput = (optionInput: string): void => {
+    store.commit('convert/setOptionInput', optionInput);
+};
+const findCurrencieCode = (): void => {
+    store.commit('convert/findCurrencieCode');
+};
+const findCurrencieWithCurrencyCode = (): void => {
+    store.commit('convert/findCurrencieWithCurrencyCode');
+};
+const calculateCurrency = (): void => {
+    store.commit('convert/calculateCurrency');
+};
+const makeConvertListItem = (): void => {
+    store.commit('convert/makeConvertListItem');
+};
+const addConvertListItemToHistoryArray = (): void => {
+    store.commit('convert/addConvertListItemToHistoryArray');
+};
+const fetchCurrencies = (): void => {
+    store.dispatch('convert/fetchCurrencies');
+};
 
-    mounted(): void {
-        this.amount = this.getAmount;
-        this.fetchCurrencies();
-        this.updateOptionInputOnMounted();
-        this.saveRadioInputValue();
-        this.optionInput = localStorage.getItem('optionInput') || '';
-    },
+const calculate = (): void => {
+    calculateCurrency();
+    makeConvertListItem();
+    addConvertListItemToHistoryArray();
+    router.push({ name: 'resultPage' });
+};
 
-    methods: {
-        ...mapMutations({
-            setValueInput: 'convert/setValueInput',
-            setOptionInput: 'convert/setOptionInput',
-            findCurrencieCode: 'convert/findCurrencieCode',
-            findCurrencieWithCurrencyCode:
-                'convert/findCurrencieWithCurrencyCode',
-            calculateCurrency: 'convert/calculateCurrency',
-            makeConvertListItem: 'convert/makeConvertListItem',
-            addConvertListItemToHistoryArray:
-                'convert/addConvertListItemToHistoryArray',
-        }),
-        ...mapActions({ fetchCurrencies: 'convert/fetchCurrencies' }),
+const saveOptionValue = (): void => {
+    const select: HTMLSelectElement =
+        currencySelect.value as unknown as HTMLSelectElement;
+    const selectedOption: string = select.options[select.selectedIndex].value;
+    localStorage.setItem('optionInput', selectedOption);
+    setOptionInput(selectedOption);
+};
 
-        saveOptionValue() {
-            const select = this.$refs.currencySelect as HTMLSelectElement;
-            const selectedOption: string =
-                select.options[select.selectedIndex].value;
-            localStorage.setItem('optionInput', selectedOption);
-            this.setOptionInput(selectedOption);
-        },
+const saveRadioInputValue = (): void => {
+    const input = document.querySelector(
+        'input[type="radio"]:checked',
+    ) as HTMLInputElement;
+    setValueInput(input.value);
+};
 
-        saveRadioInputValue() {
-            const input = document.querySelector(
-                'input[type="radio"]:checked',
-            ) as HTMLInputElement;
-            this.setValueInput(input.value);
-        },
+const updateOptionInputOnMounted = (): void => {
+    fetchCurrencies();
+    saveOptionValue();
+    findCurrencieCode();
+    findCurrencieWithCurrencyCode();
+};
 
-        updateOptionInputOnMounted(): void {
-            this.fetchCurrencies();
-            this.saveOptionValue();
-            this.findCurrencieCode();
-            this.findCurrencieWithCurrencyCode();
-        },
-        findSelectedCurrency(): void {
-            this.saveOptionValue();
-            this.findCurrencieCode();
-            this.findCurrencieWithCurrencyCode();
-            this.optionInput = localStorage.getItem('optionInput') || '';
-        },
+const findSelectedCurrency = (): void => {
+    saveOptionValue();
+    findCurrencieCode();
+    findCurrencieWithCurrencyCode();
+    optionInput.value = localStorage.getItem('optionInput') || '';
+};
 
-        calculate(): void {
-            this.calculateCurrency();
-            this.makeConvertListItem();
-            this.addConvertListItemToHistoryArray();
-            this.$router.push({ name: 'resultPage' });
-        },
+const cancelOperation = (): void => {
+    router.push({ name: 'converterPage' });
+};
 
-        cancelOperation(): void {
-            this.$router.push({ name: 'converterPage' });
-        },
-    },
+onMounted(() => {
+    amount.value = getAmount;
+    fetchCurrencies();
+    updateOptionInputOnMounted();
+    saveRadioInputValue();
+    optionInput.value = localStorage.getItem('optionInput') || '';
 });
 </script>
 

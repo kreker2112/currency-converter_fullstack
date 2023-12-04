@@ -4,15 +4,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import InputForm from '@/components/InputForm.vue';
-export default defineComponent({
-    name: 'ConverterPage',
-    components: {
-        InputForm,
-    },
-});
 </script>
 
 <style scoped lang="scss">

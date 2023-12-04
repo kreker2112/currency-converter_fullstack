@@ -15,25 +15,19 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
-export default defineComponent({
-    name: 'ResultPage',
+<script setup lang="ts">
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-    computed: {
-        ...mapGetters({
-            getResult: 'convert/getResult',
-            getOptionInput: 'convert/getOptionInput',
-        }),
-    },
+const store = useStore();
+const router = useRouter();
 
-    methods: {
-        cancelOperation() {
-            this.$router.push('/converter');
-        },
-    },
-});
+const getResult = store.getters['convert/getResult'];
+const getOptionInput = store.getters['convert/getOptionInput'];
+
+const cancelOperation = (): void => {
+    router.push('/converter');
+};
 </script>
 
 <style scoped lang="scss">

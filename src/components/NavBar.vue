@@ -15,22 +15,17 @@
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { v4 as uuidv4 } from 'uuid';
-import { defineComponent } from 'vue';
-export default defineComponent({
-    data() {
-        return {
-            navButtons: [
-                { id: uuidv4(), name: 'Конвертер валют', link: '/converter' },
-                { id: uuidv4(), name: 'Поступления', link: '/#' },
-                { id: uuidv4(), name: 'Налоговые обязанности', link: '/#' },
-                { id: uuidv4(), name: 'Уплата налогов', link: '/#' },
-                { id: uuidv4(), name: 'О сайте', link: '/#' },
-            ],
-        };
-    },
-});
+import { ref } from 'vue';
+
+const navButtons = ref([
+    { id: uuidv4(), name: 'Конвертер валют', link: '/converter' },
+    { id: uuidv4(), name: 'Поступления', link: '/#' },
+    { id: uuidv4(), name: 'Налоговые обязанности', link: '/#' },
+    { id: uuidv4(), name: 'Уплата налогов', link: '/#' },
+    { id: uuidv4(), name: 'О сайте', link: '/#' },
+]);
 </script>
 
 <style scoped lang="scss">

@@ -10,41 +10,31 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import Notiflix from 'notiflix';
-import { mapMutations } from 'vuex';
-import { Amount } from '@/interfaces/currency';
+import { useStore } from 'vuex';
+import { ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default defineComponent({
-    name: 'InputForm',
-    data(): {
-        amount: Amount;
-    } {
-        return {
-            amount: '',
-        };
-    },
+const store = useStore();
+const router = useRouter();
 
-    methods: {
-        ...mapMutations({ setAmount: 'convert/setAmount' }),
+const amount: Ref<string> = ref('');
 
-        accept(): void {
-            !this.amount
-                ? Notiflix.Notify.failure('Введите сумму!')
-                : this.convert();
-        },
-        convert(): void {
-            this.setAmount(this.amount);
-            this.$router.push({
-                name: 'currenciesList',
-            });
-        },
-        addAmountToState(): void {
-            this.setAmount(this.amount);
-        },
-    },
-});
+const accept = (): void => {
+    !amount.value ? Notiflix.Notify.failure('Введите сумму!') : convert();
+};
+
+const convert = (): void => {
+    store.commit('convert/setAmount', amount.value);
+    router.push({
+        name: 'currenciesList',
+    });
+};
+
+const addAmountToState = (): void => {
+    store.commit('convert/setAmount', amount.value);
+};
 </script>
 
 <style scoped lang="scss">

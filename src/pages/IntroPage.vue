@@ -9,11 +9,7 @@
     </header>
 </template>
 
-<script>
-export default {
-    name: 'IntroPage',
-};
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .header__container {
