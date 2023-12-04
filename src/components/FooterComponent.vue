@@ -11,12 +11,7 @@
     </footer>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-export default defineComponent({
-    name: 'FooterComponent',
-});
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .footer-component {
@@ -32,11 +27,13 @@ export default defineComponent({
         gap: 5px;
         font-size: 16px;
         text-align: center;
+
         p {
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
+
         a {
             color: #273baa;
             text-decoration: underline;

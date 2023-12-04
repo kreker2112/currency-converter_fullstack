@@ -16,42 +16,37 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { mapGetters, mapMutations } from 'vuex';
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
 
-export default defineComponent({
-    name: 'ConvertationHistory',
+const store = useStore();
 
-    computed: {
-        ...mapGetters({ getCurrenciesHistory: 'convert/getCurrenciesHistory' }),
-    },
+const getCurrenciesHistory = store.getters['convert/getCurrenciesHistory'];
+const addConvertListItemToHistoryArray = (
+    convertListItemsArray: string[],
+): void => {
+    store.commit(
+        'convert/addConvertListItemToHistoryArray',
+        convertListItemsArray,
+    );
+};
+const cleanCurrenciesHistory = (): void => {
+    store.commit('convert/cleanCurrenciesHistory');
+};
 
-    mounted() {
-        const historyInLocalStorage: string | null = localStorage.getItem(
-            'convertListItemsArray',
-        );
-        if (historyInLocalStorage) {
-            const convertListItemsArray: string[] = JSON.parse(
-                historyInLocalStorage,
-            );
-            this.addConvertListItemToHistoryArray(convertListItemsArray);
-        }
-    },
-
-    methods: {
-        ...mapMutations({
-            cleanCurrenciesHistory: 'convert/cleanCurrenciesHistory',
-            addConvertListItemToHistoryArray:
-                'convert/addConvertListItemToHistoryArray',
-        }),
-
-        clearHistory(): void {
-            localStorage.removeItem('convertListItemsArray');
-            this.cleanCurrenciesHistory();
-        },
-    },
+onMounted(() => {
+    const historyInLocalStorage = localStorage.getItem('convertListItemsArray');
+    if (historyInLocalStorage) {
+        const convertListItemsArray = JSON.parse(historyInLocalStorage);
+        addConvertListItemToHistoryArray(convertListItemsArray);
+    }
 });
+
+const clearHistory = (): void => {
+    localStorage.removeItem('convertListItemsArray');
+    cleanCurrenciesHistory();
+};
 </script>
 
 <style scoped lang="scss">

@@ -113,7 +113,6 @@ export default defineComponent({
         this.fetchCurrencies();
         this.updateOptionInputOnMounted();
         this.saveRadioInputValue();
-        console.log(this.$refs.currenciesList);
         this.optionInput = localStorage.getItem('optionInput') || '';
     },
 

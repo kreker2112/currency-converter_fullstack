@@ -27,7 +27,7 @@ export default defineComponent({
     },
 
     methods: {
-        ...mapMutations({ setAmount: 'convert/setAmount' }),
+        ...mapMutations({ setAmount: 'setAmount' }),
 
         accept(): void {
             !this.amount

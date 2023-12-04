@@ -2,7 +2,7 @@
     <div class="currency-input__container">
         <input
             v-focus
-            :value="modelValue"
+            :value="props.modelValue"
             class="input"
             type="number"
             placeholder="Введите сумму"
@@ -17,30 +17,25 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script setup lang="ts">
+import { defineProps, defineEmits, PropType } from 'vue';
 
-export default defineComponent({
-    name: 'CurrencyInput',
-    props: {
-        modelValue: {
-            type: [String, Number] as PropType<string | number>,
-            default: '',
-            required: true,
-        },
-    },
-    emits: ['update:modelValue', 'clearInput'],
-
-    methods: {
-        updateInput(input: Event): void {
-            const inputValue = (input.target as HTMLInputElement).value;
-            this.$emit('update:modelValue', inputValue);
-        },
-        clearInput(): void {
-            this.$emit('update:modelValue', '');
-        },
+const props = defineProps({
+    modelValue: {
+        type: [String, Number] as PropType<string | number>,
+        required: true,
     },
 });
+const emit = defineEmits(['update:modelValue']);
+
+const updateInput = (input: Event): void => {
+    const inputValue = (input.target as HTMLInputElement).value;
+    emit('update:modelValue', inputValue);
+};
+
+const clearInput = (): void => {
+    emit('update:modelValue', '');
+};
 </script>
 
 <style scoped lang="scss">
@@ -49,6 +44,7 @@ export default defineComponent({
     flex-direction: row;
     gap: 0;
 }
+
 .input {
     @extend .currency-input__input;
 }
