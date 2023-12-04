@@ -12,6 +12,8 @@ import store from '@/store';
 
 import { ComponentWithname } from '@/interfaces/currency';
 
+import './assets/scss/global.scss';
+
 const app = createApp(App);
 
 (components as ComponentWithname[]).forEach((component) => {
