@@ -1,9 +1,7 @@
 <template>
     <div class="convertation-history container">
         <h1 class="convertation-history header">История конвертаций:</h1>
-        <ButtonComponent
-            button-style="cleanup-history"
-            @click.prevent="clearHistory"
+        <ButtonComponent button-style="cleanup-history" @click="clearHistory"
             >Очистить историю</ButtonComponent
         >
         <transition-group name="convertation-history list"
