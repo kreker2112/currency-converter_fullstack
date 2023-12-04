@@ -127,7 +127,7 @@ const amountModule: Module<AmountState, any> = {
             }
         },
     },
-    // namespaced: true,
+    namespaced: true,
 };
 
 export default amountModule;
