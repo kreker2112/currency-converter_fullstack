@@ -23,8 +23,8 @@ export default defineComponent({
 
     computed: {
         ...mapGetters({
-            getResult: 'convert/getResult',
-            getOptionInput: 'convert/getOptionInput',
+            getResult: 'getResult',
+            getOptionInput: 'getOptionInput',
         }),
     },
 

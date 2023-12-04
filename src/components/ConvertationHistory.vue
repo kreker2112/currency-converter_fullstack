@@ -1,7 +1,9 @@
 <template>
     <div class="convertation-history container">
         <h1 class="convertation-history header">История конвертаций:</h1>
-        <ButtonComponent button-style="cleanup-history" @click="clearHistory"
+        <ButtonComponent
+            button-style="cleanup-history"
+            @click.prevent="clearHistory"
             >Очистить историю</ButtonComponent
         >
         <transition-group name="convertation-history list"
@@ -22,17 +24,14 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
-const getCurrenciesHistory = store.getters['convert/getCurrenciesHistory'];
+const getCurrenciesHistory = store.getters['getCurrenciesHistory'];
 const addConvertListItemToHistoryArray = (
     convertListItemsArray: string[],
 ): void => {
-    store.commit({
-        type: 'convert/addConvertListItemToHistoryArray',
-        payload: convertListItemsArray,
-    });
+    store.commit('addConvertListItemToHistoryArray', convertListItemsArray);
 };
 const cleanCurrenciesHistory = (): void => {
-    store.commit('convert/cleanCurrenciesHistory');
+    store.commit('cleanCurrenciesHistory');
 };
 
 onMounted(() => {

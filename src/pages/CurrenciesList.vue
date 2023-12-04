@@ -102,9 +102,9 @@ export default defineComponent({
 
     computed: {
         ...mapGetters({
-            getCachedCurrencies: 'convert/getCachedCurrencies',
-            getOptionInput: 'convert/getOptionInput',
-            getAmount: 'convert/getAmount',
+            getCachedCurrencies: 'getCachedCurrencies',
+            getOptionInput: 'getOptionInput',
+            getAmount: 'getAmount',
         }),
     },
 
@@ -118,17 +118,16 @@ export default defineComponent({
 
     methods: {
         ...mapMutations({
-            setValueInput: 'convert/setValueInput',
-            setOptionInput: 'convert/setOptionInput',
-            findCurrencieCode: 'convert/findCurrencieCode',
-            findCurrencieWithCurrencyCode:
-                'convert/findCurrencieWithCurrencyCode',
-            calculateCurrency: 'convert/calculateCurrency',
-            makeConvertListItem: 'convert/makeConvertListItem',
+            setValueInput: 'setValueInput',
+            setOptionInput: 'setOptionInput',
+            findCurrencieCode: 'findCurrencieCode',
+            findCurrencieWithCurrencyCode: 'findCurrencieWithCurrencyCode',
+            calculateCurrency: 'calculateCurrency',
+            makeConvertListItem: 'makeConvertListItem',
             addConvertListItemToHistoryArray:
-                'convert/addConvertListItemToHistoryArray',
+                'addConvertListItemToHistoryArray',
         }),
-        ...mapActions({ fetchCurrencies: 'convert/fetchCurrencies' }),
+        ...mapActions({ fetchCurrencies: 'fetchCurrencies' }),
 
         saveOptionValue() {
             const select = this.$refs.currencySelect as HTMLSelectElement;
