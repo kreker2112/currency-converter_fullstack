@@ -22,14 +22,17 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
-const getCurrenciesHistory = store.getters['getCurrenciesHistory'];
+const getCurrenciesHistory = store.getters['convert/getCurrenciesHistory'];
 const addConvertListItemToHistoryArray = (
     convertListItemsArray: string[],
 ): void => {
-    store.commit('addConvertListItemToHistoryArray', convertListItemsArray);
+    store.commit(
+        'convert/addConvertListItemToHistoryArray',
+        convertListItemsArray,
+    );
 };
 const cleanCurrenciesHistory = (): void => {
-    store.commit('cleanCurrenciesHistory');
+    store.commit('convert/cleanCurrenciesHistory');
 };
 
 onMounted(() => {

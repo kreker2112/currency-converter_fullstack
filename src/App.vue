@@ -27,10 +27,11 @@ export default defineComponent({
         this.initExchangeHistory();
     },
     methods: {
-        ...mapMutations([
-            'addConvertListItemToHistoryArray',
-            'cleanCurrenciesHistory',
-        ]),
+        ...mapMutations({
+            addConvertListItemToHistoryArray:
+                'convert/addConvertListItemToHistoryArray',
+            cleanCurrenciesHistory: 'convert/cleanCurrenciesHistory',
+        }),
         initExchangeHistory(): void {
             const exchangeHistory: string = JSON.parse(
                 localStorage.getItem('convertListItemsArray') as string,
