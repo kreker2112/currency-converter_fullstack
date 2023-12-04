@@ -8,15 +8,7 @@
 const props = defineProps({
     buttonStyle: {
         type: String,
-        default: '',
-        validator: (value: string) =>
-            [
-                'nav',
-                'currency-input_cleanup',
-                'cleanup-history',
-                'currencies-list',
-                'cancel-result',
-            ].includes(value),
+        default: 'button',
     },
 });
 </script>

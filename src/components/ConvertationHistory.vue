@@ -26,10 +26,10 @@ const getCurrenciesHistory = store.getters['convert/getCurrenciesHistory'];
 const addConvertListItemToHistoryArray = (
     convertListItemsArray: string[],
 ): void => {
-    store.commit(
-        'convert/addConvertListItemToHistoryArray',
-        convertListItemsArray,
-    );
+    store.commit({
+        type: 'convert/addConvertListItemToHistoryArray',
+        payload: convertListItemsArray,
+    });
 };
 const cleanCurrenciesHistory = (): void => {
     store.commit('convert/cleanCurrenciesHistory');
