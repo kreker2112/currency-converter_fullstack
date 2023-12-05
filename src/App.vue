@@ -12,7 +12,7 @@ import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import currencyLayout from '@/layouts/currencyLayout.vue';
 import defaultLayout from '@/layouts/defaultLayout.vue';
-import { ref } from 'vue';
+import { computed } from 'vue';
 
 const components: { [key: string]: any } = {
     currencyLayout,
@@ -22,10 +22,9 @@ const components: { [key: string]: any } = {
 const store = useStore();
 const route = useRoute();
 
-const currentLayout = ref<string>(route.meta.layout as string);
-console.log('currentLayout: ', currentLayout);
-const currentComponent = ref(components[currentLayout.value]);
-console.log('currentComponent: ', currentComponent);
+const currentComponent = computed(() => {
+    return components[route.meta.layout as string];
+});
 
 const addConvertListItemToHistoryArray = (convertListItem: string): void => {
     store.commit('convert/addConvertListItemToHistoryArray', convertListItem);
