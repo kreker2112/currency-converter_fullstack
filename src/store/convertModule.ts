@@ -93,7 +93,6 @@ const amountModule: Module<AmountState, any> = {
                 state.radioInput === 'rateBuy' ? currency : 'UAH';
             const resultForItem = state.result;
             const itemForHistory = `${amount} ${currencyFrom} = ${resultForItem} ${currencyTo}`;
-            localStorage.setItem('convertListItem', itemForHistory);
             state.convertListItem = itemForHistory;
         },
         addConvertListItemToHistoryArray(state): void {

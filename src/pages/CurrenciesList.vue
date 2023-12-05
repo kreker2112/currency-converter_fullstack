@@ -258,9 +258,9 @@ onMounted(() => {
                     color: #fff;
                 }
                 &:checked::after {
-                    -webkit-animation: click-wave 0.65s;
-                    -moz-animation: click-wave 0.65s;
-                    animation: click-wave 0.65s;
+                    -webkit-animation: $radio-animation 0.65s;
+                    -moz-animation: $radio-animation 0.65s;
+                    animation: $radio-animation 0.65s;
                     background: #40e0d0;
                     content: '';
                     display: block;
@@ -283,20 +283,20 @@ onMounted(() => {
         }
     }
 }
-@keyframes click-wave {
-    0% {
-        height: 40px;
-        width: 40px;
-        opacity: 0.35;
-        position: relative;
-    }
-    100% {
-        height: 200px;
-        width: 200px;
-        margin-left: -80px;
-        margin-top: -80px;
-        opacity: 0;
-    }
-}
+// @keyframes click-wave {
+//     0% {
+//         height: 40px;
+//         width: 40px;
+//         opacity: 0.35;
+//         position: relative;
+//     }
+//     100% {
+//         height: 200px;
+//         width: 200px;
+//         margin-left: -80px;
+//         margin-top: -80px;
+//         opacity: 0;
+//     }
+// }
 </style>
 ~/src/assets/constants/currenciesMap

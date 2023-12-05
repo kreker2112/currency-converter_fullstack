@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, h } from 'vue';
 
 import App from '@/App.vue';
 
@@ -14,7 +14,9 @@ import { ComponentWithname } from '@/interfaces/currency';
 
 import './assets/scss/global.scss';
 
-const app = createApp(App);
+const app = createApp({
+    render: () => h(App),
+});
 
 (components as ComponentWithname[]).forEach((component) => {
     app.component(component.name, component);

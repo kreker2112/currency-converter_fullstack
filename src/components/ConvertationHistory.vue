@@ -17,12 +17,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
 
-const getCurrenciesHistory = store.getters['convert/getCurrenciesHistory'];
+const getCurrenciesHistory = computed(
+    () => store.getters['convert/getCurrenciesHistory'],
+);
 const addConvertListItemToHistoryArray = (
     convertListItemsArray: string[],
 ): void => {
@@ -39,12 +41,15 @@ onMounted(() => {
     const historyInLocalStorage = localStorage.getItem('convertListItemsArray');
     if (historyInLocalStorage) {
         const convertListItemsArray = JSON.parse(historyInLocalStorage);
-        addConvertListItemToHistoryArray(convertListItemsArray);
+        if (getCurrenciesHistory.value.length === 0) {
+            addConvertListItemToHistoryArray(convertListItemsArray);
+        }
     }
 });
 
 const clearHistory = (): void => {
     localStorage.removeItem('convertListItemsArray');
+    localStorage.removeItem('convertListItem');
     cleanCurrenciesHistory();
 };
 </script>
