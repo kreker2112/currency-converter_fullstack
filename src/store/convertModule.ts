@@ -2,8 +2,6 @@ import { Module } from 'vuex';
 import axios from 'axios';
 import { currenciesMap } from '@/assets/constants/currenciesMap';
 
-const monobankUrl = process.env.VUE_APP_MONOBANK_URL;
-
 export interface AmountState {
     amount: string;
     currenciesHistory: string[];
@@ -14,6 +12,7 @@ export interface AmountState {
     currencyObject: { rateBuy: number; rateSell: number };
     result: number;
     convertListItem: string;
+    selectedBank: string;
 }
 
 const amountModule: Module<AmountState, any> = {
@@ -27,6 +26,7 @@ const amountModule: Module<AmountState, any> = {
         currencyObject: { rateBuy: 0, rateSell: 0 },
         result: 0,
         convertListItem: '',
+        selectedBank: '',
     }),
     getters: {
         getAmount: (state) => state.amount,
@@ -112,17 +112,26 @@ const amountModule: Module<AmountState, any> = {
                 );
             }
         },
+        setSelectedBank: (state, bank) => {
+            state.selectedBank = bank;
+            console.log(state.selectedBank);
+        },
     },
     actions: {
-        fetchCurrencies: async ({ commit }) => {
-            try {
-                const response = await axios.get(monobankUrl);
-                const currencies = response.data;
-                commit('setCachedCurrencies', currencies);
-            } catch (error: any) {
-                error.response.status === 429
-                    ? console.log('Too many requests')
-                    : console.error(error);
+        fetchCurrencies: async ({ commit, state }) => {
+            const selectedBank = state.selectedBank as string;
+            if (selectedBank) {
+                const apiUrl =
+                    process.env[`VUE_APP_${selectedBank.toUpperCase()}_URL`];
+                try {
+                    const response = await axios.get(apiUrl);
+                    const currencies = response.data;
+                    commit('setCachedCurrencies', currencies);
+                } catch (error: any) {
+                    error.response.status === 429
+                        ? console.log('Too many requests')
+                        : console.error(error);
+                }
             }
         },
     },
