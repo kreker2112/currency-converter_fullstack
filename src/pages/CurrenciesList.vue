@@ -5,6 +5,10 @@
                 Выберите, пожалуйста, валюту для конвертации
             </legend>
 
+            <div class="selected-bank">
+                <strong>Выбран банк:</strong> {{ getSelectedBank }}
+            </div>
+
             <div class="amount__sum">
                 <strong>Сумма для обмена:</strong> {{ amount }}
             </div>
@@ -96,6 +100,9 @@ let optionInput: Ref<string> = ref('');
 const currencySelect = ref(HTMLSelectElement);
 
 const getAmount = store.getters['convert/getAmount'];
+
+const getSelectedBank = store.getters['convert/getSelectedBank'].toUpperCase();
+
 const setValueInput = (valueInput: string): void => {
     store.commit('convert/setValueInput', valueInput);
 };
@@ -183,6 +190,11 @@ onMounted(() => {
             font-size: 30px;
             font-weight: bold;
             margin-bottom: 10px;
+        }
+        .selected-bank {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
         .amount__sum {
             font-size: 20px;
