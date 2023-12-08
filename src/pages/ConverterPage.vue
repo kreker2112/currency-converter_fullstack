@@ -8,7 +8,7 @@
                 class="bank-select__list"
                 name="bank"
                 v-model="selectedBank"
-                @change="updateSelectedBank"
+                @change="setSelectedBank"
             >
                 <option
                     disabled
@@ -19,7 +19,7 @@
                     Select a bank
                 </option>
                 <option value="monobank">Monobank</option>
-                <option value="otherBank">NBU</option>
+                <option value="nbu">NBU</option>
             </select>
         </div>
         <div class="input-form__container">
@@ -34,9 +34,16 @@ import { ref } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore();
 const selectedBank = ref('');
-const updateSelectedBank = () => {
+const setSelectedBank = () => {
     store.commit('convert/setSelectedBank', selectedBank.value);
 };
+// const fetchCurrencies = () => {
+//     store.dispatch('convert/fetchCurrencies');
+// };
+// const updateSelectedBank = () => {
+//     setSelectedBank();
+//     fetchCurrencies();
+// };
 </script>
 
 <style scoped lang="scss">

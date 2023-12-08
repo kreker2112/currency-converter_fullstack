@@ -9,7 +9,7 @@ export interface AmountState {
     optionInput: string;
     radioInput: string;
     currencyCode: number;
-    currencyObject: { rateBuy: number; rateSell: number };
+    currencyObject: { rateBuy: number; rateSell: number; rate: number };
     result: number;
     convertListItem: string;
     selectedBank: string;
@@ -23,7 +23,7 @@ const amountModule: Module<AmountState, any> = {
         optionInput: '',
         radioInput: '',
         currencyCode: 0,
-        currencyObject: { rateBuy: 0, rateSell: 0 },
+        currencyObject: { rateBuy: 0, rateSell: 0, rate: 0 },
         result: 0,
         convertListItem: '',
         selectedBank: '',
@@ -38,6 +38,7 @@ const amountModule: Module<AmountState, any> = {
         getCurrencyObject: (state) => state.currencyObject,
         getResult: (state) => state.result,
         getConvertListItem: (state) => state.convertListItem,
+        getSelectedBank: (state) => state.selectedBank,
     },
     mutations: {
         setAmount: (state, amount: string) => (state.amount = amount),
@@ -65,8 +66,9 @@ const amountModule: Module<AmountState, any> = {
             const currencyCodeForSearch = state.currencyCode;
             currencies.find((item: any) => {
                 if (
-                    item.currencyCodeA === currencyCodeForSearch &&
-                    item.currencyCodeB === 980
+                    (item.currencyCodeA === currencyCodeForSearch &&
+                        item.currencyCodeB === 980) ||
+                    item.r030 === currencyCodeForSearch
                 ) {
                     state.currencyObject = item;
                 }
@@ -77,24 +79,26 @@ const amountModule: Module<AmountState, any> = {
                 ...state.currencyObject,
             };
             const amount = Number(state.amount);
+            const rateExchange = currencyObjectForCalculate.rate;
             const rateBuy = currencyObjectForCalculate.rateBuy;
             const rateSell = currencyObjectForCalculate.rateSell;
             const result =
                 state.radioInput === 'rateBuy'
-                    ? amount / rateBuy
-                    : amount * rateSell;
+                    ? amount / rateBuy || amount / rateExchange
+                    : amount * rateSell || amount * rateExchange;
             const fixedResult = result.toFixed(2);
-            state.result = Number(fixedResult);
+            return (state.result = Number(fixedResult));
         },
         makeConvertListItem: (state) => {
             const amount = state.amount;
             const currency = state.optionInput;
+            const selectedBank = state.selectedBank;
             const currencyFrom: string =
                 state.radioInput === 'rateBuy' ? 'UAH' : currency;
             const currencyTo: string =
                 state.radioInput === 'rateBuy' ? currency : 'UAH';
             const resultForItem = state.result;
-            const itemForHistory = `${amount} ${currencyFrom} = ${resultForItem} ${currencyTo}`;
+            const itemForHistory = `${selectedBank.toUpperCase()}: ${amount} ${currencyFrom} = ${resultForItem} ${currencyTo}`;
             state.convertListItem = itemForHistory;
         },
         addConvertListItemToHistoryArray(state): void {
@@ -114,18 +118,24 @@ const amountModule: Module<AmountState, any> = {
         },
         setSelectedBank: (state, bank) => {
             state.selectedBank = bank;
-            console.log(state.selectedBank);
+            // console.log(state.selectedBank);
         },
     },
     actions: {
         fetchCurrencies: async ({ commit, state }) => {
             const selectedBank = state.selectedBank as string;
+            // console.log('selectedBank: ', selectedBank);
             if (selectedBank) {
                 const apiUrl =
                     process.env[`VUE_APP_${selectedBank.toUpperCase()}_URL`];
+                // console.log('selectedBank: ', selectedBank.toUpperCase());
+                // console.log('apiUrl: ', apiUrl);
                 try {
                     const response = await axios.get(apiUrl);
+                    // console.log('response: ', response);
                     const currencies = response.data;
+                    // console.log('currencies: ', currencies);
+
                     commit('setCachedCurrencies', currencies);
                 } catch (error: any) {
                     error.response.status === 429
