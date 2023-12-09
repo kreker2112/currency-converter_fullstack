@@ -1,7 +1,29 @@
 <template>
     <div>
         <div class="input-form">
-            <h4>Конвертер валют</h4>
+            <h2>Конвертер валют</h2>
+            <div class="bank-select__container">
+                <h2 class="bank-select__header">Выберите, пожалуйста, банк:</h2>
+                <select
+                    ref="bankSelect"
+                    id="bank-select"
+                    class="bank-select__list"
+                    name="bank"
+                    v-model="selectedBank"
+                    @change="setSelectedBank"
+                >
+                    <option
+                        disabled
+                        value=""
+                        selected
+                        class="select-option__disabled"
+                    >
+                        Choose a bank
+                    </option>
+                    <option value="monobank">Monobank</option>
+                    <option value="nbu">NBU</option>
+                </select>
+            </div>
             <CurrencyInput v-model="amount" @input="addAmountToState" />
             <ButtonComponent button-style="button" @click.prevent="accept"
                 >Выберите валюту</ButtonComponent
@@ -20,9 +42,12 @@ const store = useStore();
 const router = useRouter();
 
 const amount: Ref<string> = ref('');
+const selectedBank = ref('');
 
 const accept = (): void => {
-    !amount.value ? Notiflix.Notify.failure('Введите сумму!') : convert();
+    !amount.value || !selectedBank.value
+        ? Notiflix.Notify.failure('Введите сумму и выберите банк!')
+        : convert();
 };
 
 const convert = (): void => {
@@ -34,6 +59,10 @@ const convert = (): void => {
 
 const addAmountToState = (): void => {
     store.commit('convert/setAmount', amount.value);
+};
+
+const setSelectedBank = () => {
+    store.commit('convert/setSelectedBank', selectedBank.value);
 };
 </script>
 
@@ -54,6 +83,29 @@ const addAmountToState = (): void => {
         font-size: 20px;
         font-weight: 900;
         color: #070707;
+    }
+    .bank-select__container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin: 20px 0;
+        .bank-select__header {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0 10px 0;
+        }
+        .bank-select__list {
+            width: fit-content;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 5px;
+            border-radius: 5px;
+            border: 2px solid #12c0b2;
+            outline: none;
+            text-align: center;
+        }
     }
 }
 </style>
