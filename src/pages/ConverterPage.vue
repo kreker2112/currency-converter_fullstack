@@ -16,7 +16,7 @@
                     selected
                     class="select-option__disabled"
                 >
-                    Select a bank
+                    Choose a bank
                 </option>
                 <option value="monobank">Monobank</option>
                 <option value="nbu">NBU</option>
