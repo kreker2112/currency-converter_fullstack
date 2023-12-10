@@ -63,7 +63,7 @@ const clearHistory = (): void => {
     width: fit-content;
     height: calc(100vh - 156px);
     border-left: 4px solid #12c0b2;
-    overflow-y: scroll;
+    overflow-y: auto;
     transition: transform 0.3s ease-in-out;
     transform: translateX(0);
 

@@ -2,7 +2,7 @@
     <Navbar />
     <div class="currency-layout">
         <slot></slot>
-        <ConvertationHistory />
+        <ConvertationHistory class="convertation-history__component" />
     </div>
     <FooterComponent />
 </template>

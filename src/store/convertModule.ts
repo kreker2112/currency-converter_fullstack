@@ -108,7 +108,7 @@ const amountModule: Module<AmountState, any> = {
                 ) || [];
             state.currenciesHistory = convertListItemsArray;
             if (state.convertListItem) {
-                convertListItemsArray.push(state.convertListItem);
+                convertListItemsArray.unshift(state.convertListItem);
 
                 localStorage.setItem(
                     'convertListItemsArray',
