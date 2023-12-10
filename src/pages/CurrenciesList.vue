@@ -295,20 +295,5 @@ onMounted(() => {
         }
     }
 }
-// @keyframes click-wave {
-//     0% {
-//         height: 40px;
-//         width: 40px;
-//         opacity: 0.35;
-//         position: relative;
-//     }
-//     100% {
-//         height: 200px;
-//         width: 200px;
-//         margin-left: -80px;
-//         margin-top: -80px;
-//         opacity: 0;
-//     }
-// }
 </style>
 ~/src/assets/constants/currenciesMap
