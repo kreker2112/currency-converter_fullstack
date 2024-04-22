@@ -128,8 +128,8 @@ const amountModule: Module<AmountState, any> = {
             if (selectedBank) {
                 const apiUrl =
                     process.env[`VUE_APP_${selectedBank.toUpperCase()}_URL`];
-                // console.log('selectedBank: ', selectedBank.toUpperCase());
-                // console.log('apiUrl: ', apiUrl);
+                console.log('selectedBank: ', selectedBank.toUpperCase());
+                console.log('apiUrl: ', apiUrl);
                 try {
                     const response = await axios.get(apiUrl);
                     // console.log('response: ', response);
@@ -138,7 +138,7 @@ const amountModule: Module<AmountState, any> = {
 
                     commit('setCachedCurrencies', currencies);
                 } catch (error: any) {
-                    error.response.status === 429
+                    error.response && error.response.status === 429
                         ? console.log('Too many requests')
                         : console.error(error);
                 }

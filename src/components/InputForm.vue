@@ -22,6 +22,7 @@
                     </option>
                     <option value="monobank">Monobank</option>
                     <option value="nbu">NBU</option>
+                    <option value="privatbank">PrivatBank</option>
                 </select>
             </div>
             <CurrencyInput v-model="amount" @input="addAmountToState" />
