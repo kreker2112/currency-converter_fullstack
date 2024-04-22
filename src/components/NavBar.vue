@@ -21,7 +21,7 @@ import { ref } from 'vue';
 
 const navButtons = ref([
     { id: uuidv4(), name: 'Конвертер валют', link: '/converter' },
-    { id: uuidv4(), name: 'Поступления', link: '/#' },
+    { id: uuidv4(), name: 'Поступления', link: '/funds' },
     { id: uuidv4(), name: 'Налоговые обязанности', link: '/#' },
     { id: uuidv4(), name: 'Уплата налогов', link: '/#' },
     { id: uuidv4(), name: 'О сайте', link: '/#' },
