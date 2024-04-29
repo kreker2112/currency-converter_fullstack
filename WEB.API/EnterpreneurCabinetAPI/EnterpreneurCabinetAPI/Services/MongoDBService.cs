@@ -15,9 +15,11 @@ namespace EnterpreneurCabinetAPI.Services
             _transactions = database.GetCollection<Transactions>("Transactions");
         }
 
-        public List<Transactions> Get()
+        public List<string> GetTransactionDetails()
         {
-            return _transactions.Find(transaction => true).ToList();
+            return _transactions.Find(transaction => true)
+                                .Project(transaction => transaction.TransactionsDetail)
+                                .ToList();
         }
 
         public Transactions Post(Transactions transaction)

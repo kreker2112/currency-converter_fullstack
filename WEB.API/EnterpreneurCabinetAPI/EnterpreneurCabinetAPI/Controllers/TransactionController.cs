@@ -15,8 +15,11 @@ namespace EnterpreneurCabinetAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var dbList = _mongoClient.GetDatabase("mypetprojectsdb").GetCollection<Transactions>("Transactions").AsQueryable();
-            return new JsonResult(dbList);
+            var collection = _mongoClient.GetDatabase("mypetprojectsdb").GetCollection<Transactions>("Transactions");
+            var details = collection.Find(Builders<Transactions>.Filter.Empty)
+                                    .Project(t => t.TransactionsDetail)
+                                    .ToList();
+            return new JsonResult(details);
         }
 
         // Добавление новой транзакции с новым Bson id в массив транзакций
