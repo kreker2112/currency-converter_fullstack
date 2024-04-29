@@ -1,0 +1,85 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EF4A1668-6DB2-4B26-BB1D-45D250C4B9DB}|EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI.csproj|g:\\webdevrepos\\currency-converter\\web.api\\enterpreneurcabinetapi\\enterpreneurcabinetapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF4A1668-6DB2-4B26-BB1D-45D250C4B9DB}|EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI.csproj|solutionrelative:enterpreneurcabinetapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF4A1668-6DB2-4B26-BB1D-45D250C4B9DB}|EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI.csproj|g:\\webdevrepos\\currency-converter\\web.api\\enterpreneurcabinetapi\\enterpreneurcabinetapi\\services\\mongodbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF4A1668-6DB2-4B26-BB1D-45D250C4B9DB}|EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI.csproj|solutionrelative:enterpreneurcabinetapi\\services\\mongodbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF4A1668-6DB2-4B26-BB1D-45D250C4B9DB}|EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI.csproj|g:\\webdevrepos\\currency-converter\\web.api\\enterpreneurcabinetapi\\enterpreneurcabinetapi\\controllers\\transactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF4A1668-6DB2-4B26-BB1D-45D250C4B9DB}|EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI.csproj|solutionrelative:enterpreneurcabinetapi\\controllers\\transactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF4A1668-6DB2-4B26-BB1D-45D250C4B9DB}|EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI.csproj|g:\\webdevrepos\\currency-converter\\web.api\\enterpreneurcabinetapi\\enterpreneurcabinetapi\\models\\transactions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF4A1668-6DB2-4B26-BB1D-45D250C4B9DB}|EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI.csproj|solutionrelative:enterpreneurcabinetapi\\models\\transactions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI\\Program.cs",
+              "RelativeDocumentMoniker": "EnterpreneurCabinetAPI\\Program.cs",
+              "ToolTip": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI\\Program.cs",
+              "RelativeToolTip": "EnterpreneurCabinetAPI\\Program.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAACgAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-29T11:14:35.453Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Transactions.cs",
+              "DocumentMoniker": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI\\Models\\Transactions.cs",
+              "RelativeDocumentMoniker": "EnterpreneurCabinetAPI\\Models\\Transactions.cs",
+              "ToolTip": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI\\Models\\Transactions.cs",
+              "RelativeToolTip": "EnterpreneurCabinetAPI\\Models\\Transactions.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-27T11:51:24.45Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TransactionController.cs",
+              "DocumentMoniker": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI\\Controllers\\TransactionController.cs",
+              "RelativeDocumentMoniker": "EnterpreneurCabinetAPI\\Controllers\\TransactionController.cs",
+              "ToolTip": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI\\Controllers\\TransactionController.cs",
+              "RelativeToolTip": "EnterpreneurCabinetAPI\\Controllers\\TransactionController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-27T11:50:29.019Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MongoDBService.cs",
+              "DocumentMoniker": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI\\Services\\MongoDBService.cs",
+              "RelativeDocumentMoniker": "EnterpreneurCabinetAPI\\Services\\MongoDBService.cs",
+              "ToolTip": "G:\\WebDevRepos\\currency-converter\\WEB.API\\EnterpreneurCabinetAPI\\EnterpreneurCabinetAPI\\Services\\MongoDBService.cs",
+              "RelativeToolTip": "EnterpreneurCabinetAPI\\Services\\MongoDBService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-27T11:35:21.114Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
