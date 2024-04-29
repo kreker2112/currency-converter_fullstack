@@ -26,32 +26,24 @@ const getCurrenciesHistory = computed(
     () => store.getters['convert/getCurrenciesHistory'],
 );
 
-const addConvertListItemToHistoryArray = (
-    convertListItemsArray: string[],
-): void => {
-    store.commit(
-        'convert/addConvertListItemToHistoryArray',
-        convertListItemsArray,
-    );
+const deleteCurrenciesHistory = () => {
+    store.dispatch('convert/deleteCurrenciesHistory');
+};
+
+const fetchCurrenciesHistory = () => {
+    store.dispatch('convert/fetchCurrenciesHistory');
 };
 const cleanCurrenciesHistory = (): void => {
     store.commit('convert/cleanCurrenciesHistory');
 };
 
 onMounted(() => {
-    const historyInLocalStorage = localStorage.getItem('convertListItemsArray');
-    if (historyInLocalStorage) {
-        const convertListItemsArray = JSON.parse(historyInLocalStorage);
-        if (getCurrenciesHistory.value.length === 0) {
-            addConvertListItemToHistoryArray(convertListItemsArray);
-        }
-    }
+    fetchCurrenciesHistory();
 });
 
 const clearHistory = (): void => {
-    localStorage.removeItem('convertListItemsArray');
-    localStorage.removeItem('convertListItem');
     cleanCurrenciesHistory();
+    deleteCurrenciesHistory();
 };
 </script>
 

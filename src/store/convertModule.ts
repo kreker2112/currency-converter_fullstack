@@ -39,12 +39,16 @@ const amountModule: Module<AmountState, any> = {
         getResult: (state) => state.result,
         getConvertListItem: (state) => state.convertListItem,
         getSelectedBank: (state) => state.selectedBank,
+        getconvertListItem: (state) => state.convertListItem,
     },
     mutations: {
         setAmount: (state, amount: string) => (state.amount = amount),
         cleanCurrenciesHistory: (state) => (state.currenciesHistory = []),
         setCachedCurrencies: (state, currencies) => {
             state.cachedCurrencies = currencies;
+        },
+        setCurrenciesHistory: (state, currenciesHistory: string[]) => {
+            state.currenciesHistory = currenciesHistory;
         },
         setOptionInput: (state, optionInput: string) => {
             state.optionInput = optionInput;
@@ -102,19 +106,20 @@ const amountModule: Module<AmountState, any> = {
             state.convertListItem = itemForHistory;
         },
         addConvertListItemToHistoryArray(state): void {
-            const convertListItemsArray: string[] =
-                JSON.parse(
-                    localStorage.getItem('convertListItemsArray') as string,
-                ) || [];
-            state.currenciesHistory = convertListItemsArray;
-            if (state.convertListItem) {
-                convertListItemsArray.unshift(state.convertListItem);
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const requestBody = {
+                TransactionsDetail: state.convertListItem,
+            };
 
-                localStorage.setItem(
-                    'convertListItemsArray',
-                    JSON.stringify(convertListItemsArray),
-                );
-            }
+            axios.post(
+                process.env.VUE_APP_POSTLISTARR_URL,
+                requestBody,
+                config,
+            );
         },
         setSelectedBank: (state, bank) => {
             state.selectedBank = bank;
@@ -135,6 +140,7 @@ const amountModule: Module<AmountState, any> = {
                     // console.log('response: ', response);
                     const currencies = response.data;
                     // console.log('currencies: ', currencies);
+                    // console.log('typeof currencies: ', typeof currencies);
 
                     commit('setCachedCurrencies', currencies);
                 } catch (error: any) {
@@ -142,6 +148,39 @@ const amountModule: Module<AmountState, any> = {
                         ? console.log('Too many requests')
                         : console.error(error);
                 }
+            }
+        },
+        fetchCurrenciesHistory: async ({ commit }) => {
+            try {
+                const response = await axios.get(
+                    process.env.VUE_APP_GETLISTARR_URL,
+                );
+                // Предполагаем, что данные в ответе уже в нужном формате
+                commit('setCurrenciesHistory', response.data);
+            } catch (error: any) {
+                console.error('Error fetching currency history:', error);
+                // Обрабатываем разные типы ошибок, например:
+                if (error.response) {
+                    // Запрос был сделан и сервер ответил с статус кодом, который выходит за рамки диапазона 2xx
+                    console.error('Error Status:', error.response.status);
+                    console.error('Error Data:', error.response.data);
+                } else if (error.request) {
+                    // Запрос был сделан, но ответ не был получен
+                    console.error('No response received:', error.request);
+                } else {
+                    // Ошибка была вызвана во время настройки запроса
+                    console.error('Error:', error.message);
+                }
+            }
+        },
+        deleteCurrenciesHistory: async ({ commit }) => {
+            const url = process.env.VUE_APP_DELETELISTARR_URL;
+            // console.log('URL used for deleting:', url); // Проверьте выводимое значение URL
+            try {
+                await axios.delete(url);
+                commit('cleanCurrenciesHistory');
+            } catch (error) {
+                console.error('Error clearing currency history:', error);
             }
         },
     },
