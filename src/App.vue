@@ -30,10 +30,13 @@ const addConvertListItemToHistoryArray = (convertListItem: string): void => {
     store.commit('convert/addConvertListItemToHistoryArray', convertListItem);
 };
 
+const fetchCurrenciesHistory = () => {
+    store.dispatch('convert/fetchCurrenciesHistory');
+};
+
 const initExchangeHistory = (): void => {
-    const exchangeHistory: string = JSON.parse(
-        localStorage.getItem('convertListItemsArray') as string,
-    );
+    const exchangeHistory: any = fetchCurrenciesHistory();
+
     const exchangeHistoryArray: string = exchangeHistory;
     addConvertListItemToHistoryArray(exchangeHistoryArray);
 };

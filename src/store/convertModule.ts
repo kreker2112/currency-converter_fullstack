@@ -39,7 +39,6 @@ const amountModule: Module<AmountState, any> = {
         getResult: (state) => state.result,
         getConvertListItem: (state) => state.convertListItem,
         getSelectedBank: (state) => state.selectedBank,
-        getconvertListItem: (state) => state.convertListItem,
     },
     mutations: {
         setAmount: (state, amount: string) => (state.amount = amount),
@@ -106,20 +105,11 @@ const amountModule: Module<AmountState, any> = {
             state.convertListItem = itemForHistory;
         },
         addConvertListItemToHistoryArray(state): void {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const requestBody = {
-                TransactionsDetail: state.convertListItem,
-            };
-
-            axios.post(
-                process.env.VUE_APP_POSTLISTARR_URL,
-                requestBody,
-                config,
-            );
+            const currenciesHistoryArray: string[] =
+                state.currenciesHistory || [];
+            if (state.convertListItem) {
+                currenciesHistoryArray.unshift(state.convertListItem);
+            }
         },
         setSelectedBank: (state, bank) => {
             state.selectedBank = bank;
@@ -173,6 +163,25 @@ const amountModule: Module<AmountState, any> = {
                 }
             }
         },
+        postConvertListItemToHistoryArray: async ({ commit, state }) => {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const requestBody = {
+                TransactionsDetail: state.convertListItem,
+            };
+            try {
+                await axios.post(
+                    process.env.VUE_APP_POSTLISTARR_URL,
+                    requestBody,
+                    config,
+                );
+            } catch (error) {
+                console.error('Error posting currency history:', error);
+            }
+        },
         deleteCurrenciesHistory: async ({ commit }) => {
             const url = process.env.VUE_APP_DELETELISTARR_URL;
             // console.log('URL used for deleting:', url); // Проверьте выводимое значение URL
@@ -188,3 +197,18 @@ const amountModule: Module<AmountState, any> = {
 };
 
 export default amountModule;
+
+// const config = {
+//     headers: {
+//         'Content-Type': 'application/json',
+//     },
+// };
+// const requestBody = {
+//     TransactionsDetail: state.convertListItem,
+// };
+
+// axios.post(
+//     process.env.VUE_APP_POSTLISTARR_URL,
+//     requestBody,
+//     config,
+// );

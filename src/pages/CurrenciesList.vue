@@ -127,11 +127,15 @@ const addConvertListItemToHistoryArray = (): void => {
 const fetchCurrencies = (): void => {
     store.dispatch('convert/fetchCurrencies');
 };
+const postConvertListItemToHistoryArray = (): void => {
+    store.dispatch('convert/postConvertListItemToHistoryArray');
+};
 
 const calculate = (): void => {
     calculateCurrency();
     makeConvertListItem();
     addConvertListItemToHistoryArray();
+    postConvertListItemToHistoryArray();
     router.push({ name: 'resultPage' });
 };
 
