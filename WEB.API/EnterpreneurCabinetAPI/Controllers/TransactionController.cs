@@ -11,7 +11,8 @@ namespace EnterpreneurCabinetAPI.Controllers
     {
         private readonly IMongoClient _mongoClient = mongoClient;
 
-        // Получение всех транзакций
+        // Getting all transactions details from the database 
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -22,7 +23,8 @@ namespace EnterpreneurCabinetAPI.Controllers
             return new JsonResult(details);
         }
 
-        // Добавление новой транзакции с новым Bson id в массив транзакций
+        // Adding a new transaction to the database
+
         [HttpPost]
         public IActionResult Post(Transactions transaction)
         {
@@ -30,7 +32,8 @@ namespace EnterpreneurCabinetAPI.Controllers
             return new JsonResult("AddedSuccessfully");
         }
 
-        // Удаление всех транзакций
+        // Delete all transactions from the database
+
         [HttpDelete]
         public IActionResult Delete()
         {

@@ -29,8 +29,6 @@ namespace EnterpreneurCabinetAPI.Services
             return transaction;
         }
 
-        // Удаление всех транзакций
-
         public void RemoveAll()
         {
             _transactions.DeleteMany(transaction => true);
