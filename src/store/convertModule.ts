@@ -145,25 +145,20 @@ const amountModule: Module<AmountState, any> = {
                 const response = await axios.get(
                     process.env.VUE_APP_GETLISTARR_URL,
                 );
-                // Предполагаем, что данные в ответе уже в нужном формате
                 commit('setCurrenciesHistory', response.data);
             } catch (error: any) {
                 console.error('Error fetching currency history:', error);
-                // Обрабатываем разные типы ошибок, например:
                 if (error.response) {
-                    // Запрос был сделан и сервер ответил с статус кодом, который выходит за рамки диапазона 2xx
                     console.error('Error Status:', error.response.status);
                     console.error('Error Data:', error.response.data);
                 } else if (error.request) {
-                    // Запрос был сделан, но ответ не был получен
                     console.error('No response received:', error.request);
                 } else {
-                    // Ошибка была вызвана во время настройки запроса
                     console.error('Error:', error.message);
                 }
             }
         },
-        postConvertListItemToHistoryArray: async ({ commit, state }) => {
+        postConvertListItemToHistoryArray: async ({ state }) => {
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -197,18 +192,3 @@ const amountModule: Module<AmountState, any> = {
 };
 
 export default amountModule;
-
-// const config = {
-//     headers: {
-//         'Content-Type': 'application/json',
-//     },
-// };
-// const requestBody = {
-//     TransactionsDetail: state.convertListItem,
-// };
-
-// axios.post(
-//     process.env.VUE_APP_POSTLISTARR_URL,
-//     requestBody,
-//     config,
-// );
