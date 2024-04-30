@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using EnterpreneurCabinetAPI.Models;
+using System.Threading.Tasks;
 
 
 namespace EnterpreneurCabinetAPI.Controllers
@@ -12,32 +13,29 @@ namespace EnterpreneurCabinetAPI.Controllers
         private readonly IMongoClient _mongoClient = mongoClient;
 
         // Getting all transactions details from the database 
-
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> GetAsync()
         {
             var collection = _mongoClient.GetDatabase("mypetprojectsdb").GetCollection<Transactions>("Transactions");
-            var details = collection.Find(Builders<Transactions>.Filter.Empty)
-                                    .Project(t => t.TransactionsDetail)
-                                    .ToList();
+            var details = await collection.Find(Builders<Transactions>.Filter.Empty)
+                                          .Project(t => t.TransactionsDetail)
+                                          .ToListAsync();
             return new JsonResult(details);
         }
 
         // Adding a new transaction to the database
-
         [HttpPost]
-        public IActionResult Post(Transactions transaction)
+        public async Task<IActionResult> PostAsync([FromBody] Transactions transaction)
         {
-            _mongoClient.GetDatabase("mypetprojectsdb").GetCollection<Transactions>("Transactions").InsertOne(transaction);
+            await _mongoClient.GetDatabase("mypetprojectsdb").GetCollection<Transactions>("Transactions").InsertOneAsync(transaction);
             return new JsonResult("AddedSuccessfully");
         }
 
         // Delete all transactions from the database
-
         [HttpDelete]
-        public IActionResult Delete()
+        public async Task<IActionResult> DeleteAsync()
         {
-            _mongoClient.GetDatabase("mypetprojectsdb").GetCollection<Transactions>("Transactions").DeleteMany(transaction => true);
+            await _mongoClient.GetDatabase("mypetprojectsdb").GetCollection<Transactions>("Transactions").DeleteManyAsync(transaction => true);
             return new JsonResult("DeletedSuccessfully");
         }
     }

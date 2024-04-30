@@ -15,23 +15,25 @@ namespace EnterpreneurCabinetAPI.Services
             _transactions = database.GetCollection<Transactions>("Transactions");
         }
 
-        public List<string> GetTransactionDetails()
+        public async Task<List<string>> GetTransactionDetailsAsync()
         {
-            return _transactions.Find(transaction => true)
-                                .Project(transaction => transaction.TransactionsDetail)
-                                .ToList();
+            var projection = Builders<Transactions>.Projection.Expression(t => t.TransactionsDetail);
+            var results = await _transactions.Find(transaction => true)
+                                             .Project<string>(projection)
+                                             .ToListAsync();
+            return results;
         }
 
-        public Transactions Post(Transactions transaction)
+        public async Task<Transactions> PostAsync(Transactions transaction)
         {
             transaction.Id = ObjectId.GenerateNewId().ToString();
-            _transactions.InsertOne(transaction);
+            await _transactions.InsertOneAsync(transaction);
             return transaction;
         }
 
-        public void RemoveAll()
+        public async Task RemoveAllAsync()
         {
-            _transactions.DeleteMany(transaction => true);
+            await _transactions.DeleteManyAsync(transaction => true);
         }
 
     }
