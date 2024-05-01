@@ -11,8 +11,8 @@ const store = createStore({
     },
     plugins: [
         createPersistedState({
-            key: 'currency', // измените на ваш префикс ключа
-            paths: ['convert.cachedCurrencies'], // укажите свойство, которое нужно сохранить
+            key: 'currency',
+            paths: ['convert.cachedCurrencies'],
         }),
     ],
 });

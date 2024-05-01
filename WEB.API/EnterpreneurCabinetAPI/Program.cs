@@ -15,6 +15,7 @@ options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoop
     .AddNewtonsoftJson(options=>options.SerializerSettings.ContractResolver
     = new DefaultContractResolver());
 ;
+builder.Services.AddMemoryCache();
 
 // MongoDB registration
 
