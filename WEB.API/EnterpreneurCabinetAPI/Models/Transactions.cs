@@ -12,4 +12,5 @@ namespace EnterpreneurCabinetAPI.Models
         [BsonElement("transaction")]
         public required string TransactionsDetail { get; set; }
     }
+
 }

@@ -7,14 +7,12 @@ namespace EnterpreneurCabinetAPI.Services
     public class MongoDBService
     {
         private readonly IMongoCollection<Transactions> _transactions;
-        private readonly IMongoCollection<Currency> _currencies;
 
         public MongoDBService(IConfiguration config)
         {
             var client = new MongoClient(config.GetConnectionString("MongoDB"));
             var database = client.GetDatabase(config["DatabaseSettings:DatabaseName"]);
             _transactions = database.GetCollection<Transactions>("Transactions");
-            _currencies = database.GetCollection<Currency>("Currencies");
         }
 
         public async Task<List<string>> GetTransactionDetailsAsync()
@@ -37,6 +35,7 @@ namespace EnterpreneurCabinetAPI.Services
         {
             await _transactions.DeleteManyAsync(transaction => true);
         }
+
     }
 }
 
