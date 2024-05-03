@@ -35,8 +35,11 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyCorsPolicy", builder =>
-        builder.WithOrigins("http://localhost:8080")
+    options.AddPolicy("MyCorsPolicy", configurePolicy: builder =>
+        builder.WithOrigins(
+            "http://localhost:8080", // добавляем текущий источник
+            "http://35.156.19.206:8080" // добавляем новый источник
+        )
                .AllowAnyHeader()
                .AllowAnyMethod());
 });
