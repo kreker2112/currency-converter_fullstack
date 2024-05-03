@@ -1,0 +1,28 @@
+$color-primary: #18aa66;
+$color-secondary: #6ac054;
+$color-tertiary: #39cccc;
+$color-quaternary: #fff;
+$color-quinary: #06998d;
+$color-senary: #a79e84bd;
+$color-septenary: #12c0b2;
+$color-octonary: #273baa;
+$color-nonary: #070707;
+$color-denary: #40e0d0;
+
+$radio-animation: click-wave;
+
+@keyframes click-wave {
+    0% {
+        height: 40px;
+        width: 40px;
+        opacity: 0.35;
+        position: relative;
+    }
+    100% {
+        height: 200px;
+        width: 200px;
+        margin-left: -80px;
+        margin-top: -80px;
+        opacity: 0;
+    }
+}

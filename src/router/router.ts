@@ -1,8 +1,9 @@
-import IntroPage from '@/pages/IntroPage.vue'
-import ConverterPage from '@/pages/ConverterPage.vue'
-import CurrenciesList from '@/pages/CurrenciesList.vue'
-import ResultPage from '@/pages/ResultPage.vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import IntroPage from '@/pages/IntroPage.vue';
+import ConverterPage from '@/pages/ConverterPage.vue';
+import CurrenciesList from '@/pages/CurrenciesList.vue';
+import ResultPage from '@/pages/ResultPage.vue';
+import EnteringFunds from '@/pages/EnteringFunds.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
@@ -37,11 +38,19 @@ const routes = [
             layout: 'currencyLayout',
         },
     },
-]
+    {
+        path: '/funds',
+        component: EnteringFunds,
+        name: 'enteringFunds',
+        meta: {
+            layout: 'defaultLayout',
+        },
+    },
+];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
-})
+});
 
-export default router
+export default router;

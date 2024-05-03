@@ -1,9 +1,13 @@
 <template>
-    <div class="currencies__list" @submit.prevent>
+    <div class="currencies__list" ref="currenciesList">
         <fieldset class="fieldset__container">
             <legend for="currency-select" class="currencies-legend__header">
                 Выберите, пожалуйста, валюту для конвертации
             </legend>
+
+            <div class="selected-bank">
+                <strong>Выбран банк:</strong> {{ getSelectedBank }}
+            </div>
 
             <div class="amount__sum">
                 <strong>Сумма для обмена:</strong> {{ amount }}
@@ -11,18 +15,29 @@
 
             <div class="currency currency-select">
                 <select
+                    ref="currencySelect"
                     id="currency-select"
                     class="currency currency-select__list"
                     name="currency"
                     @change="findSelectedCurrency"
                 >
-                    <option value="USD">USD (Доллар США)</option>
-                    <option value="EUR">EUR (Евро)</option>
+                    <option
+                        class="currency currency-select__option_USD"
+                        value="USD"
+                    >
+                        USD (Доллар США)
+                    </option>
+                    <option
+                        class="currency currency-select__option_EUR"
+                        value="EUR"
+                    >
+                        EUR (Евро)
+                    </option>
                 </select>
             </div>
 
             <div class="currencies__container">
-                <div class=".currency currency__container">
+                <div class="currency__item">
                     <input
                         id="rateBuy"
                         type="radio"
@@ -30,351 +45,258 @@
                         name="convert"
                         value="rateBuy"
                         checked
-                        @click="addRadioInputValueToLocalStorage"
+                        @click="saveRadioInputValue"
                     />
-                    <label class="currency currency-label" for="convertUSDtoUAH"
+                    <label class="currency-label" for="convertUSDtoUAH"
                         >UAH to {{ optionInput }}</label
                     >
                 </div>
 
-                <div class=".currency currency__container">
+                <div class="currency__item">
                     <input
                         id="rateSell"
                         type="radio"
                         class="option-input radio"
                         name="convert"
                         value="rateSell"
-                        @click="addRadioInputValueToLocalStorage"
+                        @click="saveRadioInputValue"
                     />
-                    <label class="currency currency-label" for="convertUAHtoUSD"
+                    <label class="currency-label" for="convertUAHtoUSD"
                         >{{ optionInput }} to UAH</label
                     >
                 </div>
             </div>
-            <div class="buttons buttons__contaier">
-                <small-button
-                    class="button calculate-button"
+            <div class="buttons__contaier">
+                <ButtonComponent
+                    button-style="currencies-list"
                     @click.prevent="calculate"
                 >
                     Посчитать
-                </small-button>
-                <small-button
-                    class="button calculate-button"
-                    @click="cancelOperation"
+                </ButtonComponent>
+                <ButtonComponent
+                    button-style="currencies-list"
+                    @click.prevent="cancelOperation"
                 >
                     Отменить операцию
-                </small-button>
+                </ButtonComponent>
             </div>
         </fieldset>
     </div>
 </template>
 
-<script>
-import axios from 'axios'
-axios.defaults.baseURL = 'https://api.monobank.ua/bank/currency'
-import { currenciesMap } from '@/assets/constants/currenciesMap'
-import { keysToRemove } from '@/assets/constants/keysToRemove'
+<script setup lang="ts">
+import { useStore } from 'vuex';
+import { ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
 
-import { mapActions } from 'vuex'
-export default {
-    name: 'CurrenciesList',
+const store = useStore();
+const router = useRouter();
 
-    data() {
-        return {
-            amount: '',
-            optionInput: '',
-        }
-    },
+let amount: Ref<string> = ref('');
 
-    mounted() {
-        this.amount = localStorage.amount
-        this.fetchCurrencies()
-        this.addOptionInputOnMounted()
-        this.addRadioInputOnMounted()
-        this.optionInput = localStorage.getItem('optionInput')
-    },
+let optionInput: Ref<string> = ref('');
 
-    methods: {
-        ...mapActions(['setCurrenciesHistory']),
-        // Получение данных из API банка Монобанк и запись их в localStorage:
-        async fetchCurrencies() {
-            try {
-                const response = await axios.get()
-                const currencies = response.data
-                localStorage.setItem('currencies', JSON.stringify(currencies))
-            } catch (error) {
-                error.response.status === 429
-                    ? this.handleCurrencies()
-                    : console.error(error)
-            }
-        },
-        // Добавление значения option в localStorage при его изменении:
-        addOptionValueToLocalStorage() {
-            const select = document.getElementById('currency-select')
-            const selectedOption = select.options[select.selectedIndex].value
-            localStorage.setItem('optionInput', selectedOption)
-        },
-        // Добавление значения optionInput в localStorage при монтировании компонента:
-        addOptionInputOnMounted() {
-            const select = document.getElementById('currency-select')
-            const selectedOption = select.options[select.selectedIndex].value
-            localStorage.optionInput === undefined
-                ? localStorage.setItem('optionInput', selectedOption)
-                : this.addOptionValueToLocalStorage()
-            this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage()
-            this.findCurrencieWithCurrencyCode()
-        },
-        // Добавление значения radioInput в localStorage:
-        addRadioInputValueToLocalStorage() {
-            const input = document.querySelector('input[type="radio"]:checked')
-            localStorage.setItem('radioInput', input.value)
-        },
-        // Получение данных инпута из localStorage:
-        getInputFromLocalStorage() {
-            localStorage.radioInput === 'rateBuy'
-                ? (document.getElementById('rateBuy').checked = true)
-                : (document.getElementById('rateSell').checked = true)
-        },
-        // Добавление значения radioInput в localStorage при монтировании компонента:
-        addRadioInputOnMounted() {
-            const input = document.querySelector('input[type="radio"]:checked')
-            localStorage.input === undefined
-                ? localStorage.setItem('radioInput', input.value)
-                : this.getInputFromLocalStorage()
-        },
-        // Получение данных currencies из localStorage:
-        handleCurrencies() {
-            const cachedCurrencies = JSON.parse(
-                localStorage.getItem('currencies'),
-            )
-            return cachedCurrencies
-        },
-        // Поиск валюты в currenciesMap по инпуту и запись кода валюты в localStorage:
-        findCurrencieCodeWithCurrencyMapAndAddToLocalStorage() {
-            const input = localStorage.optionInput
-            const currencyCode = Object.keys(currenciesMap).find(
-                (key) => currenciesMap[key] === input,
-            )
-            localStorage.setItem('currencyCode', currencyCode)
-        },
-        // Поиск объекта валюты в респонсе API банка Монобанк по коду и запись в localStorage:
-        findCurrencieWithCurrencyCode() {
-            const currencies = this.handleCurrencies()
-            const currencyCode = Number(localStorage.currencyCode)
-            currencies.find((item) => {
-                if (
-                    item.currencyCodeA === currencyCode &&
-                    item.currencyCodeB === 980
-                ) {
-                    localStorage.setItem('currencyObject', JSON.stringify(item))
-                }
-            })
-        },
-        findSelectedCurrency() {
-            this.addOptionValueToLocalStorage()
-            this.findCurrencieCodeWithCurrencyMapAndAddToLocalStorage()
-            this.findCurrencieWithCurrencyCode()
-            this.optionInput = localStorage.getItem('optionInput')
-        },
-        // Посчитать конвертацию согласно выбранным параметрам валюты и типа операции:
-        calculate() {
-            const currencyObject = JSON.parse(
-                localStorage.getItem('currencyObject'),
-            )
-            const amount = localStorage.amount
-            const radioInput = localStorage.radioInput
-            const rateBuy = currencyObject.rateBuy
-            const rateSell = currencyObject.rateSell
-            const rate = radioInput === 'rateBuy' ? rateBuy : rateSell
-            const result =
-                radioInput === 'rateBuy' ? amount / rate : amount * rate
-            localStorage.setItem('result', result.toFixed(2))
-            this.makeConvertListItem()
-            this.$router.push({ name: 'resultPage' })
-        },
-        // Создание строки для списка конвертаций и запись ее в localStorage:
-        makeConvertListItem() {
-            const amount = localStorage.amount
-            const currency = localStorage.optionInput
-            const currencyFrom =
-                localStorage.radioInput === 'rateBuy' ? 'UAH' : currency
-            const currencyTo =
-                localStorage.radioInput === 'rateBuy' ? currency : 'UAH'
-            const result = Number(localStorage.result)
-            const item = `${amount} ${currencyFrom} = ${result} ${currencyTo}`
-            localStorage.setItem('convertListItem', item)
-            console.log(
-                'itemFromLocalStorage: ',
-                localStorage.getItem('convertListItem'),
-            )
-            this.addConvertListItemToHistoryArray(item)
-        },
+const currencySelect = ref(HTMLSelectElement);
 
-        addConvertListItemToHistoryArray(item) {
-            const historyInLocalStorage = localStorage.getItem(
-                'convertListItemsArray',
-            )
+const getAmount = store.getters['convert/getAmount'];
 
-            if (historyInLocalStorage) {
-                const ArrayFromHistory = JSON.parse(historyInLocalStorage)
-                console.log('convertListItemsArray: ', ArrayFromHistory)
-                this.setCurrenciesHistory([...ArrayFromHistory, item])
-                localStorage.setItem(
-                    'convertListItemsArray',
-                    JSON.stringify([...ArrayFromHistory, item]),
-                )
-                return
-            }
-            localStorage.setItem(
-                'convertListItemsArray',
-                JSON.stringify([item]),
-            )
-        },
+const getSelectedBank = store.getters['convert/getSelectedBank'].toUpperCase();
 
-        // Отмена операции с очисткой input и amount в localStorage и переход на страницу конвертера:
-        cancelOperation() {
-            keysToRemove.forEach((key) => localStorage.removeItem(key))
-            this.$router.push({ name: 'converterPage' })
-        },
-    },
-}
+const setValueInput = (valueInput: string): void => {
+    store.commit('convert/setValueInput', valueInput);
+};
+const setOptionInput = (optionInput: string): void => {
+    store.commit('convert/setOptionInput', optionInput);
+};
+const findCurrencieCode = (): void => {
+    store.commit('convert/findCurrencieCode');
+};
+const findCurrencieWithCurrencyCode = (): void => {
+    store.commit('convert/findCurrencieWithCurrencyCode');
+};
+const calculateCurrency = (): void => {
+    store.commit('convert/calculateCurrency');
+};
+const makeConvertListItem = (): void => {
+    store.commit('convert/makeConvertListItem');
+};
+const addConvertListItemToHistoryArray = (): void => {
+    store.commit('convert/addConvertListItemToHistoryArray');
+};
+const fetchCurrencies = (): void => {
+    store.dispatch('convert/fetchCurrencies');
+};
+const postConvertListItemToHistoryArray = (): void => {
+    store.dispatch('convert/postConvertListItemToHistoryArray');
+};
+
+const calculate = (): void => {
+    calculateCurrency();
+    makeConvertListItem();
+    addConvertListItemToHistoryArray();
+    postConvertListItemToHistoryArray();
+    router.push({ name: 'resultPage' });
+};
+
+const saveOptionValue = (): void => {
+    const select: HTMLSelectElement =
+        currencySelect.value as unknown as HTMLSelectElement;
+    const selectedOption: string = select.options[select.selectedIndex].value;
+    localStorage.setItem('optionInput', selectedOption);
+    setOptionInput(selectedOption);
+};
+
+const saveRadioInputValue = (): void => {
+    const input = document.querySelector(
+        'input[type="radio"]:checked',
+    ) as HTMLInputElement;
+    setValueInput(input.value);
+};
+
+const updateOptionInputOnMounted = (): void => {
+    fetchCurrencies();
+    saveOptionValue();
+    findCurrencieCode();
+    findCurrencieWithCurrencyCode();
+};
+
+const findSelectedCurrency = (): void => {
+    saveOptionValue();
+    findCurrencieCode();
+    findCurrencieWithCurrencyCode();
+    optionInput.value = localStorage.getItem('optionInput') || '';
+};
+
+const cancelOperation = (): void => {
+    router.push({ name: 'converterPage' });
+};
+
+onMounted(() => {
+    amount.value = getAmount;
+    fetchCurrencies();
+    updateOptionInputOnMounted();
+    saveRadioInputValue();
+    optionInput.value = localStorage.getItem('optionInput') || '';
+});
 </script>
 
-<style scoped>
+<style lang="scss">
 .currencies__list {
     margin: 0 auto;
-}
-.fieldset__container {
-    border: 2px solid #12c0b2;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 0 auto;
-    width: 50vw;
-}
+    .fieldset__container {
+        border: 2px solid #12c0b2;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 0 auto;
+        width: 50vw;
+        .currencies-legend__header {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .selected-bank {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .amount__sum {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .currency.currency-select {
+            margin: 10px;
+            .currency-select__list {
+                width: fit-content;
+                font-size: 20px;
+                font-weight: bold;
+                padding: 5px;
+                border-radius: 5px;
+                border: 2px solid #12c0b2;
+                outline: none;
+                text-align: center;
+            }
+        }
+        .currencies__container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 10px;
+            gap: 10px;
+            .radio {
+                border-radius: 50%;
+                &::after {
+                    border-radius: 50%;
+                }
+            }
+            .option-input {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                -ms-appearance: none;
+                -o-appearance: none;
+                appearance: none;
+                position: relative;
+                top: 13.33333px;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                height: 40px;
+                width: 40px;
+                transition: all 0.15s ease-out 0s;
+                background: #cbd1d8;
+                border: none;
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                margin-right: 0.5rem;
+                outline: none;
+                position: relative;
+                z-index: 1000;
 
-.currencies__container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 10px;
-    gap: 10px;
-}
-
-.currency.currency-label {
-    font-size: 20px;
-    font-weight: bold;
-    margin-left: 10px;
-}
-.currencies-legend__header {
-    font-size: 30px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.amount__sum {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.currency.currency-select {
-    margin: 10px;
-}
-
-.currency.currency-select__list {
-    font-size: 20px;
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 5px;
-    border: 2px solid #12c0b2;
-    outline: none;
-}
-
-.buttons.buttons__contaier {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.button.calculate-button {
-    margin-top: 20px;
-    border-radius: 10px;
-    width: 20em;
-}
-
-.option-input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    -o-appearance: none;
-    appearance: none;
-    position: relative;
-    top: 13.33333px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 40px;
-    width: 40px;
-    transition: all 0.15s ease-out 0s;
-    background: #cbd1d8;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    display: inline-block;
-    margin-right: 0.5rem;
-    outline: none;
-    position: relative;
-    z-index: 1000;
-}
-.option-input:hover {
-    background: #6ac054;
-}
-.option-input:checked {
-    background: #12c0b2;
-}
-.option-input:checked::before {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    font-family: 'Font Awesome 5 Free';
-    content: '\f00c';
-    font-size: 25px;
-    font-weight: 900;
-    position: absolute;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-}
-.option-input:checked::after {
-    -webkit-animation: click-wave 0.65s;
-    -moz-animation: click-wave 0.65s;
-    animation: click-wave 0.65s;
-    background: #40e0d0;
-    content: '';
-    display: block;
-    position: relative;
-    z-index: 100;
-}
-.option-input.radio {
-    border-radius: 50%;
-}
-.option-input.radio::after {
-    border-radius: 50%;
-}
-
-@keyframes click-wave {
-    0% {
-        height: 40px;
-        width: 40px;
-        opacity: 0.35;
-        position: relative;
-    }
-    100% {
-        height: 200px;
-        width: 200px;
-        margin-left: -80px;
-        margin-top: -80px;
-        opacity: 0;
+                &:hover {
+                    background: #6ac054;
+                }
+                &:checked {
+                    background: #6ac054;
+                }
+                &:checked::before {
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    font-family: 'Font Awesome 5 Free';
+                    content: '\f00c';
+                    font-size: 25px;
+                    font-weight: 900;
+                    position: absolute;
+                    align-items: center;
+                    justify-content: center;
+                    color: #fff;
+                }
+                &:checked::after {
+                    -webkit-animation: $radio-animation 0.65s;
+                    -moz-animation: $radio-animation 0.65s;
+                    animation: $radio-animation 0.65s;
+                    background: #40e0d0;
+                    content: '';
+                    display: block;
+                    position: relative;
+                    z-index: 100;
+                }
+            }
+            .currency-label {
+                font-size: 20px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+        }
+        .buttons__contaier {
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
     }
 }
 </style>

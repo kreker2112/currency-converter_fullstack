@@ -6,12 +6,12 @@
     <FooterComponent />
 </template>
 
-<script setup>
-import Navbar from '@/components/NavBar.vue'
-import FooterComponent from '@/components/FooterComponent.vue'
+<script setup lang="ts">
+import Navbar from '@/components/NavBar.vue';
+import FooterComponent from '@/components/FooterComponent.vue';
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .default-layout {
     padding-top: 80px;
     display: flex;

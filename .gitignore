@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+yarn.lock
 
 
 # local env files
@@ -21,3 +22,42 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Файлы сборки
+bin/
+obj/
+out/
+
+# Файлы IDE
+.vs/
+*.user
+*.userosscache
+*.suo
+
+# Файлы конфигурации
+appsettings.json
+appsettings.Development.json
+
+# Пакеты NuGet
+packages/
+*.nupkg
+
+# Node modules
+node_modules/
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.cache
+TEMP/
+
+# Базы данных
+*.mdf
+*.ldf
+*.sqlite
+
+# Тесты
+TestResults/
+*.trx
+*.coverage
+coverage/

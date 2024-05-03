@@ -1,86 +1,63 @@
 <template>
     <div class="result-page">
-        <div class="container result__container">
+        <div class="result__container">
             <h1 class="result__container-header">Результат</h1>
-            <span>{{ result }}</span>
+            <span>{{ getResult }} {{ getOptionInput }}</span>
         </div>
-        <div class="buttons buttons__contaier">
-            <small-button
-                class="button calculate-button"
+        <div class="buttons__contaier">
+            <ButtonComponent
+                button-style="cancel-result"
                 @click="cancelOperation"
             >
                 Вернуться в начало
-            </small-button>
+            </ButtonComponent>
         </div>
     </div>
 </template>
 
-<script>
-import { keysToRemove } from '@/assets/constants/keysToRemove'
-export default {
-    name: 'ResultPage',
-    data() {
-        return {
-            result: null,
-        }
-    },
-    mounted() {
-        this.getResult()
-    },
-    methods: {
-        getResult() {
-            const result = Number(localStorage.getItem('result'))
-            const currency =
-                localStorage.getItem('radioInput') === 'rateBuy'
-                    ? localStorage.getItem('optionInput')
-                    : 'UAH'
-            const resultWithCurrency = result + ` ${currency}`
-            return (this.result = resultWithCurrency)
-        },
+<script setup lang="ts">
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-        cancelOperation() {
-            keysToRemove.forEach((key) => localStorage.removeItem(key))
-            this.$router.push('/converter')
-        },
-    },
-}
+const store = useStore();
+const router = useRouter();
+
+const getResult = store.getters['convert/getResult'];
+const getOptionInput = store.getters['convert/getOptionInput'];
+
+const cancelOperation = (): void => {
+    router.push('/converter');
+};
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .result-page {
     margin: 0 auto;
     height: 100%;
-}
-.container.result__container {
-    margin: 0 auto;
-    width: 15vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 2px solid #12c0b2;
-    border-radius: 5px;
-    padding: 20px;
-}
-.result__container-header {
-    margin-bottom: 20px;
-    font-size: 2em;
-}
-
-span {
-    font-size: 1.5em;
-    font-weight: 700;
-}
-
-.buttons.buttons__contaier {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.button.calculate-button {
-    margin-top: 20px;
-    border-radius: 10px;
-    width: 20em;
+    .result__container {
+        margin: 0 auto;
+        width: 15vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid #12c0b2;
+        border-radius: 5px;
+        padding: 20px;
+        &-header {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        span {
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+    }
+    .buttons__contaier {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    }
 }
 </style>

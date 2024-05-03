@@ -9,13 +9,9 @@
     </header>
 </template>
 
-<script>
-export default {
-    name: 'IntroPage',
-}
-</script>
+<script setup lang="ts"></script>
 
-<style scoped>
+<style scoped lang="scss">
 .header__container {
     margin: 0 auto;
     width: 1480px;
@@ -24,13 +20,12 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.header__title {
-    font-size: 1.5rem;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-        'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    text-align: center;
-    line-height: 3em;
+    .header__title {
+        font-size: 1.5rem;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+            'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        text-align: center;
+        line-height: 3em;
+    }
 }
 </style>
