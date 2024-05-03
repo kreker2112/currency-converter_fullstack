@@ -37,17 +37,6 @@ namespace EnterpreneurCabinetAPI.Services
         {
             await _transactions.DeleteManyAsync(transaction => true);
         }
-
-        public async Task<List<Currency>> GetAllCurrenciesAsync()
-        {
-            return await _currencies.Find(_ => true).ToListAsync();
-        }
-
-        public async Task<Currency> GetLatestCurrencyAsync()
-        {
-            return await _currencies.Find(_ => true).SortByDescending(c => c.Id).Limit(1).FirstOrDefaultAsync();
-        }
-
     }
 }
 
