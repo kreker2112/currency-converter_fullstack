@@ -10,7 +10,7 @@ import directives from '@/directives';
 
 import store from '@/store';
 
-import { ComponentWithname } from '@/interfaces/currency';
+// import { ComponentWithname } from '@/interfaces/currency';
 
 import './assets/scss/global.scss';
 

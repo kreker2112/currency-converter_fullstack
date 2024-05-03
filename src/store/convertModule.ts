@@ -121,8 +121,9 @@ const amountModule: Module<AmountState, any> = {
             const selectedBank = state.selectedBank as string;
             // console.log('selectedBank: ', selectedBank);
             if (selectedBank) {
-                const apiUrl =
-                    process.env[`VUE_APP_${selectedBank.toUpperCase()}_URL`];
+                const apiUrl = process.env[
+                    `VUE_APP_${selectedBank.toUpperCase()}_URL`
+                ] as string;
                 // console.log('selectedBank: ', selectedBank.toUpperCase());
                 // console.log('apiUrl: ', apiUrl);
                 try {
@@ -134,7 +135,7 @@ const amountModule: Module<AmountState, any> = {
 
                     commit('setCachedCurrencies', currencies);
                 } catch (error: any) {
-                    error.response && error.response.status === 429
+                    error.response.status === 429
                         ? console.log('Too many requests')
                         : console.error(error);
                 }
@@ -142,10 +143,13 @@ const amountModule: Module<AmountState, any> = {
         },
         fetchCurrenciesHistory: async ({ commit }) => {
             try {
-                const response = await axios.get(
-                    process.env.VUE_APP_GETLISTARR_URL,
-                );
-                commit('setCurrenciesHistory', response.data);
+                const url = process.env.VUE_APP_GETLISTARR_URL;
+                if (url) {
+                    const response = await axios.get(url);
+                    commit('setCurrenciesHistory', response.data);
+                } else {
+                    throw new Error('VUE_APP_GETLISTARR_URL is not defined');
+                }
             } catch (error: any) {
                 console.error('Error fetching currency history:', error);
                 if (error.response) {
@@ -164,27 +168,31 @@ const amountModule: Module<AmountState, any> = {
                     'Content-Type': 'application/json',
                 },
             };
-            const requestBody = {
-                TransactionsDetail: state.convertListItem,
-            };
-            try {
-                await axios.post(
-                    process.env.VUE_APP_POSTLISTARR_URL,
-                    requestBody,
-                    config,
-                );
-            } catch (error) {
-                console.error('Error posting currency history:', error);
+            const url = process.env.VUE_APP_POSTLISTARR_URL;
+            if (url) {
+                const requestBody = {
+                    TransactionsDetail: state.convertListItem,
+                };
+                try {
+                    await axios.post(url, requestBody, config);
+                } catch (error) {
+                    console.error('Error posting currency history:', error);
+                }
+            } else {
+                console.error('URL is undefined');
             }
         },
         deleteCurrenciesHistory: async ({ commit }) => {
             const url = process.env.VUE_APP_DELETELISTARR_URL;
-            // console.log('URL used for deleting:', url); // Проверьте выводимое значение URL
-            try {
-                await axios.delete(url);
-                commit('cleanCurrenciesHistory');
-            } catch (error) {
-                console.error('Error clearing currency history:', error);
+            if (url) {
+                try {
+                    await axios.delete(url);
+                    commit('cleanCurrenciesHistory');
+                } catch (error) {
+                    console.error('Error clearing currency history:', error);
+                }
+            } else {
+                console.error('URL is undefined');
             }
         },
     },
