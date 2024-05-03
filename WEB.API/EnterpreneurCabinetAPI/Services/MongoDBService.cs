@@ -48,12 +48,6 @@ namespace EnterpreneurCabinetAPI.Services
             return await _currencies.Find(_ => true).SortByDescending(c => c.Id).Limit(1).FirstOrDefaultAsync();
         }
 
-        public async Task SaveCurrencyAsync(BsonDocument currencyData)
-        {
-            var currency = new Currency { Currencies = currencyData };
-            await _currencies.InsertOneAsync(currency);
-        }
-
     }
 }
 

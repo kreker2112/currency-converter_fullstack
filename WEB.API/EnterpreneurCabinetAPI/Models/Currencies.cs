@@ -7,8 +7,8 @@ namespace EnterpreneurCabinetAPI.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
-        public BsonDocument Currencies { get; set; }
+        public required BsonDocument Currencies { get; set; }
     }
 }
