@@ -7,7 +7,7 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "serve-api": "cd ./WEB.API/EnterpreneurCabinetAPI && dotnet run",
+        "serve-api": "cd WEB.API/EnterpreneurCabinetAPI && dotnet run",
         "start": "concurrently \"npm run serve\" \"npm run serve-api\""
     },
     "dependencies": {
