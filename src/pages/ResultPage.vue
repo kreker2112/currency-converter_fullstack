@@ -1,7 +1,7 @@
 <template>
     <div class="result-page">
         <div class="result__container">
-            <h1 class="result__container-header">Результат</h1>
+            <h1 class="result__container-header">Result</h1>
             <span>{{ getResult }} {{ getOptionInput }}</span>
         </div>
         <div class="buttons__contaier">
@@ -9,7 +9,7 @@
                 button-style="cancel-result"
                 @click="cancelOperation"
             >
-                Вернуться в начало
+                Back to the beginning
             </ButtonComponent>
         </div>
     </div>

@@ -4,7 +4,7 @@
             <p>
                 © 2023 All rights reserved <br />
                 <a href="https://github.com/kreker2112/-urrency-converter.git">
-                    kreker2112.github
+                    Project repo
                 </a>
             </p>
         </div>

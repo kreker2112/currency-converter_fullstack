@@ -2,15 +2,15 @@
     <div class="currencies__list" ref="currenciesList">
         <fieldset class="fieldset__container">
             <legend for="currency-select" class="currencies-legend__header">
-                Выберите, пожалуйста, валюту для конвертации
+                Please, select the currency to convert
             </legend>
 
             <div class="selected-bank">
-                <strong>Выбран банк:</strong> {{ getSelectedBank }}
+                <strong>Bank selected:</strong> {{ getSelectedBank }}
             </div>
 
             <div class="amount__sum">
-                <strong>Сумма для обмена:</strong> {{ amount }}
+                <strong>Amount to exchange:</strong> {{ amount }}
             </div>
 
             <div class="currency currency-select">
@@ -25,13 +25,13 @@
                         class="currency currency-select__option_USD"
                         value="USD"
                     >
-                        USD (Доллар США)
+                        USD (U.S. dollar)
                     </option>
                     <option
                         class="currency currency-select__option_EUR"
                         value="EUR"
                     >
-                        EUR (Евро)
+                        EUR (Euro)
                     </option>
                 </select>
             </div>
@@ -71,13 +71,13 @@
                     button-style="currencies-list"
                     @click.prevent="calculate"
                 >
-                    Посчитать
+                    Calculate
                 </ButtonComponent>
                 <ButtonComponent
                     button-style="currencies-list"
                     @click.prevent="cancelOperation"
                 >
-                    Отменить операцию
+                    Cancel operation
                 </ButtonComponent>
             </div>
         </fieldset>

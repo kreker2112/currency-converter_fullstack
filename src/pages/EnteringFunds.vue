@@ -2,7 +2,7 @@
     <div>
         <header class="funds__container">
             <h1 class="funds__title">
-                Тут будут отображаться данные о поступлениях денежных средств
+                Data on cash receipts will be displayed here.
             </h1>
         </header>
     </div>

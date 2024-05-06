@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="input-form">
-            <h2>Конвертер валют</h2>
+            <h2>Currency converter</h2>
             <div class="bank-select__container">
-                <h2 class="bank-select__header">Выберите, пожалуйста, банк:</h2>
+                <h2 class="bank-select__header">Please, select a bank:</h2>
                 <select
                     ref="bankSelect"
                     id="bank-select"
@@ -18,7 +18,7 @@
                         selected
                         class="select-option__disabled"
                     >
-                        Choose a bank
+                        Select a bank
                     </option>
                     <option value="monobank">Monobank</option>
                     <option value="nbu">NBU</option>
@@ -27,7 +27,7 @@
             </div>
             <CurrencyInput v-model="amount" @input="addAmountToState" />
             <ButtonComponent button-style="button" @click.prevent="accept"
-                >Выберите валюту</ButtonComponent
+                >Select currency</ButtonComponent
             >
         </div>
     </div>
@@ -47,7 +47,7 @@ const selectedBank = ref('');
 
 const accept = (): void => {
     !amount.value || !selectedBank.value
-        ? Notiflix.Notify.failure('Введите сумму и выберите банк!')
+        ? Notiflix.Notify.failure('Input the amount and select the bank!!')
         : convert();
 };
 

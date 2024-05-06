@@ -5,14 +5,14 @@
             :value="props.modelValue"
             class="input"
             type="number"
-            placeholder="Введите сумму"
+            placeholder="Input amount"
             @input="updateInput"
         />
         <ButtonComponent
             button-style="currency-input_cleanup"
             @click="clearInput"
         >
-            Очистить
+            Clear
         </ButtonComponent>
     </div>
 </template>

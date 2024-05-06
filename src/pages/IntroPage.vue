@@ -1,10 +1,10 @@
 <template>
     <header class="header__container">
         <h1 class="header__title">
-            Добро пожаловать в личный кабинет предпринимателя! Тут можно
-            конвертировать валюту, хранить данные о поступлениях денежных
-            средств, расчет дохода за период, расчет суммы налогов и
-            формирование бюджетных платежей
+            Welcome to the entrepreneur's personal account! Here you can convert
+            currency, store data on cash receipts funds, calculation of income
+            for the period, calculation of the amount of taxes and formation of
+            budget payments
         </h1>
     </header>
 </template>
