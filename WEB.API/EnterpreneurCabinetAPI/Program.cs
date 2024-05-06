@@ -62,4 +62,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run("http://0.0.0.0:22892");
+app.Run("http://35.157.100.194:22892");
