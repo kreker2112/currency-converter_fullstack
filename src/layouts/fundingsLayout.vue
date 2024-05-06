@@ -1,6 +1,6 @@
 <template>
     <Navbar />
-    <div class="currency-layout">
+    <div class="fundings-layout">
         <slot></slot>
     </div>
     <FooterComponent />
@@ -12,13 +12,13 @@ import FooterComponent from '@/components/FooterComponent.vue';
 </script>
 
 <style scoped lang="scss">
-.currency-layout {
+.fundings-layout {
     padding-top: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    text-align: center;
+    // display: flex;
+    // flex-direction: row;
+    // align-items: center;
+    // justify-content: space-between;
+    // text-align: center;
     width: 100%;
 }
 </style>

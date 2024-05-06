@@ -43,7 +43,7 @@ const routes = [
         component: EnteringFunds,
         name: 'enteringFunds',
         meta: {
-            layout: 'defaultLayout',
+            layout: 'fundingsLayout',
         },
     },
 ];

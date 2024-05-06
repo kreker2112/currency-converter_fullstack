@@ -16,7 +16,7 @@
     width: 1480px;
     height: calc(100vh - 156px);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     .funds__title {

@@ -12,11 +12,13 @@ import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import currencyLayout from '@/layouts/currencyLayout.vue';
 import defaultLayout from '@/layouts/defaultLayout.vue';
+import fundingsLayout from '@/layouts/fundingsLayout.vue';
 import { computed } from 'vue';
 
 const components: { [key: string]: any } = {
     currencyLayout,
     defaultLayout,
+    fundingsLayout,
 };
 
 const store = useStore();
