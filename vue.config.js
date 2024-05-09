@@ -5,6 +5,8 @@ const generalVarsFiles = ['/assets/scss/_variables.scss'];
 
 export default defineConfig({
     transpileDependencies: true,
+    publicPath:
+        process.env.NODE_ENV === 'production' ? '/converter.github.io' : '/',
     chainWebpack: (config) => {
         config.plugin('define').tap((definitions) => {
             Object.assign(definitions[0], {
