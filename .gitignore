@@ -61,3 +61,6 @@ TestResults/
 *.trx
 *.coverage
 coverage/
+
+# Ключи
+*.pem
