@@ -300,4 +300,3 @@ onMounted(() => {
     }
 }
 </style>
-~/src/assets/constants/currenciesMap
