@@ -1,0 +1,48 @@
+:root {
+    --background-color: #ffffff;
+    --text-color: #ffffff;
+    --primary-color: #12c0b2;
+    --button-color: #18aa66;
+    --button-hover-color: #6ac054;
+    --footer-background-color: #12c0b2;
+    --box-shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme {
+    --background-color: #1e1e1e;
+    --text-color: #f9f9f9;
+    --primary-color: #0a74da;
+    --button-color: #0a74da;
+    --button-hover-color: #0055aa;
+    --footer-background-color: #0a74da;
+    --box-shadow-color: rgba(255, 255, 255, 0.2);
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+button {
+    background-color: var(--button-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px var(--box-shadow-color);
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
+}
+
+footer {
+    background-color: var(--footer-background-color);
+    color: var(--text-color);
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
