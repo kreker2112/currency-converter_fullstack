@@ -1,0 +1,17 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '8080:80' # Фронтенд Vue
+            - '22892:80' # API .NET
+        environment:
+            ASPNETCORE_ENVIRONMENT: Development
+        networks:
+            - app-network
+        command: npm run start
+
+networks:
+    app-network:
+        driver: bridge
