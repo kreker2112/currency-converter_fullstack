@@ -39,15 +39,6 @@ const currentComponent = computed(() => {
     return components[route.meta.layout as string];
 });
 
-// Переключение темы
-const toggleTheme = () => {
-    const newTheme =
-        currentTheme.value === 'light-theme' ? 'dark-theme' : 'light-theme';
-    currentTheme.value = newTheme;
-    document.body.className = newTheme; // Меняем класс на body
-    store.commit('theme/setTheme', newTheme); // Сохраняем тему в Vuex
-};
-
 // Инициализация истории конверсий
 const addConvertListItemToHistoryArray = (convertListItem: string): void => {
     store.commit('convert/addConvertListItemToHistoryArray', convertListItem);
