@@ -51,7 +51,7 @@ const navButtons = ref([
 
 .navbar_title {
     font-size: 2rem;
-    font-family: 'Lucida Sans', sans-serif;
+    font-family: 'Montserrat';
     color: #fff;
     padding: 15px;
     cursor: pointer;

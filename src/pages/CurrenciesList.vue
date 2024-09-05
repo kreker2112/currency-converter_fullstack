@@ -191,16 +191,19 @@ onMounted(() => {
         margin: 0 auto;
         width: 50vw;
         .currencies-legend__header {
+            font-family: 'Montserrat';
             font-size: 30px;
             font-weight: bold;
             margin-bottom: 10px;
         }
         .selected-bank {
+            font-family: 'Montserrat';
             font-size: 20px;
             font-weight: bold;
             margin-bottom: 15px;
         }
         .amount__sum {
+            font-family: 'Montserrat';
             font-size: 20px;
             font-weight: bold;
             margin-bottom: 10px;
@@ -209,6 +212,7 @@ onMounted(() => {
             margin: 10px;
             .currency-select__list {
                 width: fit-content;
+                font-family: 'Montserrat';
                 font-size: 20px;
                 font-weight: bold;
                 padding: 5px;
@@ -285,6 +289,7 @@ onMounted(() => {
                 }
             }
             .currency-label {
+                font-family: 'Montserrat';
                 font-size: 20px;
                 font-weight: bold;
                 margin-left: 10px;

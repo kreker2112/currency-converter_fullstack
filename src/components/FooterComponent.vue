@@ -35,10 +35,12 @@
         text-align: center;
 
         p {
+            font-family: 'Montserrat';
             line-height: 1.5;
         }
 
         a {
+            font-family: 'Montserrat';
             color: var(--footer-text-color);
             text-decoration: underline;
         }

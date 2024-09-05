@@ -146,7 +146,11 @@ const amountModule: Module<AmountState, any> = {
                 const url = process.env.VUE_APP_GETLISTARR_URL;
                 if (url) {
                     const response = await axios.get(url);
-                    commit('setCurrenciesHistory', response.data);
+                    const sortedData = response.data.sort((a: any, b: any) =>
+                        a._id > b._id ? 1 : -1,
+                    );
+                    commit('setCurrenciesHistory', sortedData);
+                    commit('setCurrenciesHistory', sortedData);
                 } else {
                     throw new Error('VUE_APP_GETLISTARR_URL is not defined');
                 }

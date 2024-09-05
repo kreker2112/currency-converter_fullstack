@@ -15,11 +15,15 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .button {
+    font-family: 'Montserrat';
     font-size: 1.5rem;
     width: 100%;
     height: 65px;
     border: 2px solid var(--button-color);
-    background-color: var(--button-color);
+    background-image: radial-gradient(
+        var(--secondary-color),
+        var(--primary-color)
+    );
     box-shadow: 2px 2px 2px var(--box-shadow-color);
     padding: 15px;
     color: #fff;
@@ -27,7 +31,10 @@ const props = defineProps({
     border-radius: 10px 5px 10px 5px;
 
     &:hover {
-        background-color: var(--button-hover-color);
+        background-image: radial-gradient(
+            var(--secondary-color),
+            var(--button-hover-color)
+        );
         box-shadow: 2px 2px 2px var(--button-hover-color);
         transform: scale(1.01);
         transition: all 0.9s;
@@ -36,6 +43,7 @@ const props = defineProps({
     &.nav-button {
         width: fit-content;
         height: fit-content;
+        font-family: 'Montserrat';
         font-size: 1rem;
         border: 2px solid var(--button-color);
         background-image: linear-gradient(
@@ -44,8 +52,6 @@ const props = defineProps({
         );
         border-radius: 5px;
         padding: 10px 15px;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-            'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         box-shadow: 2px 2px 2px var(--box-shadow-color);
         transition: all 0.9s;
 
@@ -59,6 +65,7 @@ const props = defineProps({
     &.currency-input_cleanup {
         width: fit-content;
         height: fit-content;
+        font-family: 'Montserrat';
         font-size: 1rem;
         border: none;
         padding: 10px 15px;
@@ -77,6 +84,7 @@ const props = defineProps({
         margin-bottom: 15px;
         width: 150px;
         height: 30px;
+        font-family: 'Montserrat';
         font-size: 12px;
         padding: 5px;
 

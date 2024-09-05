@@ -60,6 +60,8 @@ const clearHistory = (): void => {
     transform: translateX(0);
 
     .header {
+        font-family: 'Montserrat';
+        font-weight: 600;
         margin-bottom: 15px;
         font-size: 24px;
     }
@@ -72,6 +74,8 @@ const clearHistory = (): void => {
     }
     .list-item {
         text-align: center;
+        font-family: 'Montserrat';
+        font-weight: 600;
         padding: 15px;
         width: 100%;
         border: 2px solid var(--input-borders-color);

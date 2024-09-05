@@ -79,11 +79,11 @@ const setSelectedBank = () => {
     box-shadow: -2px 2px 2px var(--box-shadow-color);
     border-radius: 10px;
 
-    h4 {
+    h2 {
         margin: 0;
-        font-size: 20px;
-        font-weight: 900;
-        color: #070707;
+        font-family: 'Montserrat';
+        font-size: 30px;
+        font-weight: 600;
     }
     .bank-select__container {
         display: flex;
@@ -93,17 +93,21 @@ const setSelectedBank = () => {
         gap: 15px;
         margin: 20px 0;
         .bank-select__header {
+            font-family: 'Montserrat';
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 500;
             margin: 10px 0 10px 0;
         }
         .bank-select__list {
             width: fit-content;
+            font-family: 'Montserrat';
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 500;
             padding: 5px;
             border-radius: 5px;
+            color: var(--input-color);
             border: 2px solid var(--input-borders-color);
+            background-color: var(--input-background-color);
             outline: none;
             text-align: center;
         }

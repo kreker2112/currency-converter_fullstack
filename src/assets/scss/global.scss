@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 :root {
-    --background-color: #ffffffd8;
+    --background-color: #ececec;
     --text-color: #000000;
     --nav-button-hover-text-color: #f9f9f9;
     --primary-color: #12c0b2;
@@ -9,6 +11,8 @@
     --footer-background-color: #12c0b2;
     --box-shadow-color: rgba(0, 0, 0, 0.2);
     --footer-text-color: #ffffffd8;
+    --input-color: #000000;
+    --input-background-color: #ececec;
     --input-borders-color: #18aa66;
 }
 
@@ -22,10 +26,13 @@
     --footer-background-color: #0a74da;
     --box-shadow-color: rgba(255, 255, 255, 0.438);
     --footer-text-color: #ffffffd8;
+    --input-color: #ececec;
+    --input-background-color: #272727;
     --input-borders-color: #0a74da;
 }
 
 body {
+    font-family: 'Montserrat', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     transition:

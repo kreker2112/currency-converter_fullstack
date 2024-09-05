@@ -52,6 +52,8 @@ const clearInput = (): void => {
 .currency-input__input {
     position: relative;
     width: 100%;
+    color: var(--input-color);
+    background-color: var(--input-background-color);
     border: 2px solid var(--input-borders-color);
     padding: 10px 15px;
     border-radius: 10px 0 0 10px;
