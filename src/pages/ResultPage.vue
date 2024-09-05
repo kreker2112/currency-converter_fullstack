@@ -40,7 +40,7 @@ const cancelOperation = (): void => {
         display: flex;
         flex-direction: column;
         align-items: center;
-        border: 2px solid #12c0b2;
+        border: 2px solid var(--primary-color);
         border-radius: 5px;
         padding: 20px;
         &-header {

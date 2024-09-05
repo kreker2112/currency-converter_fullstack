@@ -52,7 +52,7 @@ const clearInput = (): void => {
 .currency-input__input {
     position: relative;
     width: 100%;
-    border: 2px solid #18aa66;
+    border: 2px solid var(--input-borders-color);
     padding: 10px 15px;
     border-radius: 10px 0 0 10px;
     font-size: 16px;
@@ -65,7 +65,7 @@ const clearInput = (): void => {
     }
 
     &[type='number'] {
-        appearance: textfield; /* Firefox */
+        appearance: textfield;
     }
 }
 </style>

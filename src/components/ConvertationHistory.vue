@@ -54,7 +54,7 @@ const clearHistory = (): void => {
     padding: 15px;
     width: fit-content;
     height: calc(100vh - 156px);
-    border-left: 4px solid #12c0b2;
+    border-left: 4px solid var(--primary-color);
     overflow-y: auto;
     transition: transform 0.3s ease-in-out;
     transform: translateX(0);
@@ -74,7 +74,7 @@ const clearHistory = (): void => {
         text-align: center;
         padding: 15px;
         width: 100%;
-        border: 2px solid #12c0b2;
+        border: 2px solid var(--input-borders-color);
         border-radius: 5px;
 
         &:not(:last-of-type) {

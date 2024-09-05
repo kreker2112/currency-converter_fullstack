@@ -18,17 +18,17 @@ const props = defineProps({
     font-size: 1.5rem;
     width: 100%;
     height: 65px;
-    border: 2px solid #18aa66;
-    background-color: #18aa66;
-    box-shadow: 2px 2px 2px #6ac054;
+    border: 2px solid var(--button-color);
+    background-color: var(--button-color);
+    box-shadow: 2px 2px 2px var(--box-shadow-color);
     padding: 15px;
     color: #fff;
     cursor: pointer;
     border-radius: 10px 5px 10px 5px;
 
     &:hover {
-        background-color: #6ac054;
-        box-shadow: 2px 2px 2px #18aa66;
+        background-color: var(--button-hover-color);
+        box-shadow: 2px 2px 2px var(--button-hover-color);
         transform: scale(1.01);
         transition: all 0.9s;
     }
@@ -37,18 +37,18 @@ const props = defineProps({
         width: fit-content;
         height: fit-content;
         font-size: 1rem;
-        border: none;
-        background-color: #06998d;
+        border: 2px solid var(--button-color);
+        background-color: var(--button-color);
         border-radius: 5px;
         padding: 10px 15px;
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
             'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        box-shadow: 2px 2px 2px #a79e84bd;
+        box-shadow: 2px 2px 2px var(--box-shadow-color);
         transition: all 0.9s;
 
         &:hover {
-            background-color: #fff;
-            color: #12c0b2;
+            background-color: var(--button-hover-color);
+            color: var(--nav-button-hover-text-color);
             box-shadow: 2px 2px 2px #a79e84bd;
         }
     }
@@ -66,7 +66,7 @@ const props = defineProps({
         box-shadow: none;
 
         &:hover {
-            background-color: #6ac054;
+            background-color: var(--button-hover-color);
         }
     }
 
@@ -78,8 +78,8 @@ const props = defineProps({
         padding: 5px;
 
         &:hover {
-            background-color: #6ac054;
-            box-shadow: 2px 2px 2px #18aa66;
+            background-color: var(--button-hover-color);
+            box-shadow: 2px 2px 2px var(--button-hover-color);
             transform: scale(1.01);
             transition: all 0.9s;
         }

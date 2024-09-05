@@ -75,8 +75,8 @@ const setSelectedBank = () => {
     gap: 15px;
     padding: 15px;
     width: 30vw;
-    border: 2px solid #18aa66;
-    box-shadow: -2px 2px 2px #a79e84bd;
+    border: 2px solid var(--input-borders-color);
+    box-shadow: -2px 2px 2px var(--box-shadow-color);
     border-radius: 10px;
 
     h4 {
@@ -103,7 +103,7 @@ const setSelectedBank = () => {
             font-weight: bold;
             padding: 5px;
             border-radius: 5px;
-            border: 2px solid #12c0b2;
+            border: 2px solid var(--input-borders-color);
             outline: none;
             text-align: center;
         }

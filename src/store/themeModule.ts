@@ -6,7 +6,7 @@ export interface ThemeState {
 
 const themeModule: Module<ThemeState, any> = {
     state: () => ({
-        currentTheme: 'light-theme',
+        currentTheme: localStorage.getItem('theme') || 'light-theme',
     }),
     getters: {
         getCurrentTheme: (state) => state.currentTheme,
@@ -14,6 +14,7 @@ const themeModule: Module<ThemeState, any> = {
     mutations: {
         setTheme: (state, theme: string) => {
             state.currentTheme = theme;
+            localStorage.setItem('theme', theme);
         },
     },
 };

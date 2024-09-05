@@ -1,21 +1,26 @@
 :root {
-    --background-color: #ffffff;
-    --text-color: #ffffff;
+    --background-color: #ffffffd8;
+    --text-color: #000000;
+    --nav-button-hover-text-color: #f9f9f9;
     --primary-color: #12c0b2;
     --button-color: #18aa66;
     --button-hover-color: #6ac054;
     --footer-background-color: #12c0b2;
     --box-shadow-color: rgba(0, 0, 0, 0.2);
+    --footer-text-color: #ffffffd8;
+    --input-borders-color: #18aa66;
 }
 
 .dark-theme {
     --background-color: #1e1e1e;
     --text-color: #f9f9f9;
-    --primary-color: #0a74da;
+    --primary-color: #1762ee;
     --button-color: #0a74da;
     --button-hover-color: #0055aa;
     --footer-background-color: #0a74da;
-    --box-shadow-color: rgba(255, 255, 255, 0.2);
+    --box-shadow-color: rgba(255, 255, 255, 0.438);
+    --footer-text-color: #ffffffd8;
+    --input-borders-color: #0a74da;
 }
 
 body {

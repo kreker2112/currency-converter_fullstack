@@ -18,8 +18,8 @@
     width: 100%;
     height: 76px;
     padding: 20px 0;
-    background-color: var(--footer-background-color);
-    color: var(--text-color);
+    background-color: var(--primary-color);
+    color: var(--footer-text-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,8 +31,12 @@
         font-size: 16px;
         text-align: center;
 
+        p {
+            line-height: 1.5;
+        }
+
         a {
-            color: var(--text-color);
+            color: var(--footer-text-color);
             text-decoration: underline;
         }
     }

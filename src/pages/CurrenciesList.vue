@@ -185,7 +185,7 @@ onMounted(() => {
 .currencies__list {
     margin: 0 auto;
     .fieldset__container {
-        border: 2px solid #12c0b2;
+        border: 2px solid var(--primary-color);
         border-radius: 5px;
         padding: 20px;
         margin: 0 auto;
@@ -213,7 +213,7 @@ onMounted(() => {
                 font-weight: bold;
                 padding: 5px;
                 border-radius: 5px;
-                border: 2px solid #12c0b2;
+                border: 2px solid var(--primary-color);
                 outline: none;
                 text-align: center;
             }
@@ -255,10 +255,10 @@ onMounted(() => {
                 z-index: 1000;
 
                 &:hover {
-                    background: #6ac054;
+                    background: var(--button-hover-color);
                 }
                 &:checked {
-                    background: #6ac054;
+                    background: var(--button-color);
                 }
                 &:checked::before {
                     width: 40px;

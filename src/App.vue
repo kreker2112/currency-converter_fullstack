@@ -26,11 +26,11 @@ const store = useStore();
 const route = useRoute();
 
 // Получаем текущую тему из Vuex
-const currentTheme = ref('light-theme');
+const currentTheme = ref(
+    store.getters['theme/getCurrentTheme'] || 'light-theme',
+);
 
 onMounted(() => {
-    currentTheme.value =
-        store.getters['theme/getCurrentTheme'] || 'light-theme';
     document.body.classList.add(currentTheme.value);
 });
 

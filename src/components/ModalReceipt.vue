@@ -93,19 +93,19 @@ const closeModal = () => {
 }
 
 .modal-content {
-    background-color: #fff;
+    background-color: var(--primary-color);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 400px;
     text-align: center;
-    border: 2px solid #12c0b2;
+    border: 2px solid var(--primary-color);
 }
 
 .modal-title {
     font-size: 1.8rem;
     margin-bottom: 20px;
-    color: #12c0b2;
+    color: var(--text-color);
     font-family: 'Lucida Sans', sans-serif;
 }
 
@@ -113,7 +113,7 @@ const closeModal = () => {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
-    border: 2px solid #12c0b2;
+    border: 2px solid var(--input-borders-color);
     border-radius: 5px;
     font-size: 1.2rem;
     outline: none;
@@ -123,7 +123,7 @@ const closeModal = () => {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
-    border: 2px solid #12c0b2;
+    border: 2px solid var(--input-borders-color);
     border-radius: 5px;
     font-size: 1.2rem;
     outline: none;

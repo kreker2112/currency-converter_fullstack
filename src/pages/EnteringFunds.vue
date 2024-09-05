@@ -95,7 +95,7 @@ const filterByYear = () => {
 
 .entering-funds__title {
     font-size: 2rem;
-    color: #12c0b2;
+    color: var(--primary-color);
     font-family: 'Lucida Sans', sans-serif;
 }
 
@@ -111,7 +111,7 @@ const filterByYear = () => {
     width: 100px;
     padding: 10px;
     font-size: 1.2rem;
-    border: 2px solid #12c0b2;
+    border: 2px solid var(--input-borders-color);
     border-radius: 5px;
     outline: none;
 }
@@ -126,7 +126,7 @@ const filterByYear = () => {
 
 .entering-funds__quarter-title {
     font-size: 1.5rem;
-    color: #12c0b2;
+    color: var(--primary-color);
     margin-bottom: 10px;
 }
 
@@ -138,9 +138,9 @@ const filterByYear = () => {
 .entering-funds__list-item {
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #12c0b2;
+    border: 1px solid var(--primary-color);
     border-radius: 5px;
     background-color: #fff;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 5px var(--box-shadow-color);
 }
 </style>
