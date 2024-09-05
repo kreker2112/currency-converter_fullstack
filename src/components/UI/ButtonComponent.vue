@@ -38,7 +38,10 @@ const props = defineProps({
         height: fit-content;
         font-size: 1rem;
         border: 2px solid var(--button-color);
-        background-color: var(--button-color);
+        background-image: linear-gradient(
+            var(--secondary-color),
+            var(--primary-color)
+        );
         border-radius: 5px;
         padding: 10px 15px;
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',

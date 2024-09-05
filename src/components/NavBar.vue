@@ -37,7 +37,10 @@ const navButtons = ref([
     position: absolute;
     width: 100%;
     height: 80px;
-    background-color: var(--primary-color);
+    background-image: linear-gradient(
+        var(--secondary-color),
+        var(--primary-color)
+    );
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;

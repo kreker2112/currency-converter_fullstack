@@ -45,7 +45,10 @@ onMounted(() => {
 }
 
 .theme-button {
-    background-color: var(--button-color);
+    background-image: linear-gradient(
+        var(--secondary-color),
+        var(--primary-color)
+    );
     border: 2px solid var(--button-color);
     border-radius: 50%;
     padding: 6px;

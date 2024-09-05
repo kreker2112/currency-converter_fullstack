@@ -18,7 +18,7 @@
                     {{ year }}
                 </option>
             </select>
-            <ButtonComponent button-style="nav-button" @click="openModal">
+            <ButtonComponent button-style="button" @click="openModal">
                 Добавить поступление
             </ButtonComponent>
         </div>

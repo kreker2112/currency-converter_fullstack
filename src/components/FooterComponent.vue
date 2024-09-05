@@ -18,7 +18,10 @@
     width: 100%;
     height: 76px;
     padding: 20px 0;
-    background-color: var(--primary-color);
+    background-image: linear-gradient(
+        var(--primary-color),
+        var(--secondary-color)
+    );
     color: var(--footer-text-color);
     display: flex;
     justify-content: center;
