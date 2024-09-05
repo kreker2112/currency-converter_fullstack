@@ -150,7 +150,6 @@ const amountModule: Module<AmountState, any> = {
                         a._id > b._id ? 1 : -1,
                     );
                     commit('setCurrenciesHistory', sortedData);
-                    commit('setCurrenciesHistory', sortedData);
                 } else {
                     throw new Error('VUE_APP_GETLISTARR_URL is not defined');
                 }
