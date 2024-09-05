@@ -1,5 +1,5 @@
 <template>
-    <div :class="['app', currentTheme]">
+    <div class="app">
         <Navbar />
         <component :is="currentComponent">
             <router-view />
@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import currencyLayout from '@/layouts/currencyLayout.vue';
@@ -25,21 +25,10 @@ const components: { [key: string]: any } = {
 const store = useStore();
 const route = useRoute();
 
-// Получаем текущую тему из Vuex
-const currentTheme = ref(
-    store.getters['theme/getCurrentTheme'] || 'light-theme',
-);
-
-onMounted(() => {
-    document.body.classList.add(currentTheme.value);
-});
-
-// Выбор текущего компонента для отображения
 const currentComponent = computed(() => {
     return components[route.meta.layout as string];
 });
 
-// Инициализация истории конверсий
 const addConvertListItemToHistoryArray = (convertListItem: string): void => {
     store.commit('convert/addConvertListItemToHistoryArray', convertListItem);
 };
