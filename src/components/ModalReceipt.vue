@@ -62,14 +62,20 @@ const fetchCurrencyRate = async () => {
 };
 
 const acceptReceipt = () => {
-    const uahAmount = parseFloat(amount.value) * exchangeRate.value;
+    const uahAmount = (parseFloat(amount.value) * exchangeRate.value).toFixed(
+        2,
+    );
     const receipt = {
-        amount: amount.value,
+        amount: parseFloat(amount.value),
         currency: currency.value,
         uahAmount,
         date: new Date(),
     };
+
+    // Важно указать пространство имен для модуля receipts
     store.commit('receipts/addReceipt', receipt);
+
+    console.log('Added receipt:', receipt); // Отладочный вывод
     closeModal();
 };
 

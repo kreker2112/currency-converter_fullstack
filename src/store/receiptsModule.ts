@@ -44,11 +44,14 @@ const receiptsModule: Module<ReceiptsState, any> = {
     mutations: {
         addReceipt: (state, receipt: Receipt) => {
             state.receipts.push(receipt);
+            console.log(state.receipts);
         },
         setFilterYear: (state, year: number) => {
             state.filterYear = year;
+            console.log(state.filterYear);
         },
     },
+    namespaced: true,
 };
 
 export default receiptsModule;

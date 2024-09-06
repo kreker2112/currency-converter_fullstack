@@ -1,7 +1,7 @@
 import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import amountModule, { AmountState } from './convertModule';
-import receiptsModule, { ReceiptsState } from './receiptsModule'; // Импортируем модуль
+import receiptsModule, { ReceiptsState } from './receiptsModule';
 
 export interface RootState {
     amount: AmountState;
