@@ -1,11 +1,11 @@
 <template>
     <div class="modal-overlay" v-if="showModal">
         <div class="modal-content">
-            <h2 class="modal-title">Добавить поступление</h2>
+            <h2 class="modal-title">Add receipt</h2>
             <input
                 type="number"
                 v-model="amount"
-                placeholder="Введите сумму"
+                placeholder="Enter the amount"
                 class="modal-input"
             />
             <select
@@ -13,11 +13,11 @@
                 @change="fetchCurrencyRate"
                 class="modal-select"
             >
-                <option value="" disabled>Выберите валюту</option>
+                <option value="" disabled>Choose currency</option>
                 <option value="USD">USD (U.S. dollar)</option>
                 <option value="EUR">EUR (Euro)</option>
             </select>
-            <p class="modal-rate">Курс: {{ exchangeRate }}</p>
+            <p class="modal-rate">Rate: {{ exchangeRate }}</p>
             <div class="modal-buttons">
                 <ButtonComponent
                     button-style="nav-button"
@@ -72,10 +72,8 @@ const acceptReceipt = () => {
         date: new Date(),
     };
 
-    // Важно указать пространство имен для модуля receipts
     store.commit('receipts/addReceipt', receipt);
 
-    console.log('Added receipt:', receipt); // Отладочный вывод
     closeModal();
 };
 
