@@ -3,7 +3,7 @@
         <div class="navbar_title" @click="$router.push('/')">
             Entrepreneur's personal account
         </div>
-        <div class="navbar__btns">
+        <div class="navbar_btns">
             <ButtonComponent
                 button-style="nav-button"
                 v-for="button in navButtons"
@@ -48,7 +48,7 @@ const navButtons = ref([
     gap: 15px;
     padding: 0 15px;
 
-    &__title {
+    &_title {
         font-size: 2rem;
         font-family: 'Montserrat';
         color: #fff;
@@ -56,7 +56,7 @@ const navButtons = ref([
         cursor: pointer;
     }
 
-    &__btns {
+    &_btns {
         display: flex;
         align-items: center;
         justify-content: flex-end;
