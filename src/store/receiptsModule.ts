@@ -1,21 +1,18 @@
 import { Module } from 'vuex';
-
-interface Receipt {
-    amount: number;
-    currency: string;
-    uahAmount: number;
-    date: Date;
-}
+import axios from 'axios';
+import { Receipt } from '@/interfaces/receipts';
 
 export interface ReceiptsState {
     receipts: Receipt[];
     filterYear: number | null;
+    exchangeRate: number;
 }
 
 const receiptsModule: Module<ReceiptsState, any> = {
     state: () => ({
         receipts: [],
         filterYear: null,
+        exchangeRate: 0,
     }),
     getters: {
         filteredReceiptsByYear: (state) => {
@@ -40,15 +37,42 @@ const receiptsModule: Module<ReceiptsState, any> = {
 
             return quarters;
         },
+        getExchangeRate: (state) => state.exchangeRate,
     },
     mutations: {
         addReceipt: (state, receipt: Receipt) => {
             state.receipts.push(receipt);
-            console.log(state.receipts);
         },
         setFilterYear: (state, year: number) => {
             state.filterYear = year;
-            console.log(state.filterYear);
+        },
+        setExchangeRate: (state, rate: number) => {
+            state.exchangeRate = rate;
+        },
+    },
+    actions: {
+        async fetchCurrencyRate({ commit }, { currency, date }) {
+            const baseUrl = process.env.VUE_APP_NBU_BY_DATE_URL;
+
+            if (baseUrl && date) {
+                const url = `${baseUrl}${date}&json`;
+                try {
+                    const response = await axios.get(url);
+                    const rates = response.data;
+                    const selectedRate = rates.find(
+                        (rate: any) => rate.cc === currency,
+                    );
+                    if (selectedRate) {
+                        commit('setExchangeRate', selectedRate.rate);
+                    }
+                } catch (error) {
+                    console.error('Ошибка получения курса валют:', error);
+                }
+            } else {
+                console.error(
+                    'Ошибка: URL для получения курса валют или дата не определены.',
+                );
+            }
         },
     },
     namespaced: true,

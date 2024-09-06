@@ -113,25 +113,20 @@ const amountModule: Module<AmountState, any> = {
         },
         setSelectedBank: (state, bank) => {
             state.selectedBank = bank;
-            // console.log(state.selectedBank);
         },
     },
     actions: {
         fetchCurrencies: async ({ commit, state }) => {
             const selectedBank = state.selectedBank as string;
-            // console.log('selectedBank: ', selectedBank);
+
             if (selectedBank) {
                 const apiUrl = process.env[
                     `VUE_APP_${selectedBank.toUpperCase()}_URL`
                 ] as string;
-                // console.log('selectedBank: ', selectedBank.toUpperCase());
-                // console.log('apiUrl: ', apiUrl);
+
                 try {
                     const response = await axios.get(apiUrl);
-                    // console.log('response: ', response);
                     const currencies = response.data;
-                    // console.log('currencies: ', currencies);
-                    // console.log('typeof currencies: ', typeof currencies);
 
                     commit('setCachedCurrencies', currencies);
                 } catch (error: any) {

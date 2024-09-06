@@ -17,6 +17,12 @@
                 <option value="USD">USD (U.S. dollar)</option>
                 <option value="EUR">EUR (Euro)</option>
             </select>
+            <input
+                type="date"
+                v-model="selectedDate"
+                @change="fetchCurrencyRate"
+                class="modal-input"
+            />
             <p class="modal-rate">Rate: {{ exchangeRate }}</p>
             <div class="modal-buttons">
                 <ButtonComponent
@@ -34,9 +40,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import axios from 'axios';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import ButtonComponent from '@/components/UI/ButtonComponent.vue';
 
 const emit = defineEmits(['close']);
 
@@ -45,19 +51,22 @@ const store = useStore();
 const showModal = ref(true);
 const amount = ref('');
 const currency = ref('');
-const exchangeRate = ref(0);
+const selectedDate = ref('');
+const exchangeRate = computed(() => store.getters['receipts/getExchangeRate']);
 
-const fetchCurrencyRate = async () => {
-    const url = process.env.VUE_APP_NBU_URL;
-    try {
-        const response = await axios.get(url);
-        const rates = response.data;
-        const selectedRate = rates.find(
-            (rate: any) => rate.cc === currency.value,
-        );
-        exchangeRate.value = selectedRate.rate;
-    } catch (error) {
-        console.error('Ошибка получения курса валют:', error);
+// Функция для преобразования даты в формат YYYYMMDD
+const formatDateToYYYYMMDD = (date: string) => {
+    return date.replace(/-/g, '');
+};
+
+const fetchCurrencyRate = () => {
+    if (currency.value && selectedDate.value) {
+        const formattedDate = formatDateToYYYYMMDD(selectedDate.value);
+        console.log(formattedDate);
+        store.dispatch('receipts/fetchCurrencyRate', {
+            currency: currency.value,
+            date: formattedDate,
+        });
     }
 };
 
@@ -69,11 +78,10 @@ const acceptReceipt = () => {
         amount: parseFloat(amount.value),
         currency: currency.value,
         uahAmount,
-        date: new Date(),
+        date: selectedDate.value,
     };
 
     store.commit('receipts/addReceipt', receipt);
-
     closeModal();
 };
 
