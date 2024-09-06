@@ -40,7 +40,6 @@
                     </li>
                 </ul>
 
-                <!-- Отображение общей суммы за квартал -->
                 <div class="entering-funds__quarter-total">
                     Total for Quarter {{ index + 1 }}:
                     {{ getQuarterTotal(quarter) }} UAH
@@ -48,16 +47,14 @@
             </div>
         </div>
 
-        <!-- Модальное окно -->
         <ModalReceipt v-if="showModal" @close="closeModal" />
 
-        <!-- Кнопка в правом нижнем углу -->
         <ButtonComponent
             button-style="add-funds-button"
             @click="openModal"
             class="floating-button"
         >
-            Add receipts
+            Add receipt
         </ButtonComponent>
     </div>
 </template>
@@ -172,6 +169,7 @@ const getQuarterTotal = (quarter: Receipt[]): string => {
         padding: 10px;
 
         .entering-funds__quarter-title {
+            font-family: 'Montserrat';
             font-size: 1.5rem;
             color: var(--primary-color);
             margin-bottom: 10px;
@@ -184,6 +182,7 @@ const getQuarterTotal = (quarter: Receipt[]): string => {
             text-align: center;
 
             .entering-funds__list-item {
+                font-family: 'Montserrat';
                 display: inline-block;
                 padding: 10px;
                 margin-bottom: 10px;
@@ -195,6 +194,7 @@ const getQuarterTotal = (quarter: Receipt[]): string => {
         }
 
         .entering-funds__quarter-total {
+            font-family: 'Montserrat';
             font-weight: bold;
             font-size: 1.2rem;
             margin-top: 15px;
