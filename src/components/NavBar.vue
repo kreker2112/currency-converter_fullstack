@@ -47,21 +47,21 @@ const navButtons = ref([
     justify-content: space-between;
     gap: 15px;
     padding: 0 15px;
-}
 
-.navbar_title {
-    font-size: 2rem;
-    font-family: 'Montserrat';
-    color: #fff;
-    padding: 15px;
-    cursor: pointer;
-}
+    &__title {
+        font-size: 2rem;
+        font-family: 'Montserrat';
+        color: #fff;
+        padding: 15px;
+        cursor: pointer;
+    }
 
-.navbar__btns {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 15px;
-    padding-right: 20px;
+    &__btns {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 15px;
+        padding-right: 20px;
+    }
 }
 </style>

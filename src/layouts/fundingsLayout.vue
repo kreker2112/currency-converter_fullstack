@@ -14,11 +14,5 @@ import FooterComponent from '@/components/FooterComponent.vue';
 <style scoped lang="scss">
 .fundings-layout {
     padding-top: 80px;
-    // display: flex;
-    // flex-direction: row;
-    // align-items: center;
-    // justify-content: space-between;
-    // text-align: center;
-    width: 100%;
 }
 </style>

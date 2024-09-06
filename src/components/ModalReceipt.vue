@@ -106,46 +106,37 @@ const closeModal = () => {
     width: 400px;
     text-align: center;
     border: 2px solid var(--primary-color);
-}
 
-.modal-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: var(--text-color);
-    font-family: 'Lucida Sans', sans-serif;
-}
+    .modal-title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: var(--text-color);
+        font-family: 'Lucida Sans', sans-serif;
+    }
 
-.modal-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 2px solid var(--input-borders-color);
-    border-radius: 5px;
-    font-size: 1.2rem;
-    outline: none;
-}
+    .modal-input,
+    .modal-select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 2px solid var(--input-borders-color);
+        border-radius: 5px;
+        font-size: 1.2rem;
+        outline: none;
+    }
 
-.modal-select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 2px solid var(--input-borders-color);
-    border-radius: 5px;
-    font-size: 1.2rem;
-    outline: none;
-}
+    .modal-rate {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
 
-.modal-rate {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-}
+    .modal-buttons {
+        display: flex;
+        justify-content: space-between;
 
-.modal-buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
-button {
-    width: 45%;
+        button {
+            width: 45%;
+        }
+    }
 }
 </style>

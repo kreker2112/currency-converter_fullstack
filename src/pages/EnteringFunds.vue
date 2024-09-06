@@ -39,6 +39,12 @@
                         {{ receipt.uahAmount }} UAH
                     </li>
                 </ul>
+
+                <!-- Отображение общей суммы за квартал -->
+                <div class="entering-funds__quarter-total">
+                    Total for Quarter {{ index + 1 }}:
+                    {{ getQuarterTotal(quarter) }} UAH
+                </div>
             </div>
         </div>
 
@@ -61,6 +67,7 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import ModalReceipt from '@/components/ModalReceipt.vue';
 import ButtonComponent from '@/components/UI/ButtonComponent.vue';
+import { Receipt } from '@/interfaces/receipts';
 
 const store = useStore();
 
@@ -69,7 +76,6 @@ const selectedYear = ref(new Date().getFullYear());
 const availableYears = [2021, 2022, 2023, 2024];
 const receiptsByQuarter = computed(() => {
     const receipts = store.getters['receipts/receiptsByQuarter'];
-    console.log('Receipts by quarter:', receipts); // Отладочный вывод
     return receipts;
 });
 
@@ -83,7 +89,15 @@ const closeModal = () => {
 
 const filterByYear = () => {
     store.commit('receipts/setFilterYear', selectedYear.value);
-    console.log('Filtered by year:', selectedYear.value); // Отладочный вывод
+};
+
+const getQuarterTotal = (quarter: Receipt[]): string => {
+    const total = quarter.reduce(
+        (accumulator: number, receipt: Receipt) =>
+            accumulator + Number(receipt.uahAmount || 0),
+        0,
+    );
+    return total.toFixed(2);
 };
 </script>
 
@@ -111,33 +125,34 @@ const filterByYear = () => {
     gap: 20px;
     width: 100%;
     padding: 10px;
-}
 
-.entering-funds__title {
-    font-size: 2rem;
-    color: var(--primary-color);
-    font-family: 'Montserrat';
-    margin-bottom: 10px;
-}
+    .entering-funds__title {
+        font-size: 2rem;
+        color: var(--primary-color);
+        font-family: 'Montserrat';
+        margin-bottom: 10px;
+    }
 
-.entering-funds__controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    .entering-funds__controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-.entering-funds__select {
-    color: var(--input-color);
-    background-color: var(--input-background-color);
-    width: 100px;
-    padding: 10px;
-    font-size: 1.2rem;
-    border: 2px solid var(--input-borders-color);
-    border-radius: 5px;
-    outline: none;
-    cursor: pointer;
-    option {
-        cursor: pointer;
+        .entering-funds__select {
+            color: var(--input-color);
+            background-color: var(--input-background-color);
+            width: 100px;
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 2px solid var(--input-borders-color);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+
+            option {
+                cursor: pointer;
+            }
+        }
     }
 }
 
@@ -149,36 +164,44 @@ const filterByYear = () => {
     gap: 20px;
     width: 100%;
     padding: 20px;
-}
 
-.entering-funds__quarter {
-    width: calc(25% - 20px);
-    background-color: var(--background-color);
-    border-radius: 10px;
-    padding: 10px;
-}
+    .entering-funds__quarter {
+        width: calc(25% - 20px);
+        background-color: var(--background-color);
+        border-radius: 10px;
+        padding: 10px;
 
-.entering-funds__quarter-title {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-    text-align: center;
-}
+        .entering-funds__quarter-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-align: center;
+        }
 
-.entering-funds__list {
-    list-style: none;
-    padding: 0;
-    text-align: center;
-}
+        .entering-funds__list {
+            list-style: none;
+            padding: 0;
+            text-align: center;
 
-.entering-funds__list-item {
-    display: inline-block;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid var(--primary-color);
-    border-radius: 5px;
-    background-color: var(--input-background-color);
-    box-shadow: 2px 2px 5px var(--box-shadow-color);
+            .entering-funds__list-item {
+                display: inline-block;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid var(--primary-color);
+                border-radius: 5px;
+                background-color: var(--input-background-color);
+                box-shadow: 2px 2px 5px var(--box-shadow-color);
+            }
+        }
+
+        .entering-funds__quarter-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+    }
 }
 
 .floating-button {
@@ -194,10 +217,10 @@ const filterByYear = () => {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
 
-.floating-button:hover {
-    background-color: var(--secondary-color);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    &:hover {
+        background-color: var(--secondary-color);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
 }
 </style>
