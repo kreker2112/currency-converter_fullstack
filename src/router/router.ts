@@ -2,7 +2,7 @@ import IntroPage from '@/pages/IntroPage.vue';
 import ConverterPage from '@/pages/ConverterPage.vue';
 import CurrenciesList from '@/pages/CurrenciesList.vue';
 import ResultPage from '@/pages/ResultPage.vue';
-import EnteringFunds from '@/pages/EnteringFunds.vue';
+import ReceiptsPage from '@/pages/ReceiptsPage.vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
@@ -39,11 +39,11 @@ const routes = [
         },
     },
     {
-        path: '/funds',
-        component: EnteringFunds,
-        name: 'enteringFunds',
+        path: '/receipts',
+        component: ReceiptsPage,
+        name: 'receiptsPage',
         meta: {
-            layout: 'fundingsLayout',
+            layout: 'receiptsLayout',
         },
     },
 ];
