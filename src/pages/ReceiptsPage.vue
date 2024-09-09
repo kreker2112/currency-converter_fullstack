@@ -3,11 +3,26 @@
         <header class="entering-funds__header">
             <h1 class="entering-funds__title">Income data</h1>
             <div class="entering-funds__controls">
+                <!-- Поле для выбора пользователя -->
+                <select
+                    v-model="selectedUser"
+                    class="entering-funds__select"
+                    @change="filterByUser"
+                >
+                    <option disabled value="">Клиент</option>
+                    <option v-for="user in users" :key="user" :value="user">
+                        {{ user }}
+                    </option>
+                </select>
+
+                <!-- Поле для выбора года -->
                 <select
                     v-model="selectedYear"
                     class="entering-funds__select"
+                    :disabled="availableYears.length === 0"
                     @change="filterByYear"
                 >
+                    <option disabled value="">Год</option>
                     <option
                         v-for="year in availableYears"
                         :key="year"
@@ -19,6 +34,7 @@
             </div>
         </header>
 
+        <!-- Список кварталов и поступлений -->
         <div class="entering-funds__quarters">
             <div
                 v-for="(quarter, index) in receiptsByQuarter"
@@ -60,7 +76,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 import { useStore } from 'vuex';
 import ModalReceipt from '@/components/ModalReceipt.vue';
 import ButtonComponent from '@/components/UI/ButtonComponent.vue';
@@ -69,8 +86,36 @@ import { Receipt } from '@/interfaces/receipts';
 const store = useStore();
 
 const showModal = ref(false);
-const selectedYear = ref(new Date().getFullYear());
-const availableYears = [2021, 2022, 2023, 2024];
+const selectedUser = ref(''); // Выбранный пользователь
+const selectedYear = ref(''); // По умолчанию пустая строка
+const availableYears = ref<number[]>([]); // Список доступных годов
+const users = ref<string[]>([]); // Список пользователей
+
+// Загрузка всех пользователей при монтировании компонента
+onMounted(async () => {
+    try {
+        const response = await axios.get(process.env.VUE_APP_GETALLUSERS_URL);
+        users.value = response.data;
+    } catch (error) {
+        console.error('Ошибка при загрузке пользователей:', error);
+    }
+});
+
+// Обновляем доступные годы при выборе пользователя
+const filterByUser = async () => {
+    selectedYear.value = ''; // Сброс поля выбора года
+    if (selectedUser.value) {
+        try {
+            const url = `${process.env.VUE_APP_GETUSERDATA_URL}${selectedUser.value}/years`;
+            const response = await axios.get(url);
+            availableYears.value = response.data;
+        } catch (error) {
+            console.error('Ошибка при загрузке годов:', error);
+        }
+    }
+};
+
+// Получаем список поступлений по кварталам
 const receiptsByQuarter = computed(() => {
     const receipts = store.getters['receipts/receiptsByQuarter'];
     return receipts;
@@ -88,6 +133,7 @@ const filterByYear = () => {
     store.commit('receipts/setFilterYear', selectedYear.value);
 };
 
+// Функция для подсчета общей суммы по кварталам
 const getQuarterTotal = (quarter: Receipt[]): string => {
     const total = quarter.reduce(
         (accumulator: number, receipt: Receipt) =>
@@ -134,11 +180,12 @@ const getQuarterTotal = (quarter: Receipt[]): string => {
         display: flex;
         justify-content: center;
         align-items: center;
+        gap: 10px;
 
         .entering-funds__select {
             color: var(--input-color);
             background-color: var(--input-background-color);
-            width: 100px;
+            width: 150px;
             padding: 10px;
             font-size: 1.2rem;
             border: 2px solid var(--input-borders-color);
