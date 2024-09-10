@@ -3,7 +3,6 @@
         <header class="entering-funds__header">
             <h1 class="entering-funds__title">Income data</h1>
             <div class="entering-funds__controls">
-                <!-- Поле для выбора пользователя -->
                 <select
                     v-model="selectedUser"
                     class="entering-funds__select"
@@ -15,7 +14,6 @@
                     </option>
                 </select>
 
-                <!-- Поле для выбора года -->
                 <select
                     v-model="selectedYear"
                     class="entering-funds__select"
@@ -34,31 +32,28 @@
             </div>
         </header>
 
-        <!-- Список кварталов и поступлений -->
         <div class="entering-funds__quarters">
             <div
-                v-for="(quarter, index) in receiptsByQuarter"
+                v-for="(quarter, index) in receiptsData"
                 :key="index"
                 class="entering-funds__quarter"
             >
                 <h2 class="entering-funds__quarter-title">
-                    Quarter {{ index + 1 }}
+                    Quarter {{ index + 1 }} ({{ quarter.QuarterName }})
                 </h2>
                 <ul class="entering-funds__list">
                     <li
-                        v-for="receipt in quarter"
-                        :key="receipt.date"
+                        v-for="receipt in quarter.Receipts"
+                        :key="receipt"
                         class="entering-funds__list-item"
                     >
-                        {{ new Date(receipt.date).toLocaleDateString() }}:
-                        {{ receipt.amount }} {{ receipt.currency }} -
-                        {{ receipt.uahAmount }} UAH
+                        {{ receipt }}
                     </li>
                 </ul>
 
                 <div class="entering-funds__quarter-total">
                     Total for Quarter {{ index + 1 }}:
-                    {{ getQuarterTotal(quarter) }} UAH
+                    {{ getQuarterTotal(quarter.Receipts) }} UAH
                 </div>
             </div>
         </div>
@@ -76,22 +71,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useStore } from 'vuex';
 import ModalReceipt from '@/components/ModalReceipt.vue';
 import ButtonComponent from '@/components/UI/ButtonComponent.vue';
-import { Receipt } from '@/interfaces/receipts';
-
-const store = useStore();
 
 const showModal = ref(false);
-const selectedUser = ref(''); // Выбранный пользователь
-const selectedYear = ref(''); // По умолчанию пустая строка
-const availableYears = ref<number[]>([]); // Список доступных годов
-const users = ref<string[]>([]); // Список пользователей
+const selectedUser = ref('');
+const selectedYear = ref('');
+const availableYears = ref<number[]>([]);
+const users = ref<string[]>([]);
+const receiptsData = ref<any[]>([]);
 
-// Загрузка всех пользователей при монтировании компонента
 onMounted(async () => {
     try {
         const response = await axios.get(process.env.VUE_APP_GETALLUSERS_URL);
@@ -101,9 +92,9 @@ onMounted(async () => {
     }
 });
 
-// Обновляем доступные годы при выборе пользователя
 const filterByUser = async () => {
-    selectedYear.value = ''; // Сброс поля выбора года
+    selectedYear.value = '';
+    receiptsData.value = [];
     if (selectedUser.value) {
         try {
             const url = `${process.env.VUE_APP_GETUSERDATA_URL}${selectedUser.value}/years`;
@@ -115,11 +106,30 @@ const filterByUser = async () => {
     }
 };
 
-// Получаем список поступлений по кварталам
-const receiptsByQuarter = computed(() => {
-    const receipts = store.getters['receipts/receiptsByQuarter'];
-    return receipts;
-});
+const filterByYear = async () => {
+    if (selectedUser.value && selectedYear.value) {
+        try {
+            const url = `${process.env.VUE_APP_GETUSERDATA_URL}${selectedUser.value}/receipts?year=${selectedYear.value}`;
+            const response = await axios.get(url);
+            receiptsData.value = response.data;
+        } catch (error) {
+            console.error('Ошибка при загрузке данных по поступлениям:', error);
+        }
+    }
+};
+
+const getQuarterTotal = (receipts: string[]): string => {
+    const total = receipts.reduce((sum, receipt) => {
+        const uahAmountMatch = receipt.match(/(\d+(\.\d+)?)\sUAH/); // Ищем сумму перед "UAH"
+        if (uahAmountMatch) {
+            const uahAmount = parseFloat(uahAmountMatch[1]);
+            return sum + uahAmount;
+        }
+        return sum;
+    }, 0);
+
+    return total.toFixed(2);
+};
 
 const openModal = () => {
     showModal.value = true;
@@ -127,20 +137,6 @@ const openModal = () => {
 
 const closeModal = () => {
     showModal.value = false;
-};
-
-const filterByYear = () => {
-    store.commit('receipts/setFilterYear', selectedYear.value);
-};
-
-// Функция для подсчета общей суммы по кварталам
-const getQuarterTotal = (quarter: Receipt[]): string => {
-    const total = quarter.reduce(
-        (accumulator: number, receipt: Receipt) =>
-            accumulator + Number(receipt.uahAmount || 0),
-        0,
-    );
-    return total.toFixed(2);
 };
 </script>
 
@@ -243,10 +239,14 @@ const getQuarterTotal = (quarter: Receipt[]): string => {
         .entering-funds__quarter-total {
             font-family: 'Montserrat';
             font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 15px;
+            font-size: 1.4rem;
+            margin-top: 20px;
+            padding: 10px;
             text-align: center;
-            color: var(--primary-color);
+            color: #ffffff;
+            background-color: var(--primary-color);
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
     }
 }
