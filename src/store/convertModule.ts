@@ -82,15 +82,28 @@ const amountModule: Module<AmountState, any> = {
                 ...state.currencyObject,
             };
             const amount = Number(state.amount);
+
             const rateExchange = currencyObjectForCalculate.rate;
             const rateBuy = currencyObjectForCalculate.rateBuy;
             const rateSell = currencyObjectForCalculate.rateSell;
+
+            if (rateBuy === 0 || rateSell === 0 || amount === 0) {
+                state.result = 0;
+                return;
+            }
+
             const result =
                 state.radioInput === 'rateBuy'
                     ? amount / rateBuy || amount / rateExchange
                     : amount * rateSell || amount * rateExchange;
             const fixedResult = result.toFixed(2);
-            return (state.result = Number(fixedResult));
+
+            if (!isFinite(result)) {
+                console.error('Ошибка: Бесконечный результат');
+                state.result = 0;
+            } else {
+                state.result = Number(fixedResult);
+            }
         },
         makeConvertListItem: (state) => {
             const amount = state.amount;
@@ -149,14 +162,13 @@ const amountModule: Module<AmountState, any> = {
                     throw new Error('VUE_APP_GETLISTARR_URL is not defined');
                 }
             } catch (error: any) {
-                console.error('Error fetching currency history:', error);
-                if (error.response) {
-                    console.error('Error Status:', error.response.status);
+                console.error(
+                    'Error fetching currency history:',
+                    error?.message || error,
+                );
+                if (error?.response) {
+                    console.error(`Error Status: ${error.response.status}`);
                     console.error('Error Data:', error.response.data);
-                } else if (error.request) {
-                    console.error('No response received:', error.request);
-                } else {
-                    console.error('Error:', error.message);
                 }
             }
         },
