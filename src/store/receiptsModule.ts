@@ -6,6 +6,7 @@ export interface ReceiptsState {
     receipts: Receipt[];
     filterYear: number | null;
     exchangeRate: number;
+    selectedUser: string | null;
 }
 
 const receiptsModule: Module<ReceiptsState, any> = {
@@ -13,6 +14,7 @@ const receiptsModule: Module<ReceiptsState, any> = {
         receipts: [],
         filterYear: null,
         exchangeRate: 0,
+        selectedUser: null,
     }),
     getters: {
         filteredReceiptsByYear: (state) => {
@@ -38,6 +40,7 @@ const receiptsModule: Module<ReceiptsState, any> = {
             return quarters;
         },
         getExchangeRate: (state) => state.exchangeRate,
+        getSelectedUser: (state) => state.selectedUser,
     },
     mutations: {
         addReceipt: (state, receipt: Receipt) => {
@@ -48,6 +51,9 @@ const receiptsModule: Module<ReceiptsState, any> = {
         },
         setExchangeRate: (state, rate: number) => {
             state.exchangeRate = rate;
+        },
+        setSelectedUser: (state, user: string) => {
+            state.selectedUser = user;
         },
     },
     actions: {
@@ -66,12 +72,50 @@ const receiptsModule: Module<ReceiptsState, any> = {
                         commit('setExchangeRate', selectedRate.rate);
                     }
                 } catch (error) {
-                    console.error('Ошибка получения курса валют:', error);
+                    console.error('Error getting exchange rate:', error);
                 }
             } else {
                 console.error(
-                    'Ошибка: URL для получения курса валют или дата не определены.',
+                    'Error: URL to get exchange rate or date not defined.',
                 );
+            }
+        },
+
+        async sendReceipt({ state }, { amount, currency, date }) {
+            const year = date.split('-')[0];
+            const quarter = Math.floor(new Date(date).getMonth() / 3) + 1;
+            const formattedDate = date.split('-').reverse().join('.');
+            const uahAmount = (parseFloat(amount) * state.exchangeRate).toFixed(
+                2,
+            );
+
+            const receiptString = `${formattedDate}: ${amount} ${currency} - ${uahAmount} UAH`;
+
+            if (!state.selectedUser) {
+                console.error('Error: No user selected');
+                return;
+            }
+
+            const url = `${process.env.VUE_APP_GETUSERDATA_URL}${state.selectedUser}/receipts?year=${year}&quarter=Q${quarter}`;
+            console.log('Request URL:', url);
+            console.log('Receipt:', receiptString);
+
+            try {
+                await axios.post(url, JSON.stringify(receiptString), {
+                    headers: {
+                        'Content-Type': 'application/json-patch+json',
+                    },
+                });
+                console.log('Receipt sent successfully:', receiptString);
+            } catch (error: any) {
+                if (error.response) {
+                    console.error(
+                        'Error sending receipt:',
+                        error.response.data.errors || error.response.data,
+                    );
+                } else {
+                    console.error('Error sending receipt:', error.message);
+                }
             }
         },
     },

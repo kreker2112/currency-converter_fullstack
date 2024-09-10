@@ -28,6 +28,7 @@
                 <ButtonComponent
                     button-style="nav-button"
                     @click="acceptReceipt"
+                    :disabled="!isFormValid"
                 >
                     Accept
                 </ButtonComponent>
@@ -44,17 +45,20 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import ButtonComponent from '@/components/UI/ButtonComponent.vue';
 
-const emit = defineEmits(['close']);
-
+const emit = defineEmits(['close', 'receiptAdded']);
 const store = useStore();
 
 const showModal = ref(true);
 const amount = ref('');
 const currency = ref('');
 const selectedDate = ref('');
+const selectedUser = computed(() => store.getters['receipts/getSelectedUser']);
 const exchangeRate = computed(() => store.getters['receipts/getExchangeRate']);
 
-// Функция для преобразования даты в формат YYYYMMDD
+const isFormValid = computed(() => {
+    return amount.value && currency.value && selectedDate.value;
+});
+
 const formatDateToYYYYMMDD = (date: string) => {
     return date.replace(/-/g, '');
 };
@@ -62,7 +66,6 @@ const formatDateToYYYYMMDD = (date: string) => {
 const fetchCurrencyRate = () => {
     if (currency.value && selectedDate.value) {
         const formattedDate = formatDateToYYYYMMDD(selectedDate.value);
-        console.log(formattedDate);
         store.dispatch('receipts/fetchCurrencyRate', {
             currency: currency.value,
             date: formattedDate,
@@ -70,23 +73,32 @@ const fetchCurrencyRate = () => {
     }
 };
 
-const acceptReceipt = () => {
-    const uahAmount = (parseFloat(amount.value) * exchangeRate.value).toFixed(
-        2,
-    );
-    const receipt = {
-        amount: parseFloat(amount.value),
-        currency: currency.value,
-        uahAmount,
-        date: selectedDate.value,
-    };
+const acceptReceipt = async () => {
+    if (!isFormValid.value) return;
 
-    store.commit('receipts/addReceipt', receipt);
-    closeModal();
+    try {
+        await store.dispatch('receipts/sendReceipt', {
+            selectedUser: selectedUser.value,
+            amount: amount.value,
+            currency: currency.value,
+            date: selectedDate.value,
+        });
+        emit('receiptAdded');
+        closeModal();
+        resetForm();
+    } catch (error) {
+        console.error('Error sending receipt:', error);
+    }
 };
 
 const closeModal = () => {
     emit('close');
+};
+
+const resetForm = () => {
+    amount.value = '';
+    currency.value = '';
+    selectedDate.value = '';
 };
 </script>
 

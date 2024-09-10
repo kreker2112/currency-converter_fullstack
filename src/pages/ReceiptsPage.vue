@@ -6,9 +6,9 @@
                 <select
                     v-model="selectedUser"
                     class="entering-funds__select"
-                    @change="filterByUser"
+                    @change="setUser"
                 >
-                    <option disabled value="">Клиент</option>
+                    <option disabled value="">User</option>
                     <option v-for="user in users" :key="user" :value="user">
                         {{ user }}
                     </option>
@@ -20,7 +20,7 @@
                     :disabled="availableYears.length === 0"
                     @change="filterByYear"
                 >
-                    <option disabled value="">Год</option>
+                    <option disabled value="">Year</option>
                     <option
                         v-for="year in availableYears"
                         :key="year"
@@ -58,10 +58,15 @@
             </div>
         </div>
 
-        <ModalReceipt v-if="showModal" @close="closeModal" />
+        <ModalReceipt
+            v-if="showModal"
+            @close="closeModal"
+            @receiptAdded="onReceiptAdded"
+        />
 
         <ButtonComponent
             button-style="add-funds-button"
+            v-if="selectedUser"
             @click="openModal"
             class="floating-button"
         >
@@ -72,10 +77,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 import axios from 'axios';
 import ModalReceipt from '@/components/ModalReceipt.vue';
 import ButtonComponent from '@/components/UI/ButtonComponent.vue';
 
+const store = useStore();
 const showModal = ref(false);
 const selectedUser = ref('');
 const selectedYear = ref('');
@@ -88,9 +95,14 @@ onMounted(async () => {
         const response = await axios.get(process.env.VUE_APP_GETALLUSERS_URL);
         users.value = response.data;
     } catch (error) {
-        console.error('Ошибка при загрузке пользователей:', error);
+        console.error('Error loading users:', error);
     }
 });
+
+const setUser = () => {
+    store.commit('receipts/setSelectedUser', selectedUser.value);
+    filterByUser();
+};
 
 const filterByUser = async () => {
     selectedYear.value = '';
@@ -101,9 +113,21 @@ const filterByUser = async () => {
             const response = await axios.get(url);
             availableYears.value = response.data;
         } catch (error) {
-            console.error('Ошибка при загрузке годов:', error);
+            console.error('Error loading years:', error);
         }
     }
+};
+
+const sortReceiptsByDate = (receipts: string[]): string[] => {
+    return receipts.sort((a, b) => {
+        const dateA = new Date(
+            a.split(':')[0].trim().split('.').reverse().join('-'),
+        );
+        const dateB = new Date(
+            b.split(':')[0].trim().split('.').reverse().join('-'),
+        );
+        return dateA.getTime() - dateB.getTime();
+    });
 };
 
 const filterByYear = async () => {
@@ -111,16 +135,20 @@ const filterByYear = async () => {
         try {
             const url = `${process.env.VUE_APP_GETUSERDATA_URL}${selectedUser.value}/receipts?year=${selectedYear.value}`;
             const response = await axios.get(url);
-            receiptsData.value = response.data;
+
+            receiptsData.value = response.data.map((quarter: any) => ({
+                ...quarter,
+                Receipts: sortReceiptsByDate(quarter.Receipts),
+            }));
         } catch (error) {
-            console.error('Ошибка при загрузке данных по поступлениям:', error);
+            console.error('Error loading receipts data:', error);
         }
     }
 };
 
 const getQuarterTotal = (receipts: string[]): string => {
     const total = receipts.reduce((sum, receipt) => {
-        const uahAmountMatch = receipt.match(/(\d+(\.\d+)?)\sUAH/); // Ищем сумму перед "UAH"
+        const uahAmountMatch = receipt.match(/(\d+(\.\d+)?)\sUAH/);
         if (uahAmountMatch) {
             const uahAmount = parseFloat(uahAmountMatch[1]);
             return sum + uahAmount;
@@ -137,6 +165,11 @@ const openModal = () => {
 
 const closeModal = () => {
     showModal.value = false;
+};
+
+const onReceiptAdded = () => {
+    showModal.value = false;
+    filterByYear();
 };
 </script>
 
