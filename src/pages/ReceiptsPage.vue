@@ -39,7 +39,7 @@
                 class="entering-funds__quarter"
             >
                 <h2 class="entering-funds__quarter-title">
-                    Quarter {{ index + 1 }} ({{ quarter.QuarterName }})
+                    {{ quarter.QuarterName }}
                 </h2>
                 <ul class="entering-funds__list">
                     <li
@@ -52,7 +52,7 @@
                 </ul>
 
                 <div class="entering-funds__quarter-total">
-                    Total for Quarter {{ index + 1 }}:
+                    Total for {{ quarter.QuarterName }}:
                     {{ getQuarterTotal(quarter.Receipts) }} UAH
                 </div>
             </div>
@@ -130,16 +130,39 @@ const sortReceiptsByDate = (receipts: string[]): string[] => {
     });
 };
 
+const groupReceiptsByQuarter = (receipts: string[]): any[] => {
+    const quarters: string[][] = [[], [], [], []];
+
+    receipts.forEach((receipt) => {
+        const receiptDate = new Date(
+            receipt.split(':')[0].trim().split('.').reverse().join('-'),
+        );
+        const month = receiptDate.getMonth();
+        const quarter = Math.floor(month / 3);
+
+        quarters[quarter].push(receipt);
+    });
+
+    return quarters.map((quarterReceipts, index) => ({
+        QuarterName: `Q${index + 1}`,
+        Receipts: quarterReceipts,
+    }));
+};
+
 const filterByYear = async () => {
     if (selectedUser.value && selectedYear.value) {
         try {
             const url = `${process.env.VUE_APP_GETUSERDATA_URL}${selectedUser.value}/receipts?year=${selectedYear.value}`;
             const response = await axios.get(url);
 
-            receiptsData.value = response.data.map((quarter: any) => ({
+            const sortedReceipts = response.data.map((quarter: any) => ({
                 ...quarter,
                 Receipts: sortReceiptsByDate(quarter.Receipts),
             }));
+
+            receiptsData.value = groupReceiptsByQuarter(
+                sortedReceipts.flatMap((quarter: any) => quarter.Receipts),
+            );
         } catch (error) {
             console.error('Error loading receipts data:', error);
         }

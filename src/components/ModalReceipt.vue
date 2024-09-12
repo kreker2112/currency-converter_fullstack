@@ -73,8 +73,15 @@ const fetchCurrencyRate = () => {
     }
 };
 
+const getQuarterFromMonth = (month: number): number => {
+    return Math.floor(month / 3) + 1;
+};
+
 const acceptReceipt = async () => {
     if (!isFormValid.value) return;
+
+    const receiptDate = new Date(selectedDate.value);
+    const quarter = getQuarterFromMonth(receiptDate.getMonth());
 
     try {
         await store.dispatch('receipts/sendReceipt', {
@@ -82,6 +89,7 @@ const acceptReceipt = async () => {
             amount: amount.value,
             currency: currency.value,
             date: selectedDate.value,
+            quarter: quarter,
         });
         emit('receiptAdded');
         closeModal();

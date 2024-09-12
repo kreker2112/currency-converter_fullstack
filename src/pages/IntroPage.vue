@@ -4,7 +4,7 @@
             Welcome to the entrepreneur's personal account! Here you can convert
             currency, store data on cash receipts funds, calculation of income
             for the period, calculation of the amount of taxes and formation of
-            budget payments
+            tax payments
         </h1>
     </header>
 </template>

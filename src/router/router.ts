@@ -3,6 +3,7 @@ import ConverterPage from '@/pages/ConverterPage.vue';
 import CurrenciesList from '@/pages/CurrenciesList.vue';
 import ResultPage from '@/pages/ResultPage.vue';
 import ReceiptsPage from '@/pages/ReceiptsPage.vue';
+import TaxObligationsPage from '@/pages/TaxObligationsPage.vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
@@ -42,6 +43,14 @@ const routes = [
         path: '/receipts',
         component: ReceiptsPage,
         name: 'receiptsPage',
+        meta: {
+            layout: 'receiptsLayout',
+        },
+    },
+    {
+        path: '/obligations',
+        component: TaxObligationsPage,
+        name: 'obligations',
         meta: {
             layout: 'receiptsLayout',
         },

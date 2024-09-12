@@ -97,8 +97,6 @@ const receiptsModule: Module<ReceiptsState, any> = {
             }
 
             const url = `${process.env.VUE_APP_GETUSERDATA_URL}${state.selectedUser}/receipts?year=${year}&quarter=Q${quarter}`;
-            console.log('Request URL:', url);
-            console.log('Receipt:', receiptString);
 
             try {
                 await axios.post(url, JSON.stringify(receiptString), {
@@ -106,7 +104,6 @@ const receiptsModule: Module<ReceiptsState, any> = {
                         'Content-Type': 'application/json-patch+json',
                     },
                 });
-                console.log('Receipt sent successfully:', receiptString);
             } catch (error: any) {
                 if (error.response) {
                     console.error(
