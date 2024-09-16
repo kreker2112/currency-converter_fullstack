@@ -161,7 +161,7 @@ const fetchReceipts = async () => {
 
     if (selectedUser.value && selectedYear.value && selectedQuarter.value) {
         try {
-            const url = `${process.env.VUE_APP_GETQUARTER_URL.replace('user', selectedUser.value).replace('choose', selectedYear.value).replace('cq', selectedQuarter.value)}`;
+            const url = `${process.env.VUE_APP_GETQUARTERSDATA_URL.replace('user', selectedUser.value).replace('choose', selectedYear.value).replace('cq', selectedQuarter.value)}`;
             const response = await axios.get(url);
             receipts.value = response.data;
 
@@ -187,7 +187,7 @@ const fetchReceipts = async () => {
                 row13.value = null;
             } else {
                 const previousQuarter = quarters[currentQuarterIndex - 1];
-                const previousQuarterUrl = `${process.env.VUE_APP_GETQUARTER_URL.replace('user', selectedUser.value).replace('choose', selectedYear.value).replace('cq', previousQuarter)}`;
+                const previousQuarterUrl = `${process.env.VUE_APP_GETQUARTERSDATA_URL.replace('user', selectedUser.value).replace('choose', selectedYear.value).replace('cq', previousQuarter)}`;
 
                 const previousQuarterResponse =
                     await axios.get(previousQuarterUrl);
@@ -225,11 +225,11 @@ const fetchReceipts = async () => {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 2%;
+    padding: 20px;
 }
 
 .tax-obligations__header {
-    padding: 2%;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 20px;
