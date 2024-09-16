@@ -27,7 +27,7 @@ const navButtons = ref([
     { id: uuidv4(), name: 'Currency converter', link: '/converter' },
     { id: uuidv4(), name: 'Receipts', link: '/receipts' },
     { id: uuidv4(), name: 'Tax obligations', link: '/obligations' },
-    { id: uuidv4(), name: 'Paying taxes', link: '/#' },
+    { id: uuidv4(), name: 'Paying taxes', link: '/taxes' },
     { id: uuidv4(), name: 'About', link: '/#' },
 ]);
 </script>

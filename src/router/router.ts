@@ -4,6 +4,7 @@ import CurrenciesList from '@/pages/CurrenciesList.vue';
 import ResultPage from '@/pages/ResultPage.vue';
 import ReceiptsPage from '@/pages/ReceiptsPage.vue';
 import TaxObligationsPage from '@/pages/TaxObligationsPage.vue';
+import PayingTaxesPage from '@/pages/PayingTaxesPage.vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
@@ -51,6 +52,14 @@ const routes = [
         path: '/obligations',
         component: TaxObligationsPage,
         name: 'obligations',
+        meta: {
+            layout: 'receiptsLayout',
+        },
+    },
+    {
+        path: '/taxes',
+        component: PayingTaxesPage,
+        name: 'taxes',
         meta: {
             layout: 'receiptsLayout',
         },

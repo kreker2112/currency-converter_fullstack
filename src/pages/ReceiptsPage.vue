@@ -212,7 +212,7 @@ const onReceiptAdded = () => {
 
 .entering-funds__header {
     position: absolute;
-    top: 3vh;
+    top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
