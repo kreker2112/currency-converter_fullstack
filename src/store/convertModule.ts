@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 import axios from 'axios';
 import { currenciesMap } from '@/assets/constants/currenciesMap';
+import { transactionApi } from '@/api/apiEndpoints';
 
 export interface AmountState {
     amount: string;
@@ -151,16 +152,11 @@ const amountModule: Module<AmountState, any> = {
         },
         fetchCurrenciesHistory: async ({ commit }) => {
             try {
-                const url = process.env.VUE_APP_GETLISTARR_URL;
-                if (url) {
-                    const response = await axios.get(url);
-                    const sortedData = response.data.sort((a: any, b: any) =>
-                        a._id > b._id ? 1 : -1,
-                    );
-                    commit('setCurrenciesHistory', sortedData);
-                } else {
-                    throw new Error('VUE_APP_GETLISTARR_URL is not defined');
-                }
+                const response = await axios.get(transactionApi.getList());
+                const sortedData = response.data.sort((a: any, b: any) =>
+                    a._id > b._id ? 1 : -1,
+                );
+                commit('setCurrenciesHistory', sortedData);
             } catch (error: any) {
                 console.error(
                     'Error fetching currency history:',
@@ -178,31 +174,23 @@ const amountModule: Module<AmountState, any> = {
                     'Content-Type': 'application/json',
                 },
             };
-            const url = process.env.VUE_APP_POSTLISTARR_URL;
-            if (url) {
-                const requestBody = {
-                    TransactionsDetail: state.convertListItem,
-                };
-                try {
-                    await axios.post(url, requestBody, config);
-                } catch (error) {
-                    console.error('Error posting currency history:', error);
-                }
-            } else {
-                console.error('URL is undefined');
+            const url = transactionApi.postList();
+            const requestBody = {
+                TransactionsDetail: state.convertListItem,
+            };
+            try {
+                await axios.post(url, requestBody, config);
+            } catch (error) {
+                console.error('Error posting currency history:', error);
             }
         },
         deleteCurrenciesHistory: async ({ commit }) => {
-            const url = process.env.VUE_APP_DELETELISTARR_URL;
-            if (url) {
-                try {
-                    await axios.delete(url);
-                    commit('cleanCurrenciesHistory');
-                } catch (error) {
-                    console.error('Error clearing currency history:', error);
-                }
-            } else {
-                console.error('URL is undefined');
+            const url = transactionApi.deleteList();
+            try {
+                await axios.delete(url);
+                commit('cleanCurrenciesHistory');
+            } catch (error) {
+                console.error('Error clearing currency history:', error);
             }
         },
     },

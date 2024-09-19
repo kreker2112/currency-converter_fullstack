@@ -4,8 +4,8 @@
             <h1 class="paying-taxes__title">Paying Taxes</h1>
             <div class="paying-taxes__controls">
                 <select
-                    v-model="selectedUser"
-                    @change="fetchYearsAndTaxDetails"
+                    :value="selectedUser"
+                    @change="onUserChange($event)"
                     class="paying-taxes__select"
                 >
                     <option disabled value="">User</option>
@@ -15,8 +15,8 @@
                 </select>
 
                 <select
-                    v-model="selectedYear"
-                    @change="fetchQuarters"
+                    :value="selectedYear"
+                    @change="onYearChange($event)"
                     class="paying-taxes__select"
                     :disabled="availableYears.length === 0"
                 >
@@ -31,8 +31,8 @@
                 </select>
 
                 <select
-                    v-model="selectedQuarter"
-                    @change="fetchQuarterData"
+                    :value="selectedQuarter"
+                    @change="onQuarterChange($event)"
                     class="paying-taxes__select"
                     :disabled="availableQuarters.length === 0"
                 >
@@ -87,96 +87,71 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
-const selectedUser = ref('');
-const selectedYear = ref('');
-const selectedQuarter = ref('');
-const users = ref<string[]>([]);
-const availableYears = ref<number[]>([]);
-const availableQuarters = ref<string[]>([]);
-const totalPayment = ref<number>(0);
-const taxDetails = ref({
-    RecipientEDRPOU: '',
-    RecipientName: '',
-    Account: '',
-    AccountName: '',
-});
+const store = useStore();
+const selectedUser = computed(() => store.state.receipts.selectedUser);
+const selectedYear = computed(() => store.state.receipts.selectedYear);
+const selectedQuarter = computed(() => store.state.receipts.selectedQuarter);
+const users = computed(() => store.state.receipts.users);
+const availableYears = computed(() => store.state.receipts.availableYears);
+const availableQuarters = computed(
+    () => store.state.receipts.availableQuarters,
+);
+const totalPayment = computed(() => store.state.receipts.totalPayment);
+const taxDetails = computed(() => store.state.receipts.taxDetails);
+
+const onUserChange = (event: Event) => {
+    const target = event.target as HTMLSelectElement | null;
+    if (target) {
+        store.commit('receipts/setSelectedUser', target.value);
+        store.dispatch('receipts/fetchYearsAndTaxDetails', target.value);
+    }
+};
+
+const onYearChange = (event: Event) => {
+    const target = event.target as HTMLSelectElement | null;
+    if (target) {
+        store.commit('receipts/setSelectedYear', target.value);
+        store.dispatch('receipts/fetchQuarters', {
+            userId: selectedUser.value,
+            year: target.value,
+        });
+    }
+};
+
+const onQuarterChange = (event: Event) => {
+    const target = event.target as HTMLSelectElement | null;
+    if (target) {
+        store.commit('receipts/setSelectedQuarter', target.value);
+        store.dispatch('receipts/fetchQuarterData', {
+            userId: selectedUser.value,
+            year: selectedYear.value,
+            quarter: target.value,
+        });
+    }
+};
 
 onMounted(async () => {
-    try {
-        const response = await axios.get(process.env.VUE_APP_GETALLUSERS_URL);
-        users.value = response.data;
-    } catch (error) {
-        console.error('Error loading users:', error);
+    await store.dispatch('receipts/fetchAllUsers');
+    if (selectedUser.value && selectedYear.value && selectedQuarter.value) {
+        await store.dispatch(
+            'receipts/fetchYearsAndTaxDetails',
+            selectedUser.value,
+        );
+        await store.dispatch('receipts/fetchQuarters', {
+            userId: selectedUser.value,
+            year: selectedYear.value,
+        });
+        await store.dispatch('receipts/fetchQuarterData', {
+            userId: selectedUser.value,
+            year: selectedYear.value,
+            quarter: selectedQuarter.value,
+        });
     }
 });
 
-const fetchYearsAndTaxDetails = async () => {
-    selectedYear.value = '';
-    selectedQuarter.value = '';
-    totalPayment.value = 0;
-
-    if (selectedUser.value) {
-        try {
-            const yearsUrl = `${process.env.VUE_APP_GETUSERDATA_URL}${selectedUser.value}/years`;
-            const taxDetailsUrl = `${process.env.VUE_APP_GETTAXDETAILS_URL.replace('user', selectedUser.value)}`;
-
-            const [yearsResponse, taxDetailsResponse] = await Promise.all([
-                axios.get(yearsUrl),
-                axios.get(taxDetailsUrl),
-            ]);
-
-            availableYears.value = yearsResponse.data;
-            taxDetails.value = taxDetailsResponse.data;
-        } catch (error) {
-            console.error('Error fetching years and tax details:', error);
-        }
-    }
-};
-
-const fetchQuarters = async () => {
-    selectedQuarter.value = '';
-    totalPayment.value = 0;
-
-    if (selectedUser.value && selectedYear.value) {
-        try {
-            const url = process.env.VUE_APP_GETQUARTERS_URL.replace(
-                'user',
-                selectedUser.value,
-            ).replace('choose', selectedYear.value);
-            const response = await axios.get(url);
-            availableQuarters.value = response.data;
-        } catch (error) {
-            console.error('Error fetching quarters:', error);
-        }
-    }
-};
-
-const fetchQuarterData = async () => {
-    totalPayment.value = 0;
-
-    if (selectedUser.value && selectedYear.value && selectedQuarter.value) {
-        try {
-            const url = `${process.env.VUE_APP_GETQUARTERDATA_URL.replace('user', selectedUser.value).replace('cy', selectedYear.value).replace('cq', selectedQuarter.value)}`;
-            const response = await axios.get(url);
-
-            const receipts = response.data;
-            const totalAmount = receipts.reduce(
-                (sum: number, receipt: string) => {
-                    const match = receipt.match(/-(\s*\d+(\.\d+)?)\sUAH/);
-                    return match ? sum + parseFloat(match[1]) : sum;
-                },
-                0,
-            );
-
-            totalPayment.value = parseFloat((totalAmount * 0.05).toFixed(2)); // Сумма * 5%
-        } catch (error) {
-            console.error('Error fetching quarter data:', error);
-        }
-    }
-};
 const getQuarterNumber = (quarter: string) => {
     return quarter.replace('Q', '');
 };
@@ -242,7 +217,6 @@ const getQuarterNumber = (quarter: string) => {
 .paying-taxes__table {
     margin-top: 30px;
     width: 100%;
-    border-collapse: collapse;
 
     th,
     td {

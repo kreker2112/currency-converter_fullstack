@@ -5,7 +5,7 @@
             <div class="tax-obligations__controls">
                 <select
                     v-model="selectedUser"
-                    @change="fetchYears"
+                    @change="onUserChange"
                     class="tax-obligations__select"
                 >
                     <option disabled value="">User</option>
@@ -16,7 +16,7 @@
 
                 <select
                     v-model="selectedYear"
-                    @change="fetchQuarters"
+                    @change="onYearChange"
                     class="tax-obligations__select"
                     :disabled="availableYears.length === 0"
                 >
@@ -32,7 +32,7 @@
 
                 <select
                     v-model="selectedQuarter"
-                    @change="fetchReceipts"
+                    @change="onQuarterChange"
                     class="tax-obligations__select"
                     :disabled="availableQuarters.length === 0"
                 >
@@ -48,7 +48,11 @@
             </div>
         </header>
 
-        <div v-if="receipts.length > 0" class="tax-obligations__receipts">
+        <!-- Добавляем проверку на выбранный квартал -->
+        <div
+            v-if="receipts.length > 0 && selectedQuarter"
+            class="tax-obligations__receipts"
+        >
             <h2>
                 Receipts for Quarter {{ selectedQuarter }} of {{ selectedYear }}
             </h2>
@@ -59,7 +63,11 @@
             </ul>
         </div>
 
-        <table v-if="receipts.length > 0" class="tax-obligations__table">
+        <!-- Добавляем проверку на выбранный квартал -->
+        <table
+            v-if="receipts.length > 0 && selectedQuarter"
+            class="tax-obligations__table"
+        >
             <thead>
                 <tr>
                     <th>Line 06</th>
@@ -77,7 +85,6 @@
                     <td>{{ row11.toFixed(2) }} UAH</td>
                     <td>{{ row12.toFixed(2) }} UAH</td>
                     <td v-if="row13 !== null">{{ row13.toFixed(2) }} UAH</td>
-                    <td v-else>-</td>
                     <td>{{ row14.toFixed(2) }} UAH</td>
                 </tr>
             </tbody>
@@ -86,17 +93,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
-const selectedUser = ref('');
-const selectedYear = ref('');
-const selectedQuarter = ref('');
-const users = ref<string[]>([]);
-const availableYears = ref<number[]>([]);
-const availableQuarters = ref<number[]>([]);
-const receipts = ref<string[]>([]);
-const totalAmount = ref<number>(0);
+const store = useStore();
+
+// Локальные состояния для управления выбором пользователя, года и квартала
+const selectedUser = ref(store.getters['receipts/getSelectedUser'] || '');
+const selectedYear = ref(store.getters['receipts/getSelectedYear'] || '');
+const selectedQuarter = ref(store.getters['receipts/getSelectedQuarter'] || '');
 const row06 = ref<number>(0);
 const row08 = ref<number>(0);
 const row11 = ref<number>(0);
@@ -104,116 +109,130 @@ const row12 = ref<number>(0);
 const row13 = ref<number | null>(0);
 const row14 = ref<number>(0);
 
+const users = computed(() => store.state.receipts.users);
+const availableYears = computed(
+    () => store.getters['receipts/getAvailableYears'],
+);
+const availableQuarters = computed(
+    () => store.getters['receipts/getAvailableQuarters'],
+);
+const receipts = computed(() => store.state.receipts.receipts);
+
 onMounted(async () => {
-    try {
-        const response = await axios.get(process.env.VUE_APP_GETALLUSERS_URL);
-        users.value = response.data;
-    } catch (error) {
-        console.error('Error loading users:', error);
+    if (!users.value || users.value.length === 0) {
+        await store.dispatch('receipts/fetchAllUsers');
+    }
+
+    if (selectedUser.value) {
+        if (!availableYears.value || availableYears.value.length === 0) {
+            await store.dispatch('receipts/fetchUserYears', selectedUser.value);
+        }
+
+        if (selectedYear.value) {
+            await store.dispatch('receipts/fetchQuarters', {
+                userId: selectedUser.value,
+                year: selectedYear.value,
+            });
+        }
+
+        if (selectedYear.value && selectedQuarter.value) {
+            await onQuarterChange();
+        }
     }
 });
 
-const fetchYears = async () => {
+const onUserChange = async () => {
+    store.commit('receipts/setSelectedUser', selectedUser.value);
+    await store.dispatch('receipts/fetchUserYears', selectedUser.value);
     selectedYear.value = '';
     selectedQuarter.value = '';
-    receipts.value = [];
-    totalAmount.value = 0;
-
-    if (selectedUser.value) {
-        try {
-            const url = `${process.env.VUE_APP_GETUSERDATA_URL}${selectedUser.value}/years`;
-            const response = await axios.get(url);
-            availableYears.value = response.data;
-        } catch (error) {
-            console.error('Error fetching years:', error);
-        }
-    }
+    store.commit('receipts/setSelectedYear', selectedYear.value);
+    store.commit('receipts/setSelectedQuarter', selectedQuarter.value);
 };
 
-const fetchQuarters = async () => {
+const onYearChange = async () => {
+    store.commit('receipts/setSelectedYear', selectedYear.value);
+    await store.dispatch('receipts/fetchQuarters', {
+        userId: selectedUser.value,
+        year: selectedYear.value,
+    });
     selectedQuarter.value = '';
-    receipts.value = [];
-    totalAmount.value = 0;
-
-    if (selectedUser.value && selectedYear.value) {
-        try {
-            const url = process.env.VUE_APP_GETQUARTERS_URL.replace(
-                'user',
-                selectedUser.value,
-            ).replace('choose', selectedYear.value);
-
-            const response = await axios.get(url);
-            availableQuarters.value = response.data;
-        } catch (error) {
-            console.error('Error fetching quarters:', error);
-        }
-    }
+    store.commit('receipts/setSelectedQuarter', selectedQuarter.value);
 };
 
-const fetchReceipts = async () => {
-    receipts.value = [];
-    totalAmount.value = 0;
-    row06.value = 0;
-    row08.value = 0;
-    row11.value = 0;
-    row12.value = 0;
-    row13.value = null;
-
-    if (selectedUser.value && selectedYear.value && selectedQuarter.value) {
-        try {
-            const url = `${process.env.VUE_APP_GETQUARTERSDATA_URL.replace('user', selectedUser.value).replace('choose', selectedYear.value).replace('cq', selectedQuarter.value)}`;
-            const response = await axios.get(url);
-            receipts.value = response.data;
-
-            totalAmount.value = receipts.value.reduce(
-                (sum: number, receipt: string) => {
-                    const match = receipt.match(/-(\s*\d+(\.\d+)?)\sUAH/);
-                    return match ? sum + parseFloat(match[1]) : sum;
-                },
-                0,
-            );
-
-            totalAmount.value = parseFloat(totalAmount.value.toFixed(2));
-
-            row06.value = totalAmount.value;
-            row08.value = row06.value;
-            row11.value = parseFloat((row06.value * 0.05).toFixed(2));
-            row12.value = row11.value;
-
-            const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
-            const currentQuarterIndex = quarters.indexOf(selectedQuarter.value);
-
-            if (currentQuarterIndex === 0) {
-                row13.value = null;
-            } else {
-                const previousQuarter = quarters[currentQuarterIndex - 1];
-                const previousQuarterUrl = `${process.env.VUE_APP_GETQUARTERSDATA_URL.replace('user', selectedUser.value).replace('choose', selectedYear.value).replace('cq', previousQuarter)}`;
-
-                const previousQuarterResponse =
-                    await axios.get(previousQuarterUrl);
-                const previousQuarterTotal =
-                    previousQuarterResponse.data.reduce(
-                        (sum: number, receipt: string) => {
-                            const match = receipt.match(
-                                /-(\s*\d+(\.\d+)?)\sUAH/,
-                            );
-                            return match ? sum + parseFloat(match[1]) : sum;
-                        },
-                        0,
-                    );
-
-                row13.value = parseFloat(
-                    (previousQuarterTotal * 0.05).toFixed(2),
-                );
-            }
-
-            row14.value = parseFloat(
-                (row12.value - (row13.value ?? 0)).toFixed(2),
-            );
-        } catch (error) {
-            console.error('Error fetching receipts:', error);
-        }
+const onQuarterChange = async () => {
+    if (!selectedYear.value || !selectedQuarter.value) {
+        return;
     }
+
+    store.commit('receipts/setSelectedQuarter', selectedQuarter.value);
+
+    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
+    const currentQuarterIndex = quarters.indexOf(selectedQuarter.value);
+
+    const previousQuartersReceipts =
+        await fetchPreviousQuartersReceipts(currentQuarterIndex);
+    const previousQuarterTotal = calculateTotalFromReceipts(
+        previousQuartersReceipts,
+    );
+
+    row13.value = parseFloat((previousQuarterTotal * 0.05).toFixed(2));
+
+    const currentQuarterReceipts = await fetchCurrentQuarterReceipts();
+    const currentQuarterTotal = calculateTotalFromReceipts(
+        currentQuarterReceipts,
+    );
+
+    setRowValues(currentQuarterTotal);
+
+    row14.value = parseFloat((row12.value - (row13.value ?? 0)).toFixed(2));
+};
+
+const fetchPreviousQuartersReceipts = async (currentQuarterIndex: number) => {
+    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
+    let previousQuartersReceipts: string[] = [];
+
+    for (let i = 0; i < currentQuarterIndex; i++) {
+        const previousQuarter = quarters[i];
+        await store.dispatch('receipts/fetchPreviousQuartersReceipts', {
+            userId: selectedUser.value,
+            year: selectedYear.value,
+            quarter: previousQuarter,
+        });
+
+        previousQuartersReceipts.push(
+            ...store.state.receipts.previousQuartersReceipts.filter(
+                (receipt: string) =>
+                    !previousQuartersReceipts.includes(receipt),
+            ),
+        );
+    }
+
+    return previousQuartersReceipts;
+};
+
+const fetchCurrentQuarterReceipts = async () => {
+    await store.dispatch('receipts/fetchReceipts', {
+        userId: selectedUser.value,
+        year: selectedYear.value,
+        quarter: selectedQuarter.value,
+    });
+
+    return [...store.state.receipts.receipts];
+};
+
+const calculateTotalFromReceipts = (receipts: string[]) => {
+    return receipts.reduce((sum: number, receipt: string) => {
+        const match = receipt.match(/-(\s*\d+(\.\d+)?)\sUAH/);
+        return match ? sum + parseFloat(match[1]) : sum;
+    }, 0);
+};
+
+const setRowValues = (currentQuarterTotal: number) => {
+    row06.value = currentQuarterTotal;
+    row08.value = row06.value;
+    row11.value = parseFloat((row06.value * 0.05).toFixed(2));
+    row12.value = row11.value;
 };
 </script>
 
@@ -288,8 +307,8 @@ const fetchReceipts = async () => {
         grid-template-columns: repeat(auto-fill, minmax(35%, 1fr));
         justify-content: center;
         column-gap: 10px;
+        text-align: center;
         width: 100%;
-        max-width: 100vw;
 
         li {
             font-family: 'Montserrat';
@@ -299,7 +318,6 @@ const fetchReceipts = async () => {
             border-radius: 5px;
             background-color: var(--input-background-color);
             box-shadow: 2px 2px 5px var(--box-shadow-color);
-            text-align: center;
         }
     }
 }
@@ -318,7 +336,6 @@ const fetchReceipts = async () => {
 
     th {
         background-color: var(--primary-color);
-
         font-weight: 600;
         text-transform: uppercase;
     }

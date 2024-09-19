@@ -1,6 +1,10 @@
 <template>
     <div class="theme-switch-container">
-        <button class="theme-button" @click="toggleTheme">
+        <button
+            class="theme-button"
+            title="Change light mode"
+            @click="toggleTheme"
+        >
             <img
                 v-if="!isDarkTheme"
                 src="@/assets/images/sun.svg"
