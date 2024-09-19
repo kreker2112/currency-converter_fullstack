@@ -44,7 +44,7 @@ const receiptsModule: Module<ReceiptsState, any> = {
     getters: {
         filteredReceiptsByYear: (state) => (year: number) => {
             return state.receipts.filter((receipt: Receipt) => {
-                const receiptDate = new Date(receipt.date); // Преобразуем дату в объект Date
+                const receiptDate = new Date(receipt.date);
                 console.log('Receipt Date: ', receiptDate);
                 return receiptDate.getFullYear() === year;
             });
@@ -55,12 +55,12 @@ const receiptsModule: Module<ReceiptsState, any> = {
         },
 
         receiptsByQuarter: (state) => () => {
-            const quarters: Receipt[][] = [[], [], [], []]; // Явно указываем, что это массив массивов Receipt
+            const quarters: Receipt[][] = [[], [], [], []];
 
             state.receipts.forEach((receipt: Receipt) => {
                 const receiptDate = new Date(receipt.date);
                 const quarterIndex = Math.floor(receiptDate.getMonth() / 3);
-                quarters[quarterIndex].push(receipt); // Теперь TypeScript знает, что в quarters находятся объекты типа Receipt
+                quarters[quarterIndex].push(receipt);
             });
 
             return quarters.map((quarterReceipts, index) => ({
