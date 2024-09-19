@@ -48,7 +48,6 @@
             </div>
         </header>
 
-        <!-- Добавляем проверку на выбранный квартал -->
         <div
             v-if="receipts.length > 0 && selectedQuarter"
             class="tax-obligations__receipts"
@@ -63,7 +62,6 @@
             </ul>
         </div>
 
-        <!-- Добавляем проверку на выбранный квартал -->
         <table
             v-if="receipts.length > 0 && selectedQuarter"
             class="tax-obligations__table"
@@ -98,7 +96,6 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
-// Локальные состояния для управления выбором пользователя, года и квартала
 const selectedUser = ref(store.getters['receipts/getSelectedUser'] || '');
 const selectedYear = ref(store.getters['receipts/getSelectedYear'] || '');
 const selectedQuarter = ref(store.getters['receipts/getSelectedQuarter'] || '');
