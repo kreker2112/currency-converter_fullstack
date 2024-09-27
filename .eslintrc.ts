@@ -7,36 +7,33 @@ const config: Linter.Config = {
     env: {
         node: true,
         browser: true,
-        es2021: true, // Обновлено для поддержки последних возможностей ECMAScript
+        es2021: true,
     },
     extends: [
-        'eslint:recommended', // Базовый набор правил ESLint
-        'plugin:@typescript-eslint/recommended', // Правила для TypeScript
-        'plugin:vue/vue3-recommended', // Правила для Vue 3
-        'plugin:prettier/recommended', // Правила Prettier для интеграции с ESLint
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:vue/vue3-recommended',
+        'plugin:prettier/recommended',
     ],
     rules: {
         'prettier/prettier': [
             'error',
             {
-                endOfLine: 'auto', // Обеспечивает совместимость переносов строк между разными ОС
+                endOfLine: 'auto',
             },
         ],
-        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off', // Правило для console.log в продакшене
-        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off', // Правило для отладчика в продакшене
+        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     },
     globals: {
-        $nuxt: 'readonly', // Глобальная переменная для Nuxt.js
+        $nuxt: 'readonly',
     },
-    parser: 'vue-eslint-parser', // Парсер для .vue файлов
+    parser: 'vue-eslint-parser',
     parserOptions: {
-        parser: '@typescript-eslint/parser', // Указываем парсер TypeScript
-        sourceType: 'module', // Модульный тип исходников
+        parser: '@typescript-eslint/parser',
+        sourceType: 'module',
     },
-    plugins: [
-        '@typescript-eslint', // Плагин для правил TypeScript
-        'prettier', // Плагин для интеграции Prettier
-    ],
+    plugins: ['@typescript-eslint', 'prettier'],
 };
 
 export default config;
