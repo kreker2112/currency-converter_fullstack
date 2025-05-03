@@ -1,0 +1,42 @@
+
+# Файлы сборки
+bin/
+obj/
+out/
+
+# Файлы IDE
+.vs/
+*.user
+*.userosscache
+*.suo
+
+# Файлы конфигурации
+appsettings.json
+appsettings.Development.json
+
+# Пакеты NuGet
+packages/
+*.nupkg
+
+# Node modules
+node_modules/
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.cache
+TEMP/
+
+# Базы данных
+*.mdf
+*.ldf
+*.sqlite
+
+# Тесты
+TestResults/
+*.trx
+*.coverage
+coverage/
+
+# Ключи
+*.pem

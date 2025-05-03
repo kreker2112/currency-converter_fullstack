@@ -20,7 +20,6 @@
             button-style="add-funds-button"
             v-if="selectedUser"
             @click="openModal"
-            class="floating-button"
         >
             Add receipt
         </ButtonComponent>
@@ -78,26 +77,6 @@ const onReceiptAdded = () => {
         color: var(--primary-color);
         font-family: 'Montserrat';
         margin-bottom: 10px;
-    }
-}
-
-.floating-button {
-    position: absolute;
-    width: 200px;
-    bottom: 40px;
-    right: 40px;
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1.3rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-    &:hover {
-        background-color: var(--secondary-color);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 }
 </style>

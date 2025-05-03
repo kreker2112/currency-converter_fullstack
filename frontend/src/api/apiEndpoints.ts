@@ -19,6 +19,8 @@ export const apiEndpoints = {
         `${USERS_API_BASE_URL}${userId}/receipts?year=${year}&quarter=${quarter}`,
     getCurrencyRateByDate: (date: string) =>
         `${CURRENCY_API_BASE_URL}${date}&json`,
+    getReceiptsBeforeQuarter: (user: string, year: number, quarter: string) =>
+        `${USERS_API_BASE_URL}${user}/receipts/before-quarter?year=${year}&quarter=${quarter}`,
 };
 
 export const transactionApi = {

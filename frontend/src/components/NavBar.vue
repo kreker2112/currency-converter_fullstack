@@ -1,7 +1,7 @@
 <template>
     <div class="navbar">
         <div class="navbar_title" @click="$router.push('/')">
-            Entrepreneur's personal account
+            Entrepreneur's Tax Cabinet
         </div>
         <div class="navbar_btns">
             <ButtonComponent

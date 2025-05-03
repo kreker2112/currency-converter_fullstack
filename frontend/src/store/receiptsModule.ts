@@ -1,7 +1,11 @@
 import { Module } from 'vuex';
 import axios from 'axios';
 import { apiEndpoints } from '@/api/apiEndpoints';
-import { Receipt } from '@/interfaces/receipts';
+import { Receipt, RawReceiptsInput, QuarterData } from '@/interfaces/receipts';
+import {
+    parseReceiptsFromStrings,
+    sortReceiptsByDate,
+} from '@/utils/receiptUtils';
 
 export interface ReceiptsState {
     receipts: Receipt[];
@@ -84,46 +88,34 @@ const receiptsModule: Module<ReceiptsState, any> = {
         getUsers: (state) => state.users,
     },
     mutations: {
-        setReceipts: (state, rawReceiptsData: any[]) => {
-            const parsedReceipts: Receipt[] = rawReceiptsData.flatMap(
-                (quarterData: any) => {
-                    if (
-                        quarterData.Receipts &&
-                        Array.isArray(quarterData.Receipts)
-                    ) {
-                        return quarterData.Receipts.map(
-                            (receiptString: string) => {
-                                const [datePart, amountPart] =
-                                    receiptString.split(':');
-                                const [amount, currency, , uahAmountPart] =
-                                    amountPart.trim().split(' ');
+        setReceipts: (state, rawReceiptsData: RawReceiptsInput) => {
+            let receiptStrings: string[] = [];
 
-                                const uahAmountMatch =
-                                    uahAmountPart.match(/-?\d+(\.\d+)?/);
-                                const uahAmount = uahAmountMatch
-                                    ? parseFloat(uahAmountMatch[0])
-                                    : 0;
+            if (
+                rawReceiptsData.length &&
+                typeof rawReceiptsData[0] === 'string'
+            ) {
+                receiptStrings = rawReceiptsData as string[];
+            } else {
+                receiptStrings = (rawReceiptsData as QuarterData[]).flatMap(
+                    (quarterData) => {
+                        if (
+                            quarterData.Receipts &&
+                            Array.isArray(quarterData.Receipts)
+                        ) {
+                            return quarterData.Receipts;
+                        } else {
+                            console.error('Invalid quarter data:', quarterData);
+                            return [];
+                        }
+                    },
+                );
+            }
 
-                                return {
-                                    date: datePart
-                                        .trim()
-                                        .split('.')
-                                        .reverse()
-                                        .join('-'),
-                                    amount: parseFloat(amount),
-                                    currency,
-                                    uahAmount,
-                                };
-                            },
-                        );
-                    } else {
-                        console.error('Invalid quarter data:', quarterData);
-                        return [];
-                    }
-                },
-            );
+            const parsedReceipts: Receipt[] =
+                parseReceiptsFromStrings(receiptStrings);
 
-            state.receipts = parsedReceipts;
+            state.receipts = sortReceiptsByDate(parsedReceipts);
         },
 
         setPreviousQuartersReceipts: (state, receipts: Receipt[]) => {
@@ -232,14 +224,23 @@ const receiptsModule: Module<ReceiptsState, any> = {
         ) {
             try {
                 const response = await axios.get(
-                    apiEndpoints.getQuarterReceipts(userId, year, quarter),
+                    apiEndpoints.getReceiptsBeforeQuarter(
+                        userId,
+                        year,
+                        quarter,
+                    ),
                 );
-                commit('setPreviousQuartersReceipts', response.data);
+
+                const parsedReceipts = parseReceiptsFromStrings(response.data);
+
+                commit('setPreviousQuartersReceipts', parsedReceipts);
+                return parsedReceipts;
             } catch (error) {
                 console.error(
                     'Error fetching previous quarters receipts:',
                     error,
                 );
+                return [];
             }
         },
 

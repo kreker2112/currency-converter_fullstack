@@ -57,7 +57,7 @@
             </h2>
             <ul>
                 <li v-for="receipt in receipts" :key="receipt">
-                    {{ receipt }}
+                    {{ formatReceipt(receipt) }}
                 </li>
             </ul>
         </div>
@@ -93,6 +93,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import { Receipt } from '@/interfaces/receipts';
 
 const store = useStore();
 
@@ -164,48 +165,58 @@ const onQuarterChange = async () => {
 
     store.commit('receipts/setSelectedQuarter', selectedQuarter.value);
 
-    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
-    const currentQuarterIndex = quarters.indexOf(selectedQuarter.value);
+    // Получаем все квитанции до текущего квартала (исключительно)
+    const previousQuarterReceipts = await fetchPreviousQuarterReceipts();
 
-    const previousQuartersReceipts =
-        await fetchPreviousQuartersReceipts(currentQuarterIndex);
     const previousQuarterTotal = calculateTotalFromReceipts(
-        previousQuartersReceipts,
+        previousQuarterReceipts,
     );
 
-    row13.value = parseFloat((previousQuarterTotal * 0.05).toFixed(2));
+    console.log(
+        'Previous quarter total (before 5% calculation):',
+        previousQuarterTotal,
+    );
+
+    row13.value =
+        previousQuarterTotal > 0
+            ? parseFloat((previousQuarterTotal * 0.05).toFixed(2))
+            : 0;
+
+    console.log(
+        'Calculated row13 (5% of previous quarter total):',
+        row13.value,
+    );
 
     const currentQuarterReceipts = await fetchCurrentQuarterReceipts();
     const currentQuarterTotal = calculateTotalFromReceipts(
         currentQuarterReceipts,
     );
 
+    console.log('Current quarter total:', currentQuarterTotal);
+
     setRowValues(currentQuarterTotal);
 
     row14.value = parseFloat((row12.value - (row13.value ?? 0)).toFixed(2));
+
+    console.log('Row14 calculated:', row14.value);
 };
 
-const fetchPreviousQuartersReceipts = async (currentQuarterIndex: number) => {
-    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
-    let previousQuartersReceipts: string[] = [];
-
-    for (let i = 0; i < currentQuarterIndex; i++) {
-        const previousQuarter = quarters[i];
-        await store.dispatch('receipts/fetchPreviousQuartersReceipts', {
+const fetchPreviousQuarterReceipts = async () => {
+    const previousReceipts = await store.dispatch(
+        'receipts/fetchPreviousQuartersReceipts',
+        {
             userId: selectedUser.value,
             year: selectedYear.value,
-            quarter: previousQuarter,
-        });
+            quarter: selectedQuarter.value,
+        },
+    );
 
-        previousQuartersReceipts.push(
-            ...store.state.receipts.previousQuartersReceipts.filter(
-                (receipt: string) =>
-                    !previousQuartersReceipts.includes(receipt),
-            ),
-        );
+    if (!Array.isArray(previousReceipts)) {
+        return [];
     }
 
-    return previousQuartersReceipts;
+    console.log('Fetched total previous receipts:', previousReceipts.length);
+    return previousReceipts;
 };
 
 const fetchCurrentQuarterReceipts = async () => {
@@ -218,11 +229,22 @@ const fetchCurrentQuarterReceipts = async () => {
     return [...store.state.receipts.receipts];
 };
 
-const calculateTotalFromReceipts = (receipts: string[]) => {
-    return receipts.reduce((sum: number, receipt: string) => {
-        const match = receipt.match(/-(\s*\d+(\.\d+)?)\sUAH/);
-        return match ? sum + parseFloat(match[1]) : sum;
-    }, 0);
+function formatReceipt(receipt: Receipt): string {
+    const date = new Date(receipt.date).toLocaleDateString('uk-UA'); // формат ДД.ММ.ГГГГ
+    return `${date}: ${receipt.amount} ${receipt.currency} - ${receipt.uahAmount} UAH`;
+}
+
+const calculateTotalFromReceipts = (receipts: Receipt[]): number => {
+    let total = 0;
+    receipts.forEach((receipt) => {
+        if (receipt.uahAmount !== undefined) {
+            total += receipt.uahAmount;
+        } else {
+            console.warn('UAH amount is missing in receipt:', receipt);
+        }
+    });
+    console.log('Total UAH amount from receipts:', total);
+    return total;
 };
 
 const setRowValues = (currentQuarterTotal: number) => {
