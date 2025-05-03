@@ -3,7 +3,9 @@
         <div className="copyright">
             <p>
                 © 2023 All rights reserved <br />
-                <a href="https://github.com/kreker2112/-urrency-converter.git">
+                <a
+                    href="https://github.com/kreker2112/currency-converter_fullstack"
+                >
                     Project repo
                 </a>
             </p>

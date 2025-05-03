@@ -35,3 +35,16 @@ export function sortReceiptsByDate(receipts: Receipt[]): Receipt[] {
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     );
 }
+
+export const calculateTotalFromReceipts = (receipts: Receipt[]): number => {
+    let total = 0;
+    receipts.forEach((receipt) => {
+        if (receipt.uahAmount !== undefined) {
+            total += receipt.uahAmount;
+        } else {
+            console.warn('UAH amount is missing in receipt:', receipt);
+        }
+    });
+    console.log('Total UAH amount from receipts:', total);
+    return total;
+};

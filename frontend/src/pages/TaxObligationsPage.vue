@@ -94,6 +94,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { Receipt } from '@/interfaces/receipts';
+import { calculateTotalFromReceipts } from '@/utils/receiptUtils';
 
 const store = useStore();
 
@@ -165,7 +166,6 @@ const onQuarterChange = async () => {
 
     store.commit('receipts/setSelectedQuarter', selectedQuarter.value);
 
-    // Получаем все квитанции до текущего квартала (исключительно)
     const previousQuarterReceipts = await fetchPreviousQuarterReceipts();
 
     const previousQuarterTotal = calculateTotalFromReceipts(
@@ -230,22 +230,9 @@ const fetchCurrentQuarterReceipts = async () => {
 };
 
 function formatReceipt(receipt: Receipt): string {
-    const date = new Date(receipt.date).toLocaleDateString('uk-UA'); // формат ДД.ММ.ГГГГ
+    const date = new Date(receipt.date).toLocaleDateString('uk-UA');
     return `${date}: ${receipt.amount} ${receipt.currency} - ${receipt.uahAmount} UAH`;
 }
-
-const calculateTotalFromReceipts = (receipts: Receipt[]): number => {
-    let total = 0;
-    receipts.forEach((receipt) => {
-        if (receipt.uahAmount !== undefined) {
-            total += receipt.uahAmount;
-        } else {
-            console.warn('UAH amount is missing in receipt:', receipt);
-        }
-    });
-    console.log('Total UAH amount from receipts:', total);
-    return total;
-};
 
 const setRowValues = (currentQuarterTotal: number) => {
     row06.value = currentQuarterTotal;
