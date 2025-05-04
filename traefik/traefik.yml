@@ -5,6 +5,8 @@ entryPoints:
 providers:
   docker:
     exposedByDefault: false
+  file:
+    filename: /etc/traefik/dynamic.yml
 
 api:
   dashboard: true
