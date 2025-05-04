@@ -1,5 +1,5 @@
-const USERS_API_BASE_URL = 'http://localhost:22892/api/Users/';
-const TRANSACTIONS_API_BASE_URL = 'http://localhost:22892/api/Transactions';
+const USERS_API_BASE_URL = `${process.env.VUE_APP_API_URL}/Users/`;
+const TRANSACTIONS_API_BASE_URL = `${process.env.VUE_APP_API_URL}/Transactions`;
 const CURRENCY_API_BASE_URL = process.env.VUE_APP_NBU_BY_DATE_URL;
 
 export const apiEndpoints = {
