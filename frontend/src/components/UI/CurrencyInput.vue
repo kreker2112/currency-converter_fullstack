@@ -57,7 +57,7 @@ const clearInput = (): void => {
     border: 2px solid var(--input-borders-color);
     padding: 10px 15px;
     border-radius: 10px 0 0 10px;
-    font-size: 16px;
+    font-size: 1rem;
     outline: none;
 
     &::-webkit-outer-spin-button,

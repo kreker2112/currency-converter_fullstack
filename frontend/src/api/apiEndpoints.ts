@@ -14,7 +14,10 @@ export const apiEndpoints = {
         `${USERS_API_BASE_URL}${user}/receipts/quarters/${quarter}?year=${year}`,
     getSpecificQuarterData: (user: string, year: number, quarter: string) =>
         `${USERS_API_BASE_URL}${user}/receipts/specific?year=${year}&quarter=${quarter}`,
-    getTaxDetails: (user: string) => `${USERS_API_BASE_URL}${user}/tax/details`,
+    getIncomeTaxDetails: (user: string) =>
+        `${USERS_API_BASE_URL}${user}/incomeTax/details`,
+    getMilFeeDetails: (user: string) =>
+        `${USERS_API_BASE_URL}${user}/milFee/details`,
     sendUserReceipt: (userId: string, year: string, quarter: string) =>
         `${USERS_API_BASE_URL}${userId}/receipts?year=${year}&quarter=${quarter}`,
     getCurrencyRateByDate: (date: string) =>

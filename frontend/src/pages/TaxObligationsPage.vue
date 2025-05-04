@@ -86,6 +86,20 @@
                     <td>{{ row14.toFixed(2) }} UAH</td>
                 </tr>
             </tbody>
+            <thead>
+                <tr>
+                    <th>Line 23</th>
+                    <th>Line 24</th>
+                    <th>Line 25</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ row23.toFixed(2) }} UAH</td>
+                    <td v-if="row24 !== null">{{ row24.toFixed(2) }} UAH</td>
+                    <td>{{ row25.toFixed(2) }} UAH</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </template>
@@ -107,6 +121,9 @@ const row11 = ref<number>(0);
 const row12 = ref<number>(0);
 const row13 = ref<number | null>(0);
 const row14 = ref<number>(0);
+const row23 = ref<number>(0);
+const row24 = ref<number | null>(0);
+const row25 = ref<number>(0);
 
 const users = computed(() => store.state.receipts.users);
 const availableYears = computed(
@@ -187,6 +204,16 @@ const onQuarterChange = async () => {
         row13.value,
     );
 
+    row24.value =
+        previousQuarterTotal > 0
+            ? parseFloat((previousQuarterTotal * 0.01).toFixed(2))
+            : 0;
+
+    console.log(
+        'Calculated row24 (1% of previous quarter total):',
+        row24.value,
+    );
+
     const currentQuarterReceipts = await fetchCurrentQuarterReceipts();
     const currentQuarterTotal = calculateTotalFromReceipts(
         currentQuarterReceipts,
@@ -199,6 +226,10 @@ const onQuarterChange = async () => {
     row14.value = parseFloat((row12.value - (row13.value ?? 0)).toFixed(2));
 
     console.log('Row14 calculated:', row14.value);
+
+    row25.value = parseFloat((row23.value - (row24.value ?? 0)).toFixed(2));
+
+    console.log('Row24 calculated:', row24.value);
 };
 
 const fetchPreviousQuarterReceipts = async () => {
@@ -239,6 +270,7 @@ const setRowValues = (currentQuarterTotal: number) => {
     row08.value = row06.value;
     row11.value = parseFloat((row06.value * 0.05).toFixed(2));
     row12.value = row11.value;
+    row23.value = currentQuarterTotal * 0.01;
 };
 </script>
 

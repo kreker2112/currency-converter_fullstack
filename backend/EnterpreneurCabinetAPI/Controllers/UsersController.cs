@@ -128,15 +128,26 @@ namespace EnterpreneurCabinetAPI.Controllers
             return Ok("Receipt added successfully");
         }
 
-        [HttpGet("{userId}/tax/details")]
-        public async Task<IActionResult> GetTaxPaymentDetails(string userId)
+        [HttpGet("{userId}/incomeTax/details")]
+        public async Task<IActionResult> GetIncomeTaxPaymentDetails(string userId)
         {
-            var taxDetails = await _mongoDBService.GetTaxPaymentDetailsAsync(userId);
+            var incomeTaxDetails = await _mongoDBService.GetIncomeTaxPaymentDetailsAsync(userId);
 
-            if (taxDetails == null)
-                return NotFound($"Tax payment details not found for user {userId}");
+            if (incomeTaxDetails == null)
+                return NotFound($"Income tax payment details not found for user {userId}");
 
-            return Ok(taxDetails);
+            return Ok(incomeTaxDetails);
+        }
+
+        [HttpGet("{userId}/milFee/details")]
+        public async Task<IActionResult> GetMilFeePaymentDetails(string userId)
+        {
+            var milFeeDetails = await _mongoDBService.GetMilFeePaymentDetailsAsync(userId);
+
+            if (milFeeDetails == null)
+                return NotFound($"Income tax payment details not found for user {userId}");
+
+            return Ok(milFeeDetails);
         }
     }
 }

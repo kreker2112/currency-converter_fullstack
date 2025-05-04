@@ -48,14 +48,14 @@
             </div>
         </header>
 
-        <div v-if="totalPayment > 0" class="paying-taxes__summary">
+        <div v-if="incomeTaxPayment > 0" class="paying-taxes__summary">
             <h2>
                 Total Payment for Quarter {{ selectedQuarter }} of
-                {{ selectedYear }}: {{ totalPayment.toFixed(2) }} UAH
+                {{ selectedYear }}: {{ incomeTaxPayment.toFixed(2) }} UAH
             </h2>
         </div>
 
-        <table v-if="totalPayment > 0" class="paying-taxes__table">
+        <table v-if="incomeTaxPayment > 0" class="paying-taxes__table">
             <thead>
                 <tr>
                     <th>Сума до сплати</th>
@@ -68,15 +68,41 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ totalPayment.toFixed(2) }}</td>
-                    <td>{{ taxDetails.RecipientEDRPOU }}</td>
-                    <td>{{ taxDetails.RecipientName }}</td>
-                    <td>{{ taxDetails.Account }}</td>
-                    <td>{{ taxDetails.AccountName }}</td>
+                    <td>{{ incomeTaxPayment.toFixed(2) }}</td>
+                    <td>{{ incomeTaxDetails.IncomeTaxEDRPOU }}</td>
+                    <td>{{ incomeTaxDetails.IncomeTaxName }}</td>
+                    <td>{{ incomeTaxDetails.IncomeTaxAccount }}</td>
+                    <td>{{ incomeTaxDetails.IncomeTaxAccountName }}</td>
                     <td>
                         Код: 101 <br />
-                        Сума: {{ totalPayment.toFixed(2) }} UAH <br />
+                        Сума: {{ incomeTaxPayment.toFixed(2) }} UAH <br />
                         Додаткова інформація запису: Єдиний податок за
+                        {{ getQuarterNumber(selectedQuarter) }} квартал
+                        {{ selectedYear }}
+                    </td>
+                </tr>
+            </tbody>
+            <thead>
+                <tr>
+                    <th>Сума до сплати</th>
+                    <th>ЄДРПОУ Отримувача</th>
+                    <th>Отримувач</th>
+                    <th>Рахунок</th>
+                    <th>Назва рахунку</th>
+                    <th>Призначення платежу (стандарт ISO 20022)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ milFeePayment.toFixed(2) }}</td>
+                    <td>{{ milFeeDetails.MilFeeEDRPOU }}</td>
+                    <td>{{ milFeeDetails.MilFeeName }}</td>
+                    <td>{{ milFeeDetails.MilFeeAccount }}</td>
+                    <td>{{ milFeeDetails.MilFeeAccountName }}</td>
+                    <td>
+                        Код: 101 <br />
+                        Сума: {{ milFeePayment.toFixed(2) }} UAH <br />
+                        Додаткова інформація запису: Військовий збір за
                         {{ getQuarterNumber(selectedQuarter) }} квартал
                         {{ selectedYear }}
                     </td>
@@ -99,8 +125,10 @@ const availableYears = computed(() => store.state.receipts.availableYears);
 const availableQuarters = computed(
     () => store.state.receipts.availableQuarters,
 );
-const totalPayment = computed(() => store.state.receipts.totalPayment);
-const taxDetails = computed(() => store.state.receipts.taxDetails);
+const incomeTaxPayment = computed(() => store.state.receipts.incomeTaxPayment);
+const incomeTaxDetails = computed(() => store.state.receipts.incomeTaxDetails);
+const milFeePayment = computed(() => store.state.receipts.milFeePayment);
+const milFeeDetails = computed(() => store.state.receipts.milFeeDetails);
 
 const onUserChange = (event: Event) => {
     const target = event.target as HTMLSelectElement | null;

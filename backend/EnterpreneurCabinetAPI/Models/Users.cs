@@ -21,19 +21,35 @@ namespace EnterpreneurCabinetAPI.Models
         public List<string> Receipts { get; set; } = [];
     }
 
-    public class TaxPaymentDetails
+    public class IncomeTaxPaymentDetails
     {
-        [BsonElement("RecipientEDRPOU")]
-        public string RecipientEDRPOU { get; set; } = string.Empty;
+        [BsonElement("IncomeTaxEDRPOU")]
+        public string IncomeTaxEDRPOU { get; set; } = string.Empty;
 
-        [BsonElement("RecipientName")]
-        public string RecipientName { get; set; } = string.Empty;
+        [BsonElement("IncomeTaxName")]
+        public string IncomeTaxName { get; set; } = string.Empty;
 
-        [BsonElement("Account")]
-        public string Account { get; set; } = string.Empty;
+        [BsonElement("IncomeTaxAccount")]
+        public string IncomeTaxAccount { get; set; } = string.Empty;
 
-        [BsonElement("AccountName")]
-        public string AccountName { get; set; } = string.Empty;
+        [BsonElement("IncomeTaxAccountName")]
+        public string IncomeTaxAccountName { get; set; } = string.Empty;
+
+    }
+
+    public class MilFeePaymentDetails
+    {
+        [BsonElement("MilFeeEDRPOU")]
+        public string MilFeeEDRPOU { get; set; } = string.Empty;
+
+        [BsonElement("MilFeeName")]
+        public string MilFeeName { get; set; } = string.Empty;
+
+        [BsonElement("MilFeeAccount")]
+        public string MilFeeAccount { get; set; } = string.Empty;
+
+        [BsonElement("MilFeeAccountName")]
+        public string MilFeeAccountName { get; set; } = string.Empty;
 
     }
 
@@ -65,9 +81,12 @@ namespace EnterpreneurCabinetAPI.Models
         public string? RegistrationAddress { get; set; }
 
         [BsonElement("IncomeReceipts")]
-        public List<Receipt> IncomeReceipts { get; set; } = [];
+        public List<Receipt> IncomeReceipts { get; set; } = new();
 
-        [BsonElement("TaxPaymentDetails")]
-        public TaxPaymentDetails? TaxPaymentDetails { get; set; }
+        [BsonElement("IncomeTaxPaymentDetails")]
+        public IncomeTaxPaymentDetails? IncomeTaxPaymentDetails { get; set; }
+
+        [BsonElement("MilFeePaymentDetails")]
+        public MilFeePaymentDetails? MilFeePaymentDetails { get; set; }
     }
 }

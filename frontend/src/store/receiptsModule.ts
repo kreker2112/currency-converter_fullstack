@@ -17,8 +17,15 @@ export interface ReceiptsState {
     selectedUser: string | null;
     selectedYear: string | null;
     selectedQuarter: string | null;
-    totalPayment: number;
-    taxDetails: {
+    incomeTaxPayment: number;
+    milFeePayment: number;
+    incomeTaxDetails: {
+        RecipientEDRPOU: string;
+        RecipientName: string;
+        Account: string;
+        AccountName: string;
+    };
+    milFeeDetails: {
         RecipientEDRPOU: string;
         RecipientName: string;
         Account: string;
@@ -37,8 +44,15 @@ const receiptsModule: Module<ReceiptsState, any> = {
         selectedUser: null,
         selectedYear: null,
         selectedQuarter: null,
-        totalPayment: 0,
-        taxDetails: {
+        incomeTaxPayment: 0,
+        milFeePayment: 0,
+        incomeTaxDetails: {
+            RecipientEDRPOU: '',
+            RecipientName: '',
+            Account: '',
+            AccountName: '',
+        },
+        milFeeDetails: {
             RecipientEDRPOU: '',
             RecipientName: '',
             Account: '',
@@ -151,12 +165,20 @@ const receiptsModule: Module<ReceiptsState, any> = {
             state.users = users;
         },
 
-        setTotalPayment(state, totalPayment) {
-            state.totalPayment = totalPayment;
+        setIncomeTaxPayment(state, incomeTaxPayment) {
+            state.incomeTaxPayment = incomeTaxPayment;
         },
 
-        setTaxDetails(state, taxDetails) {
-            state.taxDetails = taxDetails;
+        setMilFeePayment(state, milFeePayment) {
+            state.milFeePayment = milFeePayment;
+        },
+
+        setIncomeTaxDetails(state, incomeTaxDetails) {
+            state.incomeTaxDetails = incomeTaxDetails;
+        },
+
+        setMilFeeDetails(state, milFeeDetails) {
+            state.milFeeDetails = milFeeDetails;
         },
     },
     actions: {
@@ -294,12 +316,20 @@ const receiptsModule: Module<ReceiptsState, any> = {
 
         async fetchYearsAndTaxDetails({ commit }, userId: string) {
             try {
-                const [yearsResponse, taxDetailsResponse] = await Promise.all([
+                const [
+                    yearsResponse,
+                    incomeTaxDetailsResponse,
+                    incomeMilFeeResponse,
+                ] = await Promise.all([
                     axios.get(apiEndpoints.getUserYears(userId)),
-                    axios.get(apiEndpoints.getTaxDetails(userId)),
+                    axios.get(apiEndpoints.getIncomeTaxDetails(userId)),
+                    axios.get(apiEndpoints.getMilFeeDetails(userId)),
                 ]);
                 commit('setAvailableYears', yearsResponse.data);
-                commit('setTaxDetails', taxDetailsResponse.data);
+                commit('setIncomeTaxDetails', incomeTaxDetailsResponse.data);
+                commit('setMilFeeDetails', incomeMilFeeResponse.data);
+                console.log(incomeTaxDetailsResponse.data);
+                console.log(incomeMilFeeResponse.data);
             } catch (error) {
                 console.error('Error fetching years and tax details:', error);
             }
@@ -318,10 +348,15 @@ const receiptsModule: Module<ReceiptsState, any> = {
                     },
                     0,
                 );
-                const totalPayment = parseFloat(
+                const incomeTaxPayment = parseFloat(
                     (totalAmount * 0.05).toFixed(2),
                 );
-                commit('setTotalPayment', totalPayment);
+                commit('setIncomeTaxPayment', incomeTaxPayment);
+
+                const milFeePayment = parseFloat(
+                    (totalAmount * 0.01).toFixed(2),
+                );
+                commit('setMilFeePayment', milFeePayment);
             } catch (error) {
                 console.error('Error fetching quarter data:', error);
             }

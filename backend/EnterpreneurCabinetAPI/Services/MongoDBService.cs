@@ -74,10 +74,16 @@ namespace EnterpreneurCabinetAPI.Services
             return newUser;
         }
 
-        public async Task<TaxPaymentDetails?> GetTaxPaymentDetailsAsync(string userId)
+        public async Task<IncomeTaxPaymentDetails?> GetIncomeTaxPaymentDetailsAsync(string userId)
         {
             var user = await _users.Find(u => u.UserID == userId).FirstOrDefaultAsync();
-            return user?.TaxPaymentDetails;
+            return user?.IncomeTaxPaymentDetails;
+        }
+
+        public async Task<MilFeePaymentDetails?> GetMilFeePaymentDetailsAsync(string userId)
+        {
+            var user = await _users.Find(u => u.UserID == userId).FirstOrDefaultAsync();
+            return user?.MilFeePaymentDetails;
         }
 
 
